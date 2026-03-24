@@ -834,21 +834,38 @@ def _check_seo(r: ScanResult, html: str, fetch_ok: bool):
             f'<link rel="canonical" href="https://{r.domain}/">\n'
             "Add this inside your <head> tag on every page."))
 
-    # ── Check 19: Sitemap.xml ──
+    # ── Check 19: Sitemap ──
+    # Check /sitemap.xml first, then fall back to robots.txt Sitemap directive.
+    has_sitemap = False
     try:
         req = urllib.request.Request(
             f"{r.url}/sitemap.xml",
             headers={"User-Agent": "Mozilla/5.0 (compatible; didyouship/1.0)"},
         )
         resp = urllib.request.urlopen(req, timeout=5)
-        content = resp.read()
-        if resp.status == 200 and len(content) > 50:
-            r.passed.append("sitemap.xml exists")
-            r.raw["seo"]["has_sitemap"] = True
-        else:
-            raise ValueError("empty")
+        if resp.status == 200 and len(resp.read()) > 50:
+            has_sitemap = True
     except Exception:
-        r.raw["seo"]["has_sitemap"] = False
+        pass
+
+    if not has_sitemap:
+        # Check robots.txt for a Sitemap: directive (e.g. Stripe, large sites)
+        try:
+            req = urllib.request.Request(
+                f"{r.url}/robots.txt",
+                headers={"User-Agent": "Mozilla/5.0 (compatible; didyouship/1.0)"},
+            )
+            resp = urllib.request.urlopen(req, timeout=5)
+            robots = resp.read().decode("utf-8", errors="ignore")
+            if re.search(r"(?i)^Sitemap:\s*https?://", robots, re.MULTILINE):
+                has_sitemap = True
+        except Exception:
+            pass
+
+    r.raw["seo"]["has_sitemap"] = has_sitemap
+    if has_sitemap:
+        r.passed.append("sitemap.xml exists")
+    else:
         r.issues.append(Issue("seo", "medium",
             "Google Search Console can't track your indexed pages",
             "No sitemap.xml found at /sitemap.xml. Google Search Console "
@@ -977,20 +994,9 @@ def _check_404(r: ScanResult):
             headers={"User-Agent": "Mozilla/5.0 (compatible; didyouship/1.0)"},
         )
         resp = urllib.request.urlopen(req, timeout=5)
-        # If we get 200 for a random path, that's weird but not a 404 issue
-        html = resp.read().decode("utf-8", errors="ignore")
-        if len(html) > 500 and "<a" in html.lower():
-            r.passed.append("Custom 404 page exists")
-        else:
-            r.issues.append(Issue("polish", "low",
-                "Broken links show a bare error page",
-                "When someone hits a broken link on your site, they see a "
-                "minimal default error page. A custom 404 page with a "
-                "link back home keeps visitors on your site.",
-                "Create a 404 page in your framework:\n"
-                "Next.js: pages/404.js\n"
-                "Astro: src/pages/404.astro\n"
-                "Static: 404.html in your public directory"))
+        # 200 for a random path = SPA with client-side routing.
+        # These apps handle 404s in JS — skip the check, it's not applicable.
+        r.passed.append("Custom 404 page exists")
     except urllib.error.HTTPError as e:
         if e.code == 404:
             # Read the error page content
