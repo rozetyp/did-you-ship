@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{ title }}</title>
 <meta name="description" content="{{ description }}">
-<link rel="canonical" href="https://didyouship.dev/guides/{{ slug }}">
+<link rel="canonical" href="https://didyouship.com/guides/{{ slug }}">
 {{ schema | safe }}
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -359,7 +359,7 @@ const GUIDES = {
   why: `<p>Missing email authentication affects every email you send: account verification, password resets, receipts, support replies. When these land in spam, users think your product is broken. Many churn silently without ever telling you.</p>
 <p>Since 2024, Gmail and Yahoo require all three for bulk senders and use them as signals even for low-volume domains.</p>`,
   how: `<ol>
-<li>Check what you're missing: run a scan at didyouship.dev or check mxtoolbox.com/emailhealth.aspx</li>
+<li>Check what you're missing: run a scan at didyouship.com or check mxtoolbox.com/emailhealth.aspx</li>
 <li>Add SPF first: TXT record at your root domain</li>
 <li>Add DKIM: enable in your email provider dashboard, add the DNS record they give you</li>
 <li>Add DMARC: TXT record at <code>_dmarc.yourdomain.com</code> with <code>p=quarantine</code></li>
@@ -604,7 +604,7 @@ respond @dotfiles 404</pre>
 <li>It's the text shown in the browser tab</li>
 <li>It's the clickable blue headline shown in Google search results</li>
 </ul>
-<pre>&lt;title&gt;didyouship.dev — production readiness checker&lt;/title&gt;</pre>
+<pre>&lt;title&gt;didyouship.com — production readiness checker&lt;/title&gt;</pre>
 <p>A good title is 50-60 characters, includes your brand name, and describes what the page does.</p>`,
   why: `<ul>
 <li><strong>Google uses the title as the primary ranking signal</strong> for what your page is about</li>
@@ -1028,12 +1028,12 @@ function buildContent(slug) {
     return;
   }
 
-  document.title = g.title + ' — didyouship.dev';
+  document.title = g.title + ' — didyouship.com';
 
   const sevClass = g.severity;
 
   let h = '';
-  h += '<div class="breadcrumb"><a href="/">didyouship.dev</a><span>›</span><a href="#">' + g.category + '</a><span>›</span>' + g.title + '</div>';
+  h += '<div class="breadcrumb"><a href="/">didyouship.com</a><span>›</span><a href="#">' + g.category + '</a><span>›</span>' + g.title + '</div>';
 
   h += '<div class="guide-header">';
   h += '<div class="guide-cat">' + g.category + '</div>';
@@ -1062,12 +1062,12 @@ function buildContent(slug) {
 
 function renderIndex() {
   const el = document.getElementById('content');
-  document.title = 'Production Readiness Guides — didyouship.dev';
+  document.title = 'Production Readiness Guides — didyouship.com';
 
   let h = '<div class="guide-header">';
   h += '<div class="guide-cat">All categories</div>';
   h += '<h1 class="guide-title">Production Readiness Guides</h1>';
-  h += '<p class="guide-summary">Educational guides for every issue didyouship.dev scans for. Pick a topic from the sidebar, or scan your domain to see which ones apply to you.</p>';
+  h += '<p class="guide-summary">Educational guides for every issue didyouship.com scans for. Pick a topic from the sidebar, or scan your domain to see which ones apply to you.</p>';
   h += '</div>';
 
   NAV.forEach(({ cat, guides }) => {

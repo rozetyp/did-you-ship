@@ -1,5 +1,5 @@
 """
-didyouship.dev — production readiness scanner.
+didyouship.com — production readiness scanner.
 
 GET /             → landing page
 GET /api/scan/{domain} → run 24 checks, return issues + fixes + score
@@ -29,7 +29,7 @@ log = logging.getLogger("didyouship")
 limiter = Limiter(key_func=get_remote_address)
 
 app = FastAPI(
-    title="didyouship.dev",
+    title="didyouship.com",
     description="You shipped. But did you check? 24 production readiness checks in 8 seconds.",
     version="1.0.0",
 )
@@ -127,12 +127,12 @@ async def guide_page(slug: str, request: Request):
                 "@context": "https://schema.org",
                 "@type": "BreadcrumbList",
                 "itemListElement": [
-                    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://didyouship.dev"},
-                    {"@type": "ListItem", "position": 2, "name": meta.get("category", "Guide"), "item": "https://didyouship.dev/guides/" + slug},
+                    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://didyouship.com"},
+                    {"@type": "ListItem", "position": 2, "name": meta.get("category", "Guide"), "item": "https://didyouship.com/guides/" + slug},
                 ],
             }) + '</script>'
     else:
-        title = "Production Readiness Guides — didyouship.dev"
+        title = "Production Readiness Guides — didyouship.com"
         description = "Educational guides for every production readiness issue: SPF, DKIM, DMARC, SSL, security headers, SEO, performance, and more."
         schema = ""
 
@@ -174,8 +174,8 @@ async def problem_page(slug: str, request: Request):
         "@type": "Article",
         "headline": page["h1"],
         "description": description,
-        "url": f"https://didyouship.dev/why/{slug}",
-        "publisher": {"@type": "Organization", "name": "didyouship.dev", "url": "https://didyouship.dev"},
+        "url": f"https://didyouship.com/why/{slug}",
+        "publisher": {"@type": "Organization", "name": "didyouship.com", "url": "https://didyouship.com"},
     }
     schema = (
         '<script type="application/ld+json">' + json.dumps(faq_schema) + '</script>\n'
@@ -204,7 +204,7 @@ async def problem_page(slug: str, request: Request):
 async def sitemap():
     from guides_meta import ALL_SLUGS
     from problems_meta import ALL_PROBLEM_SLUGS
-    base = "https://didyouship.dev"
+    base = "https://didyouship.com"
     urls = [base + "/"]
     for slug in ALL_SLUGS:
         urls.append(f"{base}/guides/{slug}")

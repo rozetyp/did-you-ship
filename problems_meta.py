@@ -6,7 +6,7 @@ Each page answers "why is X broken?" and links to the specific fix guides.
 PROBLEMS = {
 
 "emails-going-to-spam": {
-    "seo_title": "Why Are My Emails Going to Spam? 5 Causes & Fixes | didyouship.dev",
+    "seo_title": "Why Are My Emails Going to Spam? 5 Causes & Fixes | didyouship.com",
     "description": "Emails landing in spam? Missing SPF, DKIM, or DMARC records are the most common causes. Learn why each one matters and how to fix your email deliverability.",
     "h1": "Why Are Your Emails Going to Spam?",
     "intro": "If your signup confirmations, password resets, or invoices are landing in spam — or worse, never arriving at all — it's almost always a DNS configuration problem, not a code problem. Here are the most common causes, in order of impact.",
@@ -76,7 +76,7 @@ PROBLEMS = {
 },
 
 "not-in-google": {
-    "seo_title": "Why Isn't My Website Showing in Google? 5 Causes & Fixes | didyouship.dev",
+    "seo_title": "Why Isn't My Website Showing in Google? 5 Causes & Fixes | didyouship.com",
     "description": "New website not appearing in Google search? Missing sitemap, no title tag, or viewport issues are the most common causes. Here's how to diagnose and fix each one.",
     "h1": "Why Isn't Your Website Showing in Google?",
     "intro": "Getting into Google's index is usually straightforward, but several common mistakes can prevent your site from appearing in search results entirely — or make it rank far lower than it should. Here's what to check.",
@@ -142,7 +142,7 @@ PROBLEMS = {
 },
 
 "link-preview-not-working": {
-    "seo_title": "Why Links Look Bad on Slack, Discord & Twitter? Fix Previews | didyouship.dev",
+    "seo_title": "Why Links Look Bad on Slack, Discord & Twitter? Fix Previews | didyouship.com",
     "description": "Links showing no image or preview on Slack, Discord, LinkedIn, or Twitter? Missing Open Graph tags are the cause. Learn how to fix link previews in under 10 minutes.",
     "h1": "Why Do Your Links Look Bad When Shared?",
     "intro": "When someone shares your URL on Slack, Discord, LinkedIn, iMessage, or Twitter, they expect a rich card — title, description, and an image preview. If they see a plain URL instead, Open Graph or Twitter Card tags are missing from your page. Here's what to add.",
@@ -194,7 +194,7 @@ PROBLEMS = {
 },
 
 "website-not-secure": {
-    "seo_title": "Why Does My Website Say 'Not Secure'? 4 Causes & Fixes | didyouship.dev",
+    "seo_title": "Why Does My Website Say 'Not Secure'? 4 Causes & Fixes | didyouship.com",
     "description": "'Not Secure' in the browser address bar? An expired SSL certificate, no HTTPS, broken redirect, or mixed content could be the cause. Here's how to diagnose and fix each.",
     "h1": "Why Does Your Website Say \"Not Secure\"?",
     "intro": "Chrome, Firefox, and Safari show \"Not Secure\" or \"Your connection is not private\" when something is wrong with your HTTPS configuration. There are several distinct causes — here's how to identify which one applies to you.",
@@ -256,7 +256,7 @@ PROBLEMS = {
 },
 
 "website-loading-slow": {
-    "seo_title": "Why Is My Website Loading Slowly? 4 Causes & How to Fix | didyouship.dev",
+    "seo_title": "Why Is My Website Loading Slowly? 4 Causes & How to Fix | didyouship.com",
     "description": "Website taking too long to load? Cold starts on free hosting, missing compression, or slow database queries are the most common causes. Learn how to diagnose and fix each.",
     "h1": "Why Is Your Website Loading Slowly?",
     "intro": "A slow website is one of the most damaging things for user retention — 53% of mobile users abandon a page that takes more than 3 seconds to load. There are a few distinct causes, and identifying which one you have determines the fix.",
@@ -308,7 +308,7 @@ PROBLEMS = {
 },
 
 "website-broken-on-mobile": {
-    "seo_title": "Why Is My Website Broken on Mobile? How to Fix Mobile Display | didyouship.dev",
+    "seo_title": "Why Is My Website Broken on Mobile? How to Fix Mobile Display | didyouship.com",
     "description": "Website looking tiny on phones or requiring pinch-zoom to read? A missing viewport meta tag is the most common cause. Learn how to fix mobile display in under 5 minutes.",
     "h1": "Why Is Your Website Broken on Mobile?",
     "intro": "If your site looks tiny on phones, renders at desktop width, or requires users to pinch-zoom to read anything — it's most likely a single missing HTML tag. Mobile devices account for over 60% of web traffic, and Google ranks the mobile version of your site first.",

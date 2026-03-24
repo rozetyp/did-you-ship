@@ -9,7 +9,7 @@ Content lives in static/guide.html (JS). This module only provides:
 
 GUIDES_META = {
     "spf-record": {
-        "seo_title": "SPF Record Missing: How to Fix Email Authentication | didyouship.dev",
+        "seo_title": "SPF Record Missing: How to Fix Email Authentication | didyouship.com",
         "description": "No SPF record means Gmail can't verify your emails and routes them to spam. Step-by-step fix for Google Workspace, Resend, SendGrid, Postmark, and more.",
         "category": "Email Deliverability",
         "how_steps": [
@@ -22,7 +22,7 @@ GUIDES_META = {
         ],
     },
     "dmarc": {
-        "seo_title": "DMARC Record Missing: Stop Email Spoofing on Your Domain | didyouship.dev",
+        "seo_title": "DMARC Record Missing: Stop Email Spoofing on Your Domain | didyouship.com",
         "description": "No DMARC record lets anyone send phishing emails pretending to be from your domain. Learn how to add DMARC and what policy to use.",
         "category": "Email Deliverability",
         "how_steps": [
@@ -34,7 +34,7 @@ GUIDES_META = {
         ],
     },
     "email-spoofing": {
-        "seo_title": "Email Spoofing Protection: SPF, DKIM and DMARC Explained | didyouship.dev",
+        "seo_title": "Email Spoofing Protection: SPF, DKIM and DMARC Explained | didyouship.com",
         "description": "Without SPF, DKIM, and DMARC, anyone can send email pretending to be from your domain. Learn how all three work and how to set them up.",
         "category": "Email Deliverability",
         "how_steps": [
@@ -45,7 +45,7 @@ GUIDES_META = {
         ],
     },
     "dkim-setup": {
-        "seo_title": "DKIM Not Configured: How to Set Up Email Signing | didyouship.dev",
+        "seo_title": "DKIM Not Configured: How to Set Up Email Signing | didyouship.com",
         "description": "Without DKIM, Gmail can't verify your emails are genuine and inbox placement drops. Learn how to enable DKIM for any email provider in minutes.",
         "category": "Email Deliverability",
         "how_steps": [
@@ -57,7 +57,7 @@ GUIDES_META = {
         ],
     },
     "ip-blacklisted": {
-        "seo_title": "Mail Server IP Blacklisted: How to Check and Get Delisted | didyouship.dev",
+        "seo_title": "Mail Server IP Blacklisted: How to Check and Get Delisted | didyouship.com",
         "description": "If your mail server IP is on Spamhaus or Barracuda, emails are silently dropped. Learn how to check your IP, request delisting, and prevent it recurring.",
         "category": "Email Deliverability",
         "how_steps": [
@@ -69,7 +69,7 @@ GUIDES_META = {
         ],
     },
     "email-deliverability": {
-        "seo_title": "Email Deliverability: Why Emails Land in Spam and How to Fix It | didyouship.dev",
+        "seo_title": "Email Deliverability: Why Emails Land in Spam and How to Fix It | didyouship.com",
         "description": "Emails landing in spam? Learn the three DNS records every domain needs — SPF, DKIM, and DMARC — to reliably reach the inbox.",
         "category": "Email Deliverability",
         "how_steps": [
@@ -81,7 +81,7 @@ GUIDES_META = {
         ],
     },
     "ssl-certificate": {
-        "seo_title": "SSL Certificate Expired or Invalid: How to Renew and Fix It | didyouship.dev",
+        "seo_title": "SSL Certificate Expired or Invalid: How to Renew and Fix It | didyouship.com",
         "description": "An expired SSL certificate blocks your site with a full-page browser warning. Learn how to renew it, enable auto-renewal, and fix invalid cert errors.",
         "category": "SSL & HTTPS",
         "how_steps": [
@@ -93,7 +93,7 @@ GUIDES_META = {
         ],
     },
     "https-redirect": {
-        "seo_title": "HTTP to HTTPS Redirect: Force HTTPS on Vercel, Cloudflare, Nginx | didyouship.dev",
+        "seo_title": "HTTP to HTTPS Redirect: Force HTTPS on Vercel, Cloudflare, Nginx | didyouship.com",
         "description": "Without a redirect, visitors get the insecure version of your site. Learn how to force HTTPS on Vercel, Netlify, Cloudflare, Railway, and Nginx.",
         "category": "SSL & HTTPS",
         "how_steps": [
@@ -105,7 +105,7 @@ GUIDES_META = {
         ],
     },
     "env-exposed": {
-        "seo_title": ".env File Exposed: How to Secure Your Environment Variables | didyouship.dev",
+        "seo_title": ".env File Exposed: How to Secure Your Environment Variables | didyouship.com",
         "description": "A publicly accessible .env file exposes your database passwords and API keys to anyone. Learn how to fix it immediately and rotate compromised credentials.",
         "category": "Exposed Secrets",
         "how_steps": [
@@ -117,7 +117,7 @@ GUIDES_META = {
         ],
     },
     "git-exposed": {
-        "seo_title": ".git Directory Exposed: Block Public Access to Your Source Code | didyouship.dev",
+        "seo_title": ".git Directory Exposed: Block Public Access to Your Source Code | didyouship.com",
         "description": "An exposed .git directory lets anyone download your full source code and commit history. Learn how to block it with Nginx, Apache, and Caddy.",
         "category": "Exposed Secrets",
         "how_steps": [
@@ -129,7 +129,7 @@ GUIDES_META = {
         ],
     },
     "leaked-secrets": {
-        "seo_title": "API Keys in Page Source: How to Remove Exposed Secrets | didyouship.dev",
+        "seo_title": "API Keys in Page Source: How to Remove Exposed Secrets | didyouship.com",
         "description": "API keys in your HTML source are scraped and exploited within minutes. Learn how to move them server-side in Next.js, Vite, and React.",
         "category": "Exposed Secrets",
         "how_steps": [
@@ -142,7 +142,7 @@ GUIDES_META = {
         ],
     },
     "www-redirect": {
-        "seo_title": "www Subdomain Not Working: Set Up www Redirect for SEO | didyouship.dev",
+        "seo_title": "www Subdomain Not Working: Set Up www Redirect for SEO | didyouship.com",
         "description": "www.yourdomain.com not working or both serving content? You're splitting your SEO rankings. Learn how to set up a 301 redirect correctly.",
         "category": "DNS",
         "how_steps": [
@@ -154,7 +154,7 @@ GUIDES_META = {
         ],
     },
     "hsts-header": {
-        "seo_title": "HSTS Header Missing: Add Strict-Transport-Security to Your Site | didyouship.dev",
+        "seo_title": "HSTS Header Missing: Add Strict-Transport-Security to Your Site | didyouship.com",
         "description": "Without HSTS, the first visit to your site on public WiFi can be intercepted. Learn how to add the Strict-Transport-Security header.",
         "category": "Security Headers",
         "how_steps": [
@@ -167,7 +167,7 @@ GUIDES_META = {
         ],
     },
     "page-title": {
-        "seo_title": "Page Title Tag Missing: How to Add a Title Tag for SEO | didyouship.dev",
+        "seo_title": "Page Title Tag Missing: How to Add a Title Tag for SEO | didyouship.com",
         "description": "A missing title tag means Google can't rank your page and browser tabs are blank. Learn the right format and how to set it in any framework.",
         "category": "SEO",
         "how_steps": [
@@ -180,7 +180,7 @@ GUIDES_META = {
         ],
     },
     "meta-description": {
-        "seo_title": "Meta Description Missing: Write and Add It for Better Click-Through | didyouship.dev",
+        "seo_title": "Meta Description Missing: Write and Add It for Better Click-Through | didyouship.com",
         "description": "Without a meta description, Google shows random text in search results. Learn how to write a good one and add it in Next.js, Astro, and plain HTML.",
         "category": "SEO",
         "how_steps": [
@@ -192,7 +192,7 @@ GUIDES_META = {
         ],
     },
     "open-graph": {
-        "seo_title": "Open Graph Tags Missing: Add Rich Link Previews to Your Site | didyouship.dev",
+        "seo_title": "Open Graph Tags Missing: Add Rich Link Previews to Your Site | didyouship.com",
         "description": "Without Open Graph tags, links shared on Slack, Discord, and LinkedIn show as plain text. Learn how to add og:title, og:image, and og:url.",
         "category": "SEO",
         "how_steps": [
@@ -204,7 +204,7 @@ GUIDES_META = {
         ],
     },
     "twitter-cards": {
-        "seo_title": "Twitter Card Tags Missing: Add Rich Previews for X/Twitter | didyouship.dev",
+        "seo_title": "Twitter Card Tags Missing: Add Rich Previews for X/Twitter | didyouship.com",
         "description": "Open Graph tags aren't enough for X/Twitter — you need Twitter Card tags too. Learn how to add them so your links show images on X.",
         "category": "SEO",
         "how_steps": [
@@ -215,7 +215,7 @@ GUIDES_META = {
         ],
     },
     "viewport-meta": {
-        "seo_title": "Viewport Meta Tag Missing: Fix Broken Mobile Display | didyouship.dev",
+        "seo_title": "Viewport Meta Tag Missing: Fix Broken Mobile Display | didyouship.com",
         "description": "Without the viewport meta tag, your site renders at desktop width on phones. Learn how to add it and fix mobile rendering in any framework.",
         "category": "SEO",
         "how_steps": [
@@ -227,7 +227,7 @@ GUIDES_META = {
         ],
     },
     "canonical-url": {
-        "seo_title": "Canonical URL Missing: Prevent Duplicate Content Splitting SEO | didyouship.dev",
+        "seo_title": "Canonical URL Missing: Prevent Duplicate Content Splitting SEO | didyouship.com",
         "description": "Without a canonical URL tag, Google may index multiple versions of your page and split your rankings. Learn how to add it in any framework.",
         "category": "SEO",
         "how_steps": [
@@ -239,7 +239,7 @@ GUIDES_META = {
         ],
     },
     "sitemap": {
-        "seo_title": "Sitemap.xml Missing: Create and Submit a Sitemap to Google | didyouship.dev",
+        "seo_title": "Sitemap.xml Missing: Create and Submit a Sitemap to Google | didyouship.com",
         "description": "Sitemap.xml helps Google find all your pages and is required for Google Search Console. Learn how to generate it for Next.js, Astro, Django, and more.",
         "category": "SEO",
         "how_steps": [
@@ -251,7 +251,7 @@ GUIDES_META = {
         ],
     },
     "favicon": {
-        "seo_title": "Favicon Missing: Add a Browser Tab Icon to Your Site | didyouship.dev",
+        "seo_title": "Favicon Missing: Add a Browser Tab Icon to Your Site | didyouship.com",
         "description": "A missing favicon causes a 404 error on every page load and leaves your browser tab blank. Learn how to create and add one in 5 minutes.",
         "category": "SEO",
         "how_steps": [
@@ -263,7 +263,7 @@ GUIDES_META = {
         ],
     },
     "response-time": {
-        "seo_title": "Slow Response Time & Cold Starts: Fix Server Performance | didyouship.dev",
+        "seo_title": "Slow Response Time & Cold Starts: Fix Server Performance | didyouship.com",
         "description": "Slow response times drive users away. Learn how to fix cold starts on Railway, Render, and Fly.io and how to diagnose a genuinely slow server.",
         "category": "Performance",
         "how_steps": [
@@ -276,7 +276,7 @@ GUIDES_META = {
         ],
     },
     "compression": {
-        "seo_title": "Gzip Compression Not Enabled: Speed Up Your Site for Free | didyouship.dev",
+        "seo_title": "Gzip Compression Not Enabled: Speed Up Your Site for Free | didyouship.com",
         "description": "Enabling gzip or Brotli compression reduces page size by 60-80% at zero cost. Learn how to enable it in Nginx, Express, FastAPI, and on Cloudflare.",
         "category": "Performance",
         "how_steps": [
@@ -289,7 +289,7 @@ GUIDES_META = {
         ],
     },
     "mixed-content": {
-        "seo_title": "Mixed Content Errors: Fix HTTP Resources on HTTPS Pages | didyouship.dev",
+        "seo_title": "Mixed Content Errors: Fix HTTP Resources on HTTPS Pages | didyouship.com",
         "description": "HTTP resources on an HTTPS page are silently blocked by browsers — images don't show, scripts don't run. Learn how to find and fix mixed content.",
         "category": "Breakage",
         "how_steps": [
@@ -302,7 +302,7 @@ GUIDES_META = {
         ],
     },
     "custom-404": {
-        "seo_title": "No Custom 404 Page: Create One for Next.js, Astro, and SvelteKit | didyouship.dev",
+        "seo_title": "No Custom 404 Page: Create One for Next.js, Astro, and SvelteKit | didyouship.com",
         "description": "A missing custom 404 page shows users a bare error. Learn how to create a branded 404 page in Next.js, Astro, SvelteKit, Netlify, and Nginx.",
         "category": "Polish",
         "how_steps": [

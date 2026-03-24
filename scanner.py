@@ -1,5 +1,5 @@
 """
-didyouship.dev — production readiness scanner.
+didyouship.com — production readiness scanner.
 
 24 checks across 9 categories. Every check answers:
 "What breaks if I don't fix this?"
