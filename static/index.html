@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>didyouship.dev — you shipped, but did you check?</title>
+<meta name="description" content="Free production readiness scanner. Checks email deliverability, SSL, exposed secrets, DNS, SEO, and performance in one scan. Built for developers who ship with Cursor, Replit, and Bolt.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://didyouship.dev/">
+<meta property="og:title" content="didyouship.dev — you shipped, but did you check?">
+<meta property="og:description" content="24 checks in 8 seconds. Email going to spam? Secrets exposed? Links look ugly? Find everything you forgot.">
+<meta property="og:site_name" content="didyouship.dev">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="didyouship.dev — you shipped, but did you check?">
+<meta name="twitter:description" content="24 checks in 8 seconds. Email going to spam? Secrets exposed? Links look ugly? Find everything you forgot.">
+<link rel="canonical" href="https://didyouship.dev/">
+<meta name="theme-color" content="#0c0c0e">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0c0c0e;
+  --bg2: #131316;
+  --bg3: #1a1a1f;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #e8e8ec;
+  --text2: #9898a8;
+  --text3: #5a5a6a;
+  --green: #22c55e;
+  --green-dim: rgba(34,197,94,0.12);
+  --amber: #f59e0b;
+  --amber-dim: rgba(245,158,11,0.12);
+  --red: #ef4444;
+  --red-dim: rgba(239,68,68,0.12);
+  --blue: #3b82f6;
+  --blue-dim: rgba(59,130,246,0.10);
+  --accent: #6ee7b7;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+}
+
+body {
+  background: var(--bg); color: var(--text);
+  font-family: var(--sans); font-size: 15px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page { max-width: 640px; margin: 0 auto; padding: 0 20px; }
+
+/* -- TOP -- */
+.top {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20px 0; border-bottom: 1px solid var(--border); margin-bottom: 40px;
+}
+.logo { font-family: var(--mono); font-size: 13px; color: var(--accent); }
+.logo span { color: var(--text3); }
+.free-tag {
+  font-family: var(--mono); font-size: 10px; color: var(--text3);
+  border: 1px solid var(--border2); padding: 2px 8px; border-radius: 3px;
+}
+
+/* -- CONTEXT -- */
+.context { margin-bottom: 32px; }
+.context h1 {
+  font-size: 22px; font-weight: 500; color: var(--text);
+  margin-bottom: 12px; letter-spacing: -0.02em;
+}
+.context p {
+  font-size: 14px; color: var(--text2); font-weight: 300;
+  line-height: 1.7; margin-bottom: 8px;
+}
+.what-we-check { margin-top: 20px; border-top: 1px solid var(--border); }
+.check-row {
+  display: flex; gap: 12px; padding: 8px 0;
+  border-bottom: 1px solid var(--border); font-size: 13px; align-items: baseline;
+}
+.check-cat {
+  font-family: var(--mono); font-size: 11px; color: var(--accent);
+  width: 80px; flex-shrink: 0;
+}
+.check-desc { color: var(--text3); font-weight: 300; }
+
+/* -- INPUT -- */
+.scanner { margin-bottom: 48px; }
+.input-row {
+  display: flex; background: var(--bg2);
+  border: 1px solid var(--border2); border-radius: 8px; overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input-row:focus-within {
+  border-color: rgba(110,231,183,0.3);
+  box-shadow: 0 0 0 3px rgba(110,231,183,0.06);
+}
+.input-prefix {
+  padding: 0 12px; display: flex; align-items: center;
+  font-family: var(--mono); font-size: 13px; color: var(--text3);
+  border-right: 1px solid var(--border); background: var(--bg3); user-select: none;
+}
+.input-row input {
+  flex: 1; background: transparent; border: none; outline: none;
+  padding: 13px 14px; font-family: var(--mono); font-size: 14px;
+  color: var(--text); caret-color: var(--accent); min-width: 0;
+}
+.input-row input::placeholder { color: var(--text3); }
+.scan-btn {
+  padding: 13px 20px; background: var(--accent); color: #0a1a12;
+  font-family: var(--sans); font-size: 13px; font-weight: 600;
+  border: none; cursor: pointer; white-space: nowrap; transition: background 0.15s;
+}
+.scan-btn:hover { background: #86efac; }
+.scan-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.hint { font-size: 12px; color: var(--text3); margin-top: 8px; }
+
+/* -- SCANNING -- */
+.scanning { display: none; padding: 24px 0; }
+.scanning.visible { display: block; }
+.scan-steps { display: flex; flex-direction: column; gap: 6px; }
+.scan-step {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: var(--text3); font-family: var(--mono); transition: color 0.3s;
+}
+.scan-step .mark { width: 14px; text-align: center; flex-shrink: 0; font-size: 11px; }
+.scan-step.done { color: var(--green); }
+.scan-step.active { color: var(--text2); }
+.scan-step.active .mark { animation: blink 0.8s ease-in-out infinite; color: var(--accent); }
+@keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+/* -- RESULTS -- */
+#results { display: none; }
+#results.visible { display: block; }
+
+/* grade */
+.grade {
+  display: flex; gap: 20px; align-items: center;
+  padding: 24px 0; border-bottom: 1px solid var(--border);
+}
+.grade-letter {
+  font-family: var(--mono); font-size: 64px; font-weight: 500;
+  line-height: 1; letter-spacing: -0.04em; flex-shrink: 0;
+}
+.grade-letter.A { color: var(--green); }
+.grade-letter.B { color: #60a5fa; }
+.grade-letter.C { color: var(--amber); }
+.grade-letter.D, .grade-letter.F { color: var(--red); }
+.grade-meta { flex: 1; min-width: 0; }
+.grade-domain { font-family: var(--mono); font-size: 13px; color: var(--text2); margin-bottom: 2px; }
+.grade-score { font-family: var(--mono); font-size: 12px; color: var(--text3); }
+.grade-summary { font-size: 14px; color: var(--text2); font-weight: 300; line-height: 1.55; margin-top: 8px; }
+.pills { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.pill {
+  font-family: var(--mono); font-size: 10px; padding: 3px 8px; border-radius: 3px; font-weight: 500;
+}
+.pill.critical { background: var(--red-dim); color: var(--red); }
+.pill.high { background: var(--amber-dim); color: var(--amber); }
+.pill.medium { background: var(--blue-dim); color: var(--blue); }
+.pill.low { background: rgba(255,255,255,0.04); color: var(--text3); }
+.pill.passed { background: var(--green-dim); color: var(--green); }
+
+/* fix-first callout */
+.fix-first {
+  background: var(--red-dim); border: 1px solid rgba(239,68,68,0.15);
+  border-radius: 8px; padding: 14px 16px; margin: 16px 0;
+}
+.fix-first-title {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--red); margin-bottom: 8px;
+}
+.fix-first-item {
+  font-size: 13px; color: var(--text); padding: 2px 0; font-weight: 400;
+}
+.fix-first-item::before { content: '\2192  '; color: var(--red); }
+
+/* vendors */
+.vendors {
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+}
+.vendor-label {
+  font-family: var(--mono); font-size: 10px; color: var(--text3);
+  letter-spacing: 0.05em; text-transform: uppercase; margin-right: 4px;
+}
+.vendor-tag {
+  font-family: var(--mono); font-size: 11px; color: var(--text2);
+  padding: 2px 8px; border: 1px solid var(--border2); border-radius: 3px;
+}
+
+/* issues — sorted by severity, not category */
+.issues-header {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--text3); padding: 20px 0 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.issue { border-bottom: 1px solid var(--border); cursor: pointer; }
+.issue:hover { background: rgba(255,255,255,0.01); }
+.issue-top {
+  display: flex; align-items: flex-start; gap: 10px; padding: 10px 0;
+}
+.sev-bar {
+  width: 3px; height: 16px; border-radius: 2px;
+  flex-shrink: 0; margin-top: 3px;
+}
+.issue.critical .sev-bar { background: var(--red); }
+.issue.high .sev-bar { background: var(--amber); }
+.issue.medium .sev-bar { background: var(--blue); }
+.issue.low .sev-bar { background: var(--text3); }
+.issue-title {
+  flex: 1; font-size: 14px; font-weight: 500; color: var(--text); letter-spacing: -0.01em;
+}
+.issue-tags { display: flex; gap: 6px; flex-shrink: 0; align-items: center; }
+.cat-tag {
+  font-family: var(--mono); font-size: 9px; color: var(--text3);
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.sev-label {
+  font-family: var(--mono); font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.04em; flex-shrink: 0;
+}
+.issue.critical .sev-label { color: var(--red); }
+.issue.high .sev-label { color: var(--amber); }
+.issue.medium .sev-label { color: var(--blue); }
+.issue.low .sev-label { color: var(--text3); }
+
+.issue-body { display: none; padding: 0 0 14px 13px; }
+.issue-body.open { display: block; }
+.issue-detail {
+  font-size: 13px; color: var(--text2); font-weight: 300;
+  line-height: 1.65; margin-bottom: 10px;
+}
+.fix-box {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 6px; padding: 10px 12px; margin-bottom: 8px;
+}
+.fix-label {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 6px;
+}
+.fix-code {
+  font-family: var(--mono); font-size: 12px; color: var(--text2);
+  line-height: 1.7; white-space: pre-wrap; word-break: break-word;
+}
+.copy-btn {
+  margin-top: 8px; font-family: var(--mono); font-size: 11px; color: var(--text3);
+  background: none; border: 1px solid var(--border); padding: 3px 10px;
+  border-radius: 3px; cursor: pointer; transition: all 0.15s;
+}
+.copy-btn:hover { color: var(--text); border-color: var(--border2); }
+.copy-btn.copied { color: var(--green); border-color: rgba(34,197,94,0.3); }
+
+/* expand chevron on issue rows */
+.issue-chevron {
+  font-size: 12px; color: var(--text3); flex-shrink: 0; margin-left: 6px;
+  transition: transform 0.2s; display: inline-block;
+}
+.issue.open .issue-chevron { transform: rotate(90deg); }
+
+/* severity group separators */
+.sev-group-label {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 16px 0 2px; color: var(--text3);
+}
+.sev-group-label.critical { color: rgba(239,68,68,0.8); }
+.sev-group-label.high     { color: rgba(245,158,11,0.8); }
+.sev-group-label.medium   { color: rgba(59,130,246,0.8); }
+
+/* toast notification */
+.toast {
+  position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(12px);
+  background: var(--bg3); border: 1px solid var(--border2); color: var(--text);
+  font-family: var(--mono); font-size: 12px; padding: 10px 20px; border-radius: 6px;
+  opacity: 0; transition: opacity 0.25s, transform 0.25s; pointer-events: none; z-index: 999;
+  white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* all-clear state (zero issues) */
+.all-clear { text-align: center; padding: 40px 0 16px; }
+.all-clear-score { font-family: var(--mono); font-size: 52px; font-weight: 500; color: var(--green); line-height: 1; }
+.all-clear h2 { font-size: 16px; font-weight: 500; color: var(--text); margin: 14px 0 6px; }
+.all-clear p { font-size: 13px; color: var(--text2); font-weight: 300; }
+
+/* clickable fix-first items */
+.fix-first-item { cursor: pointer; transition: opacity 0.15s; }
+.fix-first-item:hover { opacity: 0.75; }
+
+.guide-link {
+  font-size: 12px; color: var(--accent); text-decoration: none;
+  font-weight: 500; transition: color 0.15s;
+}
+.guide-link:hover { color: #86efac; text-decoration: underline; }
+
+/* passing */
+.pass-toggle {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--text3); cursor: pointer; padding: 14px 0;
+  user-select: none; border-bottom: 1px solid var(--border);
+}
+.pass-toggle:hover { color: var(--text2); }
+.pass-toggle .arr { font-size: 9px; transition: transform 0.2s; }
+.pass-toggle.open .arr { transform: rotate(90deg); }
+.pass-list { display: none; padding: 0 0 10px; }
+.pass-list.open { display: block; }
+.pass-item { font-size: 13px; color: var(--text3); padding: 4px 0; font-weight: 300; }
+.pass-item::before { content: '\2713  '; color: var(--green); }
+
+/* actions */
+.actions { display: flex; gap: 8px; flex-wrap: wrap; padding: 16px 0 48px; }
+.btn {
+  font-family: var(--sans); font-size: 13px; padding: 8px 16px;
+  border-radius: 6px; cursor: pointer; transition: all 0.15s; border: none;
+}
+.btn-primary { background: var(--accent); color: #0a1a12; font-weight: 600; }
+.btn-primary:hover { background: #86efac; }
+.btn-ghost { background: none; color: var(--text2); border: 1px solid var(--border2); }
+.btn-ghost:hover { color: var(--text); background: var(--bg2); }
+
+.foot {
+  border-top: 1px solid var(--border); padding: 32px 0 48px;
+  font-size: 11px; color: var(--text3);
+}
+.foot-note { margin-bottom: 28px; }
+.foot-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 0;
+}
+.foot-heading {
+  font-family: var(--mono); font-size: 10px; color: var(--text3);
+  text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;
+}
+.foot-links { display: flex; flex-direction: column; gap: 7px; }
+.foot-links a { font-size: 12px; color: var(--text3); text-decoration: none; transition: color 0.15s; }
+.foot-links a:hover { color: var(--accent); }
+@media (max-width: 480px) { .foot-grid { grid-template-columns: 1fr; } }
+
+@media (max-width: 500px) {
+  .grade { flex-direction: column; text-align: center; }
+  .pills { justify-content: center; }
+  .input-prefix { display: none; }
+  .issue-tags { flex-direction: column; gap: 2px; align-items: flex-end; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="top">
+  <div class="logo">didyouship<span>.dev</span></div>
+  <span class="free-tag">free</span>
+</div>
+
+<div class="context">
+  <h1>You shipped. But did you check?</h1>
+  <p>Built with Cursor, Replit, v0, or Bolt and deployed? Your emails might be going to spam, your .env could be publicly accessible, www might not work, and your links probably look ugly when shared.</p>
+  <p>This scans your live domain and shows you exactly what's broken — sorted by what to fix first, with copy-pasteable commands and DNS records.</p>
+
+  <div class="what-we-check">
+    <div class="check-row"><span class="check-cat">Email</span><span class="check-desc">SPF, DKIM, DMARC, blacklists — why your emails land in spam</span></div>
+    <div class="check-row"><span class="check-cat">SSL</span><span class="check-desc">Certificate, HTTPS redirect — why Chrome says "Not Secure"</span></div>
+    <div class="check-row"><span class="check-cat">Secrets</span><span class="check-desc">.env files, .git exposure, API keys in page source</span></div>
+    <div class="check-row"><span class="check-cat">DNS</span><span class="check-desc">www subdomain, apex redirect — why some visitors get errors</span></div>
+    <div class="check-row"><span class="check-cat">SEO</span><span class="check-desc">Title, meta tags, OG, Twitter Cards, sitemap, viewport</span></div>
+    <div class="check-row"><span class="check-cat">Speed</span><span class="check-desc">Response time, compression, cold starts, mixed content</span></div>
+  </div>
+</div>
+
+<div class="scanner">
+  <div class="input-row">
+    <span class="input-prefix">https://</span>
+    <input type="text" id="domain" placeholder="yourdomain.com" autocomplete="off" spellcheck="false" autofocus>
+    <button class="scan-btn" id="scan-btn" onclick="startScan()">Scan</button>
+  </div>
+  <p class="hint">26 checks. ~8 seconds. Nothing stored.</p>
+</div>
+
+<div class="scanning" id="scanning">
+  <div class="scan-steps" id="steps">
+    <div class="scan-step" data-s><span class="mark">&middot;</span>Email deliverability, DKIM &amp; blacklists</div>
+    <div class="scan-step" data-s><span class="mark">&middot;</span>SSL &amp; HTTPS</div>
+    <div class="scan-step" data-s><span class="mark">&middot;</span>Exposed secrets</div>
+    <div class="scan-step" data-s><span class="mark">&middot;</span>DNS records</div>
+    <div class="scan-step" data-s><span class="mark">&middot;</span>Security headers</div>
+    <div class="scan-step" data-s><span class="mark">&middot;</span>SEO &amp; meta tags</div>
+    <div class="scan-step" data-s><span class="mark">&middot;</span>Performance</div>
+  </div>
+</div>
+
+<div id="results"></div>
+
+<div class="foot">
+  <div class="foot-note">Public DNS and HTTP requests only. No scraping. No data stored.</div>
+  <div class="foot-grid">
+    <div>
+      <div class="foot-heading">Common problems</div>
+      <div class="foot-links">
+        <a href="/why/emails-going-to-spam">Why are my emails going to spam?</a>
+        <a href="/why/not-in-google">Why isn't my site showing in Google?</a>
+        <a href="/why/link-preview-not-working">Why do links look bad when shared?</a>
+        <a href="/why/website-not-secure">Why does my site say "Not Secure"?</a>
+        <a href="/why/website-loading-slow">Why is my website slow?</a>
+        <a href="/why/website-broken-on-mobile">Why is my site broken on mobile?</a>
+      </div>
+    </div>
+    <div>
+      <div class="foot-heading">Fix guides</div>
+      <div class="foot-links">
+        <a href="/guides/spf-record">SPF Record</a>
+        <a href="/guides/dmarc">DMARC</a>
+        <a href="/guides/dkim-setup">DKIM Setup</a>
+        <a href="/guides/ssl-certificate">SSL Certificate</a>
+        <a href="/guides/env-exposed">.env File Exposed</a>
+        <a href="/guides/open-graph">Open Graph Tags</a>
+        <a href="/guides/response-time">Cold Starts & Slow Servers</a>
+        <a href="/guides/leaked-secrets">API Keys in Page Source</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<div class="toast" id="toast"></div>
+<script>
+let timer, currentDomain = '';
+
+// Guide slugs for each issue title pattern
+const GUIDES = {
+  'spf': 'spf-record', 'dmarc': 'dmarc', 'spoofing': 'email-spoofing',
+  'ssl': 'ssl-certificate', 'https': 'https-redirect', 'certificate': 'ssl-certificate',
+  '.env': 'env-exposed', '.git': 'git-exposed', 'secret': 'leaked-secrets',
+  'www': 'www-redirect', 'separate sites': 'www-redirect',
+  'hsts': 'hsts-header',
+  'title': 'page-title', 'meta description': 'meta-description',
+  'open graph': 'open-graph', 'og tags': 'open-graph',
+  'twitter': 'twitter-cards', 'x/twitter': 'twitter-cards',
+  'viewport': 'viewport-meta', 'mobile': 'viewport-meta',
+  'canonical': 'canonical-url', 'sitemap': 'sitemap',
+  'favicon': 'favicon',
+  'response time': 'response-time', 'cold start': 'response-time',
+  'compression': 'compression', 'bigger than': 'compression',
+  'mixed content': 'mixed-content', 'silently broken': 'mixed-content',
+  '404': 'custom-404',
+  'dkim': 'dkim-setup', 'cryptographic': 'dkim-setup',
+  'blacklisted': 'ip-blacklisted',
+  'email': 'email-deliverability', 'spam': 'email-deliverability',
+};
+
+function guideSlug(title) {
+  const t = title.toLowerCase();
+  for (const [key, slug] of Object.entries(GUIDES)) {
+    if (t.includes(key)) return slug;
+  }
+  return null;
+}
+
+// Determine if a fix contains pasteable content (DNS records, meta tags, config)
+function isPasteable(fix) {
+  if (!fix) return false;
+  return /^[<v]|TXT|include:|DMARC|SPF|Strict-Transport|max-age|rel=|name=|property=|content=|gzip|server_tokens/i.test(fix);
+}
+
+const SEV_ORDER = { critical: 0, high: 1, medium: 2, low: 3 };
+
+function esc(s) {
+  const e = document.createElement('div');
+  e.textContent = s || '';
+  return e.innerHTML;
+}
+
+function startScan() {
+  const input = document.getElementById('domain');
+  let d = input.value.trim().toLowerCase()
+    .replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/.*$/, '').split('@').pop();
+  if (!d || !d.includes('.')) { input.focus(); return; }
+  input.value = d;
+  currentDomain = d;
+
+  document.getElementById('results').classList.remove('visible');
+  document.getElementById('results').innerHTML = '';
+  document.getElementById('scanning').classList.add('visible');
+  document.getElementById('scan-btn').disabled = true;
+
+  const steps = document.querySelectorAll('#steps .scan-step');
+  steps.forEach(s => { s.className = 'scan-step'; s.querySelector('.mark').textContent = '\u00b7'; });
+
+  let i = 0;
+  function tick() {
+    if (i > 0) { steps[i-1].className = 'scan-step done'; steps[i-1].querySelector('.mark').textContent = '\u2713'; }
+    if (i < steps.length) { steps[i].className = 'scan-step active'; steps[i].querySelector('.mark').textContent = '\u2013'; i++; timer = setTimeout(tick, 600 + Math.random() * 500); }
+  }
+  tick();
+
+  fetch('/api/scan/' + encodeURIComponent(d))
+    .then(r => r.json())
+    .then(data => {
+      clearTimeout(timer);
+      steps.forEach(s => { s.className = 'scan-step done'; s.querySelector('.mark').textContent = '\u2713'; });
+      setTimeout(() => {
+        document.getElementById('scanning').classList.remove('visible');
+        document.getElementById('scan-btn').disabled = false;
+        document.getElementById('results').innerHTML = data.error ? renderErr(d, data.error) : render(data);
+        document.getElementById('results').classList.add('visible');
+        document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 300);
+    })
+    .catch(() => {
+      clearTimeout(timer);
+      document.getElementById('scanning').classList.remove('visible');
+      document.getElementById('scan-btn').disabled = false;
+      document.getElementById('results').innerHTML = renderErr(d, 'Scan failed. Check the domain and try again.');
+      document.getElementById('results').classList.add('visible');
+    });
+}
+
+function renderErr(d, msg) {
+  return '<div class="grade"><div class="grade-letter" style="color:var(--text3)">?</div>'
+    + '<div class="grade-meta"><div class="grade-domain">' + esc(d) + '</div>'
+    + '<div class="grade-summary" style="color:var(--red)">' + esc(msg) + '</div></div></div>';
+}
+
+function render(d) {
+  let h = '';
+  const catNames = {
+    secrets:'Secrets', email:'Email', ssl:'SSL', dns:'DNS',
+    breakage:'Breakage', security:'Security', seo:'SEO',
+    performance:'Speed', polish:'Polish'
+  };
+
+  // Sort issues by severity
+  const sorted = [...d.issues].sort((a, b) => (SEV_ORDER[a.severity] ?? 9) - (SEV_ORDER[b.severity] ?? 9));
+
+  // Grade
+  h += '<div class="grade">';
+  h += '<div class="grade-letter ' + d.grade + '">' + d.grade + '</div>';
+  h += '<div class="grade-meta">';
+  h += '<div class="grade-domain">' + esc(d.domain) + '</div>';
+  h += '<div class="grade-score">' + d.score + ' / 100</div>';
+  if (d.summary) h += '<div class="grade-summary">' + esc(d.summary) + '</div>';
+  const cr = d.critical_count || 0, hi = d.high_count || 0;
+  const me = d.issues.filter(i=>i.severity==='medium').length;
+  const lo = d.issues.filter(i=>i.severity==='low').length;
+  const pa = d.passed ? d.passed.length : 0;
+  h += '<div class="pills">';
+  if (cr) h += '<span class="pill critical">' + cr + ' critical</span>';
+  if (hi) h += '<span class="pill high">' + hi + ' high</span>';
+  if (me) h += '<span class="pill medium">' + me + ' medium</span>';
+  if (lo) h += '<span class="pill low">' + lo + ' low</span>';
+  if (pa) h += '<span class="pill passed">' + pa + ' passed</span>';
+  h += '</div></div></div>';
+
+  // "Fix first" callout for criticals
+  const criticals = sorted.filter(i => i.severity === 'critical');
+  if (criticals.length) {
+    h += '<div class="fix-first">';
+    h += '<div class="fix-first-title">Fix these first</div>';
+    criticals.forEach(i => {
+      const cidx = sorted.indexOf(i);
+      h += '<div class="fix-first-item" onclick="openIssue(\'i' + cidx + '\')">' + esc(i.title) + '</div>';
+    });
+    h += '</div>';
+  }
+
+  // Vendors
+  const vs = [...(d.email_vendors||[]), ...(d.mx_vendors||[])];
+  if (vs.length) {
+    h += '<div class="vendors"><span class="vendor-label">Email stack</span>';
+    vs.forEach(v => { h += '<span class="vendor-tag">' + esc(v) + '</span>'; });
+    h += '</div>';
+  }
+
+  // Issues sorted by severity
+  if (sorted.length) {
+    h += '<div class="issues-header">' + sorted.length + ' issues found — sorted by priority</div>';
+    let lastSev = null;
+    sorted.forEach((issue, idx) => {
+      if (issue.severity !== lastSev) {
+        lastSev = issue.severity;
+        const sevLabel = {critical:'Critical', high:'High', medium:'Medium', low:'Low'};
+        h += '<div class="sev-group-label ' + issue.severity + '">' + sevLabel[issue.severity] + '</div>';
+      }
+      const uid = 'i' + idx;
+      const slug = guideSlug(issue.title);
+      h += '<div class="issue ' + issue.severity + '">';
+      h += '<div class="issue-top" onclick="toggle(\'' + uid + '\')">';
+      h += '<span class="sev-bar"></span>';
+      h += '<span class="issue-title">' + esc(issue.title) + '</span>';
+      h += '<span class="issue-tags">';
+      h += '<span class="cat-tag">' + (catNames[issue.category] || issue.category) + '</span>';
+      h += '<span class="sev-label">' + issue.severity + '</span>';
+      h += '<span class="issue-chevron">›</span>';
+      h += '</span>';
+      h += '</div>';
+      h += '<div class="issue-body" id="b-' + uid + '">';
+      h += '<div class="issue-detail">' + esc(issue.ai_explanation || issue.detail) + '</div>';
+      if (issue.fix) {
+        h += '<div class="fix-box"><div class="fix-label">How to fix</div>';
+        h += '<div class="fix-code">' + esc(issue.fix) + '</div>';
+        if (isPasteable(issue.fix)) {
+          h += '<button class="copy-btn" onclick="event.stopPropagation();copyFix(this)">Copy</button>';
+        }
+        h += '</div>';
+      }
+      if (slug) {
+        h += '<a class="guide-link" href="/guides/' + slug + '" onclick="event.stopPropagation()">Learn more about this \u2192</a>';
+      }
+      h += '</div></div>';
+    });
+  } else {
+    h += '<div class="all-clear">';
+    h += '<div class="all-clear-score">' + d.score + '</div>';
+    h += '<h2>Everything checks out</h2>';
+    h += '<p>All checks passed — your domain is production-ready.</p>';
+    h += '</div>';
+  }
+
+  // Passed
+  if (d.passed && d.passed.length) {
+    h += '<div class="pass-toggle" onclick="togPass(this)">';
+    h += '<span class="arr">&#9654;</span> ' + d.passed.length + ' checks passed</div>';
+    h += '<div class="pass-list">';
+    d.passed.forEach(p => { h += '<div class="pass-item">' + esc(p) + '</div>'; });
+    h += '</div>';
+  }
+
+  // Actions
+  h += '<div class="actions">';
+  h += '<button class="btn btn-primary" onclick="startScan()">Rescan</button>';
+  h += '<button class="btn btn-ghost" onclick="share()">Share my grade</button>';
+  h += '<button class="btn btn-ghost" onclick="newScan()">Scan another</button>';
+  h += '</div>';
+
+  return h;
+}
+
+function toggle(uid) {
+  const body = document.getElementById('b-' + uid);
+  body.classList.toggle('open');
+  body.closest('.issue').classList.toggle('open');
+}
+function togPass(el) { el.classList.toggle('open'); el.nextElementSibling.classList.toggle('open'); }
+
+function openIssue(uid) {
+  const body = document.getElementById('b-' + uid);
+  const issue = body.closest('.issue');
+  if (!body.classList.contains('open')) {
+    body.classList.add('open');
+    issue.classList.add('open');
+  }
+  issue.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function copyFix(btn) {
+  const code = btn.previousElementSibling;
+  navigator.clipboard.writeText(code.textContent).then(() => {
+    btn.textContent = '\u2713 Copied';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function share() {
+  const t = 'Scanned ' + currentDomain + ' on didyouship.dev \u2014 check yours:';
+  if (navigator.share) navigator.share({ title: 'didyouship', text: t, url: 'https://didyouship.dev' });
+  else navigator.clipboard.writeText(t + ' https://didyouship.dev').then(() => showToast('Copied to clipboard'));
+}
+
+function newScan() {
+  document.getElementById('domain').value = '';
+  document.getElementById('results').classList.remove('visible');
+  document.getElementById('results').innerHTML = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(() => document.getElementById('domain').focus(), 300);
+}
+
+document.getElementById('domain').addEventListener('keydown', e => { if (e.key === 'Enter') startScan(); });
+</script>
+</body>
+</html>
