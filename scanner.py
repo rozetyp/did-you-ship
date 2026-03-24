@@ -352,8 +352,13 @@ def _check_dkim(r: ScanResult):
 
     r.raw["email"]["dkim_selector"] = found_selector
 
+    spf_rejects_all = r.raw["email"].get("spf") and "-all" in (r.raw["email"]["spf"] or "")
+
     if found_selector:
         r.passed.append(f"DKIM configured ({found_selector} selector)")
+    elif spf_rejects_all:
+        # SPF -all means no email is sent from this domain — DKIM is not needed
+        r.passed.append("DKIM not required (domain sends no email, SPF -all)")
     else:
         r.issues.append(Issue("email", "high",
             "Emails have no cryptographic signature (DKIM missing)",
