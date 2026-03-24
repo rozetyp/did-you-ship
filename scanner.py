@@ -251,13 +251,7 @@ def _check_email(r: ScanResult):
             f"can send email as @{r.domain}.",
             f"Change {mech} to ~all or -all in your SPF TXT record."))
     elif "~all" in spf_record:
-        r.issues.append(Issue("email", "low",
-            "Email authentication isn't fully locked down",
-            "Your SPF uses ~all (softfail). Unauthorized senders are flagged but not "
-            "rejected. This is fine for now — upgrade to -all once you're confident "
-            "your SPF includes are complete.",
-            "Change ~all to -all in your SPF TXT record when ready."))
-        r.passed.append("SPF record exists")
+        r.passed.append("SPF record exists (~all softfail)")
     else:
         r.passed.append("SPF record configured correctly")
 
@@ -593,15 +587,31 @@ def _check_secrets(r: ScanResult, html: str):
 
 
 def _check_path_exposed(base_url: str, path: str) -> bool:
-    """HEAD request to check if a sensitive path returns 200."""
+    """GET request to check if a sensitive path returns real secret content.
+    SPAs return 200 for all routes — we verify the body actually looks like
+    the sensitive file, not an HTML page."""
     try:
         req = urllib.request.Request(
             base_url + path,
-            method="HEAD",
             headers={"User-Agent": "Mozilla/5.0 (compatible; didyouship/1.0)"},
         )
         resp = urllib.request.urlopen(req, timeout=5)
-        return resp.status == 200
+        if resp.status != 200:
+            return False
+        content_type = resp.headers.get("Content-Type", "")
+        if "text/html" in content_type:
+            return False
+        body = resp.read(1024).decode("utf-8", errors="ignore")
+        # Reject HTML responses (SPA catch-all routes)
+        if any(m in body[:200].lower() for m in ("<!doctype", "<html", "<head")):
+            return False
+        if path.endswith(".env"):
+            # Real .env files have KEY=VALUE lines
+            return bool(re.search(r"[A-Z_]{2,}=", body))
+        if ".git" in path:
+            # Real git configs have [core] or [remote sections
+            return "[core]" in body or "[remote" in body or "repositoryformatversion" in body
+        return True
     except Exception:
         return False
 
