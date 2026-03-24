@@ -607,6 +607,8 @@ def _check_dns(r: ScanResult):
     """Checks 10-11: www resolves, www ↔ apex redirect."""
 
     # ── Check 10: www subdomain ──
+    # Use socket.getaddrinfo as it follows CNAME chains and works with
+    # Cloudflare-proxied records that flatten to A records.
     www_resolves = False
     try:
         dns.resolver.resolve(f"www.{r.domain}", "A", lifetime=DNS_TIMEOUT)
@@ -616,7 +618,12 @@ def _check_dns(r: ScanResult):
             dns.resolver.resolve(f"www.{r.domain}", "CNAME", lifetime=DNS_TIMEOUT)
             www_resolves = True
         except Exception:
-            pass
+            try:
+                results = socket.getaddrinfo(f"www.{r.domain}", 80, proto=socket.IPPROTO_TCP)
+                if results:
+                    www_resolves = True
+            except Exception:
+                pass
 
     r.raw["dns"]["www_resolves"] = www_resolves
 

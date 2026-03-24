@@ -14,8 +14,9 @@ from concurrent.futures import ThreadPoolExecutor
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, Response
+from fastapi.responses import FileResponse, Response, HTMLResponse
 from fastapi.templating import Jinja2Templates
+from starlette.middleware.base import BaseHTTPMiddleware
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
@@ -35,6 +36,14 @@ app = FastAPI(
 )
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+class HSTSMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        response = await call_next(request)
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+        return response
+
+app.add_middleware(HSTSMiddleware)
 
 _executor = ThreadPoolExecutor(max_workers=20)
 _templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__), "static"))
@@ -219,6 +228,14 @@ async def sitemap():
 @app.get("/health")
 async def health():
     return {"status": "ok", "service": "didyouship"}
+
+
+@app.exception_handler(404)
+async def not_found(request: Request, exc):
+    return FileResponse(
+        os.path.join(os.path.dirname(__file__), "static", "404.html"),
+        status_code=404,
+    )
 
 
 app.mount("/static", StaticFiles(directory=os.path.join(os.path.dirname(__file__), "static")), name="static")

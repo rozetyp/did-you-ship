@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — didyouship.com</title>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0c0c0e; --text: #e8e8ec; --text2: #b4b4c4; --text3: #808091;
+  --accent: #6ee7b7; --border: rgba(255,255,255,0.07);
+  --mono: 'DM Mono', monospace; --sans: 'DM Sans', sans-serif;
+}
+body { background: var(--bg); color: var(--text); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+.page { max-width: 640px; margin: 0 auto; padding: 0 20px; }
+.top { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border); margin-bottom: 80px; }
+.logo { font-family: var(--mono); font-size: 13px; color: var(--accent); text-decoration: none; }
+.logo span { color: var(--text3); }
+.hero { text-align: center; padding: 40px 0 60px; }
+.code { font-family: var(--mono); font-size: 96px; font-weight: 500; color: var(--text3); line-height: 1; margin-bottom: 24px; letter-spacing: -4px; }
+h1 { font-size: 22px; font-weight: 500; color: var(--text); margin-bottom: 12px; letter-spacing: -0.02em; }
+p { font-size: 14px; color: var(--text2); font-weight: 300; line-height: 1.7; margin-bottom: 32px; }
+.btn { display: inline-block; background: var(--accent); color: #0a1a12; font-family: var(--sans); font-size: 13px; font-weight: 600; padding: 10px 22px; border-radius: 6px; text-decoration: none; transition: background 0.15s; }
+.btn:hover { background: #86efac; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="top">
+    <a href="/" class="logo">didyouship<span>.com</span></a>
+  </div>
+  <div class="hero">
+    <div class="code">404</div>
+    <h1>Page not found</h1>
+    <p>This page doesn't exist — but your domain might have bigger problems.<br>Run a free scan to find out.</p>
+    <a href="/" class="btn">Scan your domain →</a>
+  </div>
+</div>
+</body>
+</html>

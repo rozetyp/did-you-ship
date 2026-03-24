@@ -1,0 +1,39 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#0c0c0e"/>
+  <rect x="1" y="1" width="1198" height="628" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+
+  <!-- accent line top -->
+  <rect x="80" y="80" width="48" height="3" fill="#6ee7b7" rx="2"/>
+
+  <!-- logo -->
+  <text x="80" y="160" font-family="monospace" font-size="28" fill="#6ee7b7" letter-spacing="-0.5">didyouship.com</text>
+
+  <!-- headline -->
+  <text x="80" y="280" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="500" fill="#e8e8ec" letter-spacing="-2">You shipped.</text>
+  <text x="80" y="370" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="500" fill="#e8e8ec" letter-spacing="-2">But did you check?</text>
+
+  <!-- subtext -->
+  <text x="80" y="450" font-family="system-ui, -apple-system, sans-serif" font-size="26" font-weight="300" fill="#b4b4c4">26 production checks in 8 seconds. Free.</text>
+
+  <!-- check badges -->
+  <g transform="translate(80, 510)">
+    <rect width="90" height="32" rx="4" fill="rgba(239,68,68,0.15)" stroke="rgba(239,68,68,0.3)" stroke-width="1"/>
+    <text x="45" y="21" font-family="monospace" font-size="12" fill="#ef4444" text-anchor="middle">Email</text>
+  </g>
+  <g transform="translate(182, 510)">
+    <rect width="70" height="32" rx="4" fill="rgba(245,158,11,0.15)" stroke="rgba(245,158,11,0.3)" stroke-width="1"/>
+    <text x="35" y="21" font-family="monospace" font-size="12" fill="#f59e0b" text-anchor="middle">SSL</text>
+  </g>
+  <g transform="translate(264, 510)">
+    <rect width="90" height="32" rx="4" fill="rgba(59,130,246,0.15)" stroke="rgba(59,130,246,0.3)" stroke-width="1"/>
+    <text x="45" y="21" font-family="monospace" font-size="12" fill="#3b82f6" text-anchor="middle">Secrets</text>
+  </g>
+  <g transform="translate(366, 510)">
+    <rect width="70" height="32" rx="4" fill="rgba(110,231,183,0.15)" stroke="rgba(110,231,183,0.3)" stroke-width="1"/>
+    <text x="35" y="21" font-family="monospace" font-size="12" fill="#6ee7b7" text-anchor="middle">SEO</text>
+  </g>
+  <g transform="translate(448, 510)">
+    <rect width="110" height="32" rx="4" fill="rgba(110,231,183,0.15)" stroke="rgba(110,231,183,0.3)" stroke-width="1"/>
+    <text x="55" y="21" font-family="monospace" font-size="12" fill="#6ee7b7" text-anchor="middle">Performance</text>
+  </g>
+</svg>
