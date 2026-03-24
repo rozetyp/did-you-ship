@@ -136,8 +136,7 @@ async def guide_page(slug: str, request: Request):
         description = "Educational guides for every production readiness issue: SPF, DKIM, DMARC, SSL, security headers, SEO, performance, and more."
         schema = ""
 
-    return _templates.TemplateResponse("guide.html", {
-        "request": request,
+    return _templates.TemplateResponse(request, "guide.html", {
         "slug": slug,
         "title": title,
         "description": description,
@@ -189,8 +188,7 @@ async def problem_page(slug: str, request: Request):
         if s != slug
     ]
 
-    return _templates.TemplateResponse("problem.html", {
-        "request": request,
+    return _templates.TemplateResponse(request, "problem.html", {
         "slug": slug,
         "title": title,
         "description": description,
