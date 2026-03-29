@@ -134,13 +134,26 @@ a:hover { text-decoration: underline; }
   border: 1px solid var(--border); border-radius: 8px; text-align: center;
 }
 .guide-cta p { font-size: 13px; color: var(--text3); margin-bottom: 14px; }
-.guide-cta a {
-  display: inline-block; background: var(--accent); color: #0c0c0e;
-  font-family: var(--mono); font-size: 12px; font-weight: 500;
-  padding: 9px 20px; border-radius: 5px; text-decoration: none;
-  transition: opacity 0.15s;
+.guide-cta .cta-input-row {
+  display: flex; max-width: 400px; margin: 0 auto;
+  background: var(--bg3); border: 1px solid var(--border2); border-radius: 6px; overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
-.guide-cta a:hover { opacity: 0.85; }
+.guide-cta .cta-input-row:focus-within {
+  border-color: rgba(110,231,183,0.3); box-shadow: 0 0 0 3px rgba(110,231,183,0.06);
+}
+.guide-cta .cta-input-row input {
+  flex: 1; background: transparent; border: none; outline: none;
+  padding: 10px 14px; font-family: var(--mono); font-size: 13px;
+  color: var(--text); caret-color: var(--accent); min-width: 0;
+}
+.guide-cta .cta-input-row input::placeholder { color: var(--text3); }
+.guide-cta .cta-input-row button {
+  padding: 10px 18px; background: var(--accent); color: #0a1a12;
+  font-family: var(--mono); font-size: 12px; font-weight: 500;
+  border: none; cursor: pointer; white-space: nowrap; transition: background 0.15s;
+}
+.guide-cta .cta-input-row button:hover { background: #86efac; }
 
 /* ── NOT FOUND ── */
 .not-found { padding: 80px 40px; text-align: center; }
@@ -1055,7 +1068,10 @@ function buildContent(slug) {
     h += '<div class="section"><div class="section-label">Providers & tools</div>' + g.providers + '</div>';
   }
 
-  h += '<div class="guide-cta"><p>Check if your domain has this issue</p><a href="/">Run a free scan →</a></div>';
+  h += '<div class="guide-cta"><p>Check if your domain has this issue</p>';
+  h += '<form class="cta-input-row" onsubmit="window.location.href=\'/?\'+encodeURIComponent(this.querySelector(\'input\').value.trim());return false;">';
+  h += '<input type="text" placeholder="yourdomain.com" autocapitalize="none" autocorrect="off" spellcheck="false">';
+  h += '<button type="submit">Scan</button></form></div>';
 
   el.innerHTML = h;
 }
@@ -1080,7 +1096,10 @@ function renderIndex() {
     h += '</ul></div>';
   });
 
-  h += '<div class="guide-cta"><p>Run a free scan to see which issues apply to your domain</p><a href="/">Scan your domain →</a></div>';
+  h += '<div class="guide-cta"><p>Run a free scan to see which issues apply to your domain</p>';
+  h += '<form class="cta-input-row" onsubmit="window.location.href=\'/?\'+encodeURIComponent(this.querySelector(\'input\').value.trim());return false;">';
+  h += '<input type="text" placeholder="yourdomain.com" autocapitalize="none" autocorrect="off" spellcheck="false">';
+  h += '<button type="submit">Scan</button></form></div>';
   el.innerHTML = h;
 }
 

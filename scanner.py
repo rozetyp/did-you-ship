@@ -43,8 +43,25 @@ class ScanResult:
     mx_vendors: list[str] = field(default_factory=list)
 
 
-DNS_TIMEOUT = 3
+DNS_TIMEOUT = 5
 HTTP_TIMEOUT = 10
+
+
+def dns_query(qname, qtype, lifetime=None):
+    """DNS query with up to 3 attempts; only NXDOMAIN is treated as permanent."""
+    if lifetime is None:
+        lifetime = DNS_TIMEOUT
+    last_exc = None
+    for attempt in range(3):
+        try:
+            return list(dns.resolver.resolve(qname, qtype, lifetime=lifetime))
+        except dns.resolver.NXDOMAIN:
+            raise  # domain doesn't exist — never retry
+        except Exception as exc:
+            last_exc = exc
+            if attempt < 2:
+                time.sleep(0.2 * (attempt + 1))  # 0.2s, 0.4s back-off
+    raise last_exc
 
 # ── Vendor maps ──────────────────────────────────────────────────────────────
 
@@ -222,7 +239,7 @@ def _check_email(r: ScanResult):
     spf_record = None
     vendors = []
     try:
-        for rdata in dns.resolver.resolve(r.domain, "TXT", lifetime=DNS_TIMEOUT):
+        for rdata in dns_query(r.domain, "TXT"):
             txt = rdata.to_text().strip('"')
             if txt.startswith("v=spf1"):
                 spf_record = txt
@@ -260,7 +277,7 @@ def _check_email(r: ScanResult):
     dmarc_policy = None
     dmarc_rua = None
     try:
-        for rdata in dns.resolver.resolve(f"_dmarc.{r.domain}", "TXT", lifetime=DNS_TIMEOUT):
+        for rdata in dns_query(f"_dmarc.{r.domain}", "TXT"):
             txt = rdata.to_text().strip('"')
             if "v=DMARC1" in txt:
                 dmarc_record = txt
@@ -312,7 +329,7 @@ def _check_email(r: ScanResult):
     mx_hosts = []
     mx_vendors_found = []
     try:
-        for rdata in dns.resolver.resolve(r.domain, "MX", lifetime=DNS_TIMEOUT):
+        for rdata in dns_query(r.domain, "MX"):
             mx = str(rdata.exchange).rstrip(".")
             mx_hosts.append(mx)
             for frag, name in MX_VENDORS.items():
@@ -371,10 +388,10 @@ def _check_blacklist(r: ScanResult):
     # Resolve the lowest-priority MX host to an IP
     mx_ip = None
     try:
-        mx_records = list(dns.resolver.resolve(r.domain, "MX", lifetime=DNS_TIMEOUT))
+        mx_records = dns_query(r.domain, "MX")
         mx_host = str(min(mx_records, key=lambda x: x.preference).exchange).rstrip(".")
-        a_records = dns.resolver.resolve(mx_host, "A", lifetime=DNS_TIMEOUT)
-        mx_ip = str(list(a_records)[0])
+        a_records = dns_query(mx_host, "A")
+        mx_ip = str(a_records[0])
     except Exception:
         pass
 
@@ -626,11 +643,11 @@ def _check_dns(r: ScanResult):
     # Cloudflare-proxied records that flatten to A records.
     www_resolves = False
     try:
-        dns.resolver.resolve(f"www.{r.domain}", "A", lifetime=DNS_TIMEOUT)
+        dns_query(f"www.{r.domain}", "A")
         www_resolves = True
     except Exception:
         try:
-            dns.resolver.resolve(f"www.{r.domain}", "CNAME", lifetime=DNS_TIMEOUT)
+            dns_query(f"www.{r.domain}", "CNAME")
             www_resolves = True
         except Exception:
             try:

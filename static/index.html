@@ -604,7 +604,7 @@ function render(d) {
         h += '</div>';
       }
       if (slug) {
-        h += '<a class="guide-link" href="/guides/' + slug + '" onclick="event.stopPropagation()">Learn more about this \u2192</a>';
+        h += `<a class="guide-link" href="/guides/${slug}" onclick="event.stopPropagation()">Learn more about this \u2192</a>`;
       }
       h += '</div></div>';
     });
@@ -683,6 +683,16 @@ function newScan() {
 }
 
 document.getElementById('domain').addEventListener('keydown', e => { if (e.key === 'Enter') startScan(); });
+
+// Auto-scan if domain passed via URL (e.g. /?example.com)
+(function() {
+  const q = decodeURIComponent(window.location.search.slice(1)).trim();
+  if (q && q.includes('.') && !q.includes('=')) {
+    document.getElementById('domain').value = q;
+    history.replaceState(null, '', '/');
+    startScan();
+  }
+})();
 </script>
 </body>
 </html>
