@@ -7,6 +7,7 @@ didyouship.com — production readiness scanner.
 All from public data. Zero server access needed.
 """
 
+import os
 import ssl
 import socket
 import time
@@ -45,6 +46,27 @@ class ScanResult:
 
 DNS_TIMEOUT = 5
 HTTP_TIMEOUT = 10
+
+# ── Proxy support ────────────────────────────────────────────────────────────
+# Set SCAN_PROXY env var to route HTTP requests through a residential proxy.
+# Format: http://user:pass@host:port
+_PROXY_URL = os.environ.get("SCAN_PROXY", "")
+
+def _build_opener():
+    """Build a urllib opener, optionally with proxy."""
+    if _PROXY_URL:
+        proxy_handler = urllib.request.ProxyHandler({
+            "http": _PROXY_URL,
+            "https": _PROXY_URL,
+        })
+        return urllib.request.build_opener(proxy_handler)
+    return urllib.request.build_opener()
+
+_opener = _build_opener()
+
+def _urlopen(req, timeout=HTTP_TIMEOUT):
+    """urlopen via proxy-aware opener."""
+    return _opener.open(req, timeout=timeout)
 
 
 def dns_query(qname, qtype, lifetime=None):
@@ -138,9 +160,9 @@ def scan(domain: str) -> ScanResult:
     with ThreadPoolExecutor(max_workers=8) as pool:
         # Start slow I/O checks immediately — no page HTML needed
         # ssl + redirect are grouped to avoid a write race on r.raw["ssl"]
+        email_future = pool.submit(_check_email, r)          # checks 1-4  (DNS)
         futures = [
-            pool.submit(_check_email, r),                    # checks 1-4  (DNS)
-            pool.submit(_check_dkim, r),                     # check 5     (DNS)
+            email_future,
             pool.submit(_check_blacklist, r),                # check 6     (DNS)
             pool.submit(_check_ssl_and_redirect, r),         # checks 7-8  (SSL + HTTP)
             pool.submit(_check_dns, r),                      # checks 9-10 (DNS)
@@ -149,6 +171,10 @@ def scan(domain: str) -> ScanResult:
 
         # Fetch page in main thread — provides html/headers for remaining checks
         html, headers, fetch_ok = _fetch_page(r)
+
+        # DKIM must run after email check (reads r.raw["email"]["spf"])
+        email_future.result()
+        futures.append(pool.submit(_check_dkim, r))          # check 5     (DNS)
 
         # Submit html-dependent checks now that fetch is done
         futures += [
@@ -189,7 +215,7 @@ def _fetch_page(r: ScanResult) -> tuple[str, dict, bool]:
                 "User-Agent": "Mozilla/5.0 (compatible; didyouship/1.0)",
                 "Accept-Encoding": "gzip, deflate",  # no br — urllib can't decompress Brotli
             })
-            resp = urllib.request.urlopen(req, timeout=HTTP_TIMEOUT + attempt * 5)
+            resp = _urlopen(req, timeout=HTTP_TIMEOUT + attempt * 5)
             warmup_time = time.time() - t0
 
             raw_bytes = resp.read()
@@ -217,7 +243,7 @@ def _fetch_page(r: ScanResult) -> tuple[str, dict, bool]:
             req2 = urllib.request.Request(r.url, headers={
                 "User-Agent": "Mozilla/5.0 (compatible; didyouship/1.0)",
             })
-            urllib.request.urlopen(req2, timeout=HTTP_TIMEOUT)
+            _urlopen(req2, timeout=HTTP_TIMEOUT)
             response_time = time.time() - t1
             r.raw["performance"]["response_time"] = round(response_time, 2)
 
@@ -348,9 +374,7 @@ def _check_dkim(r: ScanResult):
     found_selector = None
     for selector in DKIM_SELECTORS:
         try:
-            records = dns.resolver.resolve(
-                f"{selector}._domainkey.{r.domain}", "TXT", lifetime=1
-            )
+            records = dns_query(f"{selector}._domainkey.{r.domain}", "TXT", lifetime=2)
             for rdata in records:
                 txt = rdata.to_text().strip('"')
                 if "v=DKIM1" in txt or "k=rsa" in txt or "k=ed25519" in txt:
@@ -612,7 +636,7 @@ def _check_path_exposed(base_url: str, path: str) -> bool:
             base_url + path,
             headers={"User-Agent": "Mozilla/5.0 (compatible; didyouship/1.0)"},
         )
-        resp = urllib.request.urlopen(req, timeout=5)
+        resp = _urlopen(req, timeout=5)
         if resp.status != 200:
             return False
         content_type = resp.headers.get("Content-Type", "")
@@ -707,16 +731,34 @@ def _check_www_redirect(r: ScanResult):
     r.raw["dns"]["apex_status"] = apex_status
     r.raw["dns"]["www_status"] = www_status
 
-    # If both return 200, neither is redirecting — that's the problem
+    # If both return 200, check if canonical tag handles deduplication
     if apex_status == 200 and www_status == 200:
-        r.issues.append(Issue("dns", "high",
-            f"www.{r.domain} and {r.domain} are separate sites",
-            f"Both www.{r.domain} and {r.domain} serve content independently. "
-            "Google treats these as two different websites, splitting your "
-            "search rankings in half.",
-            "Set up a 301 redirect from www to your apex domain "
-            "(or vice versa) in your hosting dashboard. Pick one "
-            "canonical version and redirect the other."))
+        # If the page has a canonical URL pointing to one version, Google
+        # respects it — no duplicate content issue despite both serving 200
+        has_canonical = False
+        try:
+            req = urllib.request.Request(
+                f"https://www.{r.domain}/",
+                headers={"User-Agent": "Mozilla/5.0 (compatible; didyouship/1.0)"},
+            )
+            resp = _urlopen(req, timeout=5)
+            body = resp.read(4096).decode("utf-8", errors="ignore")
+            if re.search(r'rel=["\']canonical["\']', body, re.IGNORECASE):
+                has_canonical = True
+        except Exception:
+            pass
+
+        if has_canonical:
+            r.passed.append("www and apex both serve (canonical URL set)")
+        else:
+            r.issues.append(Issue("dns", "medium",
+                "Google might index duplicate versions of your site",
+                f"Both www.{r.domain} and {r.domain} serve content with no "
+                "canonical tag or redirect. Google may treat these as two "
+                "separate sites, splitting your search rankings.",
+                "Set up a 301 redirect from www to your apex domain "
+                "(or vice versa) in your hosting dashboard. Or add a "
+                '<link rel="canonical"> tag pointing to your preferred version.'))
     else:
         r.passed.append("www and apex properly redirect")
 
@@ -859,7 +901,7 @@ def _check_seo(r: ScanResult, html: str, fetch_ok: bool):
             f"{r.url}/sitemap.xml",
             headers={"User-Agent": "Mozilla/5.0 (compatible; didyouship/1.0)"},
         )
-        resp = urllib.request.urlopen(req, timeout=5)
+        resp = _urlopen(req, timeout=5)
         if resp.status == 200 and len(resp.read()) > 50:
             has_sitemap = True
     except Exception:
@@ -872,7 +914,7 @@ def _check_seo(r: ScanResult, html: str, fetch_ok: bool):
                 f"{r.url}/robots.txt",
                 headers={"User-Agent": "Mozilla/5.0 (compatible; didyouship/1.0)"},
             )
-            resp = urllib.request.urlopen(req, timeout=5)
+            resp = _urlopen(req, timeout=5)
             robots = resp.read().decode("utf-8", errors="ignore")
             if re.search(r"(?i)^Sitemap:\s*https?://", robots, re.MULTILINE):
                 has_sitemap = True
@@ -1010,7 +1052,7 @@ def _check_404(r: ScanResult):
             r.url + random_path,
             headers={"User-Agent": "Mozilla/5.0 (compatible; didyouship/1.0)"},
         )
-        resp = urllib.request.urlopen(req, timeout=5)
+        resp = _urlopen(req, timeout=5)
         # 200 for a random path = SPA with client-side routing.
         # These apps handle 404s in JS — skip the check, it's not applicable.
         r.passed.append("Custom 404 page exists")

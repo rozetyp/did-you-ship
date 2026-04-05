@@ -72,13 +72,17 @@ async def public_scan(domain: str, request: Request):
         domain, result.score, result.grade, len(result.issues),
     )
 
-    # AI explanations (optional — needs XAI_API_KEY)
+    # AI explanations (optional — needs XAI_API_KEY, run in parallel)
     explanations = {}
     summary = None
     try:
         from ai_report import explain_issues, generate_summary
-        explanations = explain_issues(result)
-        summary = generate_summary(result)
+        from concurrent.futures import ThreadPoolExecutor as _TP
+        with _TP(max_workers=2) as ai_pool:
+            ef = ai_pool.submit(explain_issues, result)
+            sf = ai_pool.submit(generate_summary, result)
+            explanations = ef.result(timeout=10)
+            summary = sf.result(timeout=10)
     except Exception:
         pass
 
