@@ -3,20 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{{ title }}</title>
-<meta name="description" content="{{ description }}">
-<link rel="canonical" href="https://didyouship.com/guides/{{ slug }}">
+<title>SSL Certificate Expired or Invalid: How to Renew and Fix It (2026) | didyouship.com</title>
+<meta name="description" content="An expired SSL certificate blocks your site with a full-page browser warning. Learn how to renew it, enable auto-renewal, and fix invalid cert errors.">
+<link rel="canonical" href="https://didyouship.com/guides/ssl-certificate">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://didyouship.com/guides/{{ slug }}">
-<meta property="og:title" content="{{ title }}">
-<meta property="og:description" content="{{ description }}">
+<meta property="og:url" content="https://didyouship.com/guides/ssl-certificate">
+<meta property="og:title" content="SSL Certificate Expired or Invalid: How to Renew and Fix It (2026) | didyouship.com">
+<meta property="og:description" content="An expired SSL certificate blocks your site with a full-page browser warning. Learn how to renew it, enable auto-renewal, and fix invalid cert errors.">
 <meta property="og:site_name" content="didyouship.com">
 <meta property="og:image" content="https://didyouship.com/static/og.svg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{{ title }}">
-<meta name="twitter:description" content="{{ description }}">
+<meta name="twitter:title" content="SSL Certificate Expired or Invalid: How to Renew and Fix It (2026) | didyouship.com">
+<meta name="twitter:description" content="An expired SSL certificate blocks your site with a full-page browser warning. Learn how to renew it, enable auto-renewal, and fix invalid cert errors.">
 <meta name="twitter:image" content="https://didyouship.com/static/og.svg">
-{{ schema | safe }}
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: SSL Certificate Expired or Invalid: How to Renew and Fix It (2026)", "description": "An expired SSL certificate blocks your site with a full-page browser warning. Learn how to renew it, enable auto-renewal, and fix invalid cert errors.", "step": [{"@type": "HowToStep", "text": "Check your cert expiry: openssl s_client -connect yourdomain.com:443 | openssl x509 -noout -dates", "position": 1}, {"@type": "HowToStep", "text": "Log in to your hosting dashboard and look for SSL or Certificate settings.", "position": 2}, {"@type": "HowToStep", "text": "Enable auto-renewal \u2014 Vercel, Netlify, Cloudflare, and Render do this automatically.", "position": 3}, {"@type": "HowToStep", "text": "If renewal failed, verify your domain's DNS A/CNAME records still point to your host.", "position": 4}, {"@type": "HowToStep", "text": "For custom servers using certbot, run: certbot renew --dry-run to confirm the renewal process works.", "position": 5}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://didyouship.com"}, {"@type": "ListItem", "position": 2, "name": "SSL & HTTPS", "item": "https://didyouship.com/guides/ssl-certificate"}]}</script>
 <meta name="theme-color" content="#0c0c0e">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/static/favicon.svg">
@@ -196,58 +197,150 @@ a:hover { text-decoration: underline; }
 <div class="layout">
 
   <nav class="sidebar">
-    {% for group in sidebar_nav %}
-    <div class="sidebar-cat">{{ group.cat }}</div>
-    {% for g in group.guides %}
-    <a class="sidebar-link{% if g.slug == slug %} active{% endif %}" href="/guides/{{ g.slug }}">{{ g.title }}</a>
-    {% endfor %}
-    {% endfor %}
+    
+    <div class="sidebar-cat">Email</div>
+    
+    <a class="sidebar-link" href="/guides/spf-record">SPF Record</a>
+    
+    <a class="sidebar-link" href="/guides/dmarc">DMARC Record</a>
+    
+    <a class="sidebar-link" href="/guides/email-spoofing">Email Spoofing Protection</a>
+    
+    <a class="sidebar-link" href="/guides/dkim-setup">DKIM Setup</a>
+    
+    <a class="sidebar-link" href="/guides/ip-blacklisted">Mail Server IP Blacklisted</a>
+    
+    <a class="sidebar-link" href="/guides/email-deliverability">Email Deliverability</a>
+    
+    
+    <div class="sidebar-cat">SSL</div>
+    
+    <a class="sidebar-link active" href="/guides/ssl-certificate">SSL Certificate</a>
+    
+    <a class="sidebar-link" href="/guides/https-redirect">HTTP → HTTPS Redirect</a>
+    
+    
+    <div class="sidebar-cat">Secrets</div>
+    
+    <a class="sidebar-link" href="/guides/env-exposed">.env File Exposed</a>
+    
+    <a class="sidebar-link" href="/guides/git-exposed">.git Directory Exposed</a>
+    
+    <a class="sidebar-link" href="/guides/leaked-secrets">API Keys in Page Source</a>
+    
+    
+    <div class="sidebar-cat">DNS</div>
+    
+    <a class="sidebar-link" href="/guides/www-redirect">www Subdomain & Redirect</a>
+    
+    
+    <div class="sidebar-cat">Security</div>
+    
+    <a class="sidebar-link" href="/guides/hsts-header">HSTS Header</a>
+    
+    
+    <div class="sidebar-cat">SEO</div>
+    
+    <a class="sidebar-link" href="/guides/page-title">Page Title Tag</a>
+    
+    <a class="sidebar-link" href="/guides/meta-description">Meta Description</a>
+    
+    <a class="sidebar-link" href="/guides/open-graph">Open Graph Tags</a>
+    
+    <a class="sidebar-link" href="/guides/twitter-cards">Twitter Card Tags</a>
+    
+    <a class="sidebar-link" href="/guides/viewport-meta">Viewport Meta Tag</a>
+    
+    <a class="sidebar-link" href="/guides/canonical-url">Canonical URL</a>
+    
+    <a class="sidebar-link" href="/guides/sitemap">Sitemap.xml</a>
+    
+    <a class="sidebar-link" href="/guides/favicon">Favicon</a>
+    
+    
+    <div class="sidebar-cat">Performance</div>
+    
+    <a class="sidebar-link" href="/guides/response-time">Response Time & Cold Starts</a>
+    
+    <a class="sidebar-link" href="/guides/compression">Response Compression</a>
+    
+    
+    <div class="sidebar-cat">Breakage</div>
+    
+    <a class="sidebar-link" href="/guides/mixed-content">Mixed Content</a>
+    
+    
+    <div class="sidebar-cat">Polish</div>
+    
+    <a class="sidebar-link" href="/guides/custom-404">Custom 404 Page</a>
+    
+    
   </nav>
 
   <main class="content">
 
-    {% if guide_title %}
+    
 
     <nav class="breadcrumb">
       <a href="/">didyouship.com</a><span>›</span>
       <a href="/guides">Guides</a><span>›</span>
-      {{ guide_title }}
+      SSL Certificate
     </nav>
 
     <div class="guide-header">
-      <div class="guide-cat">{{ guide_category }}</div>
-      <h1 class="guide-title">{{ guide_title }}</h1>
-      <p class="guide-summary">{{ guide_summary }}</p>
-      {% if guide_severity %}<span class="sev-badge {{ guide_severity }}">{{ guide_severity }} severity</span>{% endif %}
+      <div class="guide-cat">SSL & HTTPS</div>
+      <h1 class="guide-title">SSL Certificate</h1>
+      <p class="guide-summary">Your SSL certificate encrypts traffic and proves your domain identity. Expired or invalid certs block your site completely.</p>
+      <span class="sev-badge critical">critical severity</span>
     </div>
 
-    {% if guide_what %}
+    
     <div class="section">
       <h2 class="section-label">What is this?</h2>
-      {{ guide_what | safe }}
+      <p>An SSL/TLS certificate does two things: it encrypts traffic between your server and visitors (so no one can read it in transit), and it proves your server actually controls yourdomain.com (not an impersonator). Browsers show the padlock icon when the certificate is valid.</p>
+<p>Certificates expire — typically every 90 days for Let's Encrypt or 1-2 years for commercial CAs. When they expire, browsers show a full-page warning that blocks most users from accessing your site.</p>
     </div>
-    {% endif %}
+    
 
-    {% if guide_why %}
+    
     <div class="section">
       <h2 class="section-label">Why it matters</h2>
-      {{ guide_why | safe }}
+      <p>An expired or invalid SSL certificate:</p>
+<ul>
+<li><strong>Blocks your site entirely.</strong> Chrome, Firefox, and Safari show a full-page red warning. Most users click "Go back" rather than proceed.</li>
+<li><strong>Destroys trust.</strong> Even technical users see "Your connection is not private" and worry about a breach.</li>
+<li><strong>Hurts SEO.</strong> Google penalizes sites with certificate errors.</li>
+</ul>
     </div>
-    {% endif %}
+    
 
-    {% if guide_how %}
+    
     <div class="section">
       <h2 class="section-label">How to fix it</h2>
-      {{ guide_how | safe }}
+      <ol>
+<li>Check certificate expiry: <code>openssl s_client -connect yourdomain.com:443 | openssl x509 -noout -dates</code></li>
+<li>Enable auto-renewal in your hosting dashboard (see providers below)</li>
+<li>If renewal failed, check that your domain's DNS still points to your host (A/CNAME records)</li>
+<li>For custom servers, ensure your Let's Encrypt certbot cron job is running: <code>certbot renew --dry-run</code></li>
+<li>Set a calendar reminder 30 days before expiry as a backup</li>
+</ol>
     </div>
-    {% endif %}
+    
 
-    {% if guide_providers %}
+    
     <div class="section">
       <h2 class="section-label">Providers &amp; tools</h2>
-      {{ guide_providers | safe }}
+      <table class="provider-table">
+<tr><th>Host</th><th>Auto-renewal</th><th>Action</th></tr>
+<tr><td>Vercel</td><td>Automatic</td><td>Nothing needed — managed for you</td></tr>
+<tr><td>Netlify</td><td>Automatic</td><td>Nothing needed — managed for you</td></tr>
+<tr><td>Cloudflare</td><td>Automatic</td><td>SSL/TLS → Overview → enable "Full (strict)"</td></tr>
+<tr><td>Railway</td><td>Automatic</td><td>Check domain settings for cert status</td></tr>
+<tr><td>Render</td><td>Automatic</td><td>Managed — check Settings → Custom Domains</td></tr>
+<tr><td>Custom VPS</td><td>Manual</td><td>Use certbot with cron: <code>0 0 * * * certbot renew</code></td></tr>
+</table>
     </div>
-    {% endif %}
+    
 
     <div class="guide-cta">
       <p>Check if your domain has this issue</p>
@@ -257,57 +350,18 @@ a:hover { text-decoration: underline; }
       </form>
     </div>
 
-    {% if related_problems %}
+    
     <div class="related-problems">
       <h2 class="section-label">Related problems</h2>
       <div class="related-problems-links">
-        {% for p in related_problems %}
-        <a class="related-problem-link" href="/why/{{ p.slug }}">{{ p.h1 }}</a>
-        {% endfor %}
+        
+        <a class="related-problem-link" href="/why/website-not-secure">Why Does Your Website Say "Not Secure"?</a>
+        
       </div>
     </div>
-    {% endif %}
+    
 
-    {% elif index_groups %}
-
-    <nav class="breadcrumb">
-      <a href="/">didyouship.com</a><span>›</span>
-      All Guides
-    </nav>
-
-    <div class="guide-header">
-      <div class="guide-cat">All categories</div>
-      <h1 class="guide-title">Production Readiness Guides</h1>
-      <p class="guide-summary">Educational guides for every issue didyouship.com scans for. Pick a topic from the sidebar, or scan your domain to see which ones apply to you.</p>
-    </div>
-
-    {% for group in index_groups %}
-    <div class="section">
-      <h2 class="section-label">{{ group.cat }}</h2>
-      <ul>
-        {% for g in group.guides %}
-        <li><a href="/guides/{{ g.slug }}">{{ g.title }}</a> — {{ g.summary }}</li>
-        {% endfor %}
-      </ul>
-    </div>
-    {% endfor %}
-
-    <div class="guide-cta">
-      <p>Run a free scan to see which issues apply to your domain</p>
-      <form class="cta-input-row" onsubmit="window.location.href='/?'+encodeURIComponent(this.querySelector('input').value.trim());return false;">
-        <input type="text" placeholder="yourdomain.com" autocapitalize="none" autocorrect="off" spellcheck="false">
-        <button type="submit">Scan</button>
-      </form>
-    </div>
-
-    {% else %}
-
-    <div class="not-found">
-      <h2>Guide not found</h2>
-      <p>This guide doesn't exist yet. <a href="/">← Scan your domain</a> to check your site.</p>
-    </div>
-
-    {% endif %}
+    
 
   </main>
 </div>

@@ -3,20 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{{ title }}</title>
-<meta name="description" content="{{ description }}">
-<link rel="canonical" href="https://didyouship.com/guides/{{ slug }}">
+<title>HSTS Header Missing: Add Strict-Transport-Security to Your Site (2026) | didyouship.com</title>
+<meta name="description" content="Without HSTS, the first visit to your site on public WiFi can be intercepted. Learn how to add the Strict-Transport-Security header.">
+<link rel="canonical" href="https://didyouship.com/guides/hsts-header">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://didyouship.com/guides/{{ slug }}">
-<meta property="og:title" content="{{ title }}">
-<meta property="og:description" content="{{ description }}">
+<meta property="og:url" content="https://didyouship.com/guides/hsts-header">
+<meta property="og:title" content="HSTS Header Missing: Add Strict-Transport-Security to Your Site (2026) | didyouship.com">
+<meta property="og:description" content="Without HSTS, the first visit to your site on public WiFi can be intercepted. Learn how to add the Strict-Transport-Security header.">
 <meta property="og:site_name" content="didyouship.com">
 <meta property="og:image" content="https://didyouship.com/static/og.svg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{{ title }}">
-<meta name="twitter:description" content="{{ description }}">
+<meta name="twitter:title" content="HSTS Header Missing: Add Strict-Transport-Security to Your Site (2026) | didyouship.com">
+<meta name="twitter:description" content="Without HSTS, the first visit to your site on public WiFi can be intercepted. Learn how to add the Strict-Transport-Security header.">
 <meta name="twitter:image" content="https://didyouship.com/static/og.svg">
-{{ schema | safe }}
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: HSTS Header Missing: Add Strict-Transport-Security to Your Site (2026)", "description": "Without HSTS, the first visit to your site on public WiFi can be intercepted. Learn how to add the Strict-Transport-Security header.", "step": [{"@type": "HowToStep", "text": "Add the Strict-Transport-Security response header to all HTTPS responses.", "position": 1}, {"@type": "HowToStep", "text": "Use value: max-age=31536000; includeSubDomains (1 year, including subdomains).", "position": 2}, {"@type": "HowToStep", "text": "For Cloudflare: SSL/TLS \u2192 Edge Certificates \u2192 HTTP Strict Transport Security \u2192 Enable.", "position": 3}, {"@type": "HowToStep", "text": "For Vercel: add a headers config in vercel.json with the Strict-Transport-Security key-value pair.", "position": 4}, {"@type": "HowToStep", "text": "For Nginx: add_header Strict-Transport-Security 'max-age=31536000; includeSubDomains' always;", "position": 5}, {"@type": "HowToStep", "text": "For Express/Node: use the helmet package \u2014 app.use(helmet()) enables HSTS by default.", "position": 6}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://didyouship.com"}, {"@type": "ListItem", "position": 2, "name": "Security Headers", "item": "https://didyouship.com/guides/hsts-header"}]}</script>
 <meta name="theme-color" content="#0c0c0e">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/static/favicon.svg">
@@ -196,58 +197,153 @@ a:hover { text-decoration: underline; }
 <div class="layout">
 
   <nav class="sidebar">
-    {% for group in sidebar_nav %}
-    <div class="sidebar-cat">{{ group.cat }}</div>
-    {% for g in group.guides %}
-    <a class="sidebar-link{% if g.slug == slug %} active{% endif %}" href="/guides/{{ g.slug }}">{{ g.title }}</a>
-    {% endfor %}
-    {% endfor %}
+    
+    <div class="sidebar-cat">Email</div>
+    
+    <a class="sidebar-link" href="/guides/spf-record">SPF Record</a>
+    
+    <a class="sidebar-link" href="/guides/dmarc">DMARC Record</a>
+    
+    <a class="sidebar-link" href="/guides/email-spoofing">Email Spoofing Protection</a>
+    
+    <a class="sidebar-link" href="/guides/dkim-setup">DKIM Setup</a>
+    
+    <a class="sidebar-link" href="/guides/ip-blacklisted">Mail Server IP Blacklisted</a>
+    
+    <a class="sidebar-link" href="/guides/email-deliverability">Email Deliverability</a>
+    
+    
+    <div class="sidebar-cat">SSL</div>
+    
+    <a class="sidebar-link" href="/guides/ssl-certificate">SSL Certificate</a>
+    
+    <a class="sidebar-link" href="/guides/https-redirect">HTTP → HTTPS Redirect</a>
+    
+    
+    <div class="sidebar-cat">Secrets</div>
+    
+    <a class="sidebar-link" href="/guides/env-exposed">.env File Exposed</a>
+    
+    <a class="sidebar-link" href="/guides/git-exposed">.git Directory Exposed</a>
+    
+    <a class="sidebar-link" href="/guides/leaked-secrets">API Keys in Page Source</a>
+    
+    
+    <div class="sidebar-cat">DNS</div>
+    
+    <a class="sidebar-link" href="/guides/www-redirect">www Subdomain & Redirect</a>
+    
+    
+    <div class="sidebar-cat">Security</div>
+    
+    <a class="sidebar-link active" href="/guides/hsts-header">HSTS Header</a>
+    
+    
+    <div class="sidebar-cat">SEO</div>
+    
+    <a class="sidebar-link" href="/guides/page-title">Page Title Tag</a>
+    
+    <a class="sidebar-link" href="/guides/meta-description">Meta Description</a>
+    
+    <a class="sidebar-link" href="/guides/open-graph">Open Graph Tags</a>
+    
+    <a class="sidebar-link" href="/guides/twitter-cards">Twitter Card Tags</a>
+    
+    <a class="sidebar-link" href="/guides/viewport-meta">Viewport Meta Tag</a>
+    
+    <a class="sidebar-link" href="/guides/canonical-url">Canonical URL</a>
+    
+    <a class="sidebar-link" href="/guides/sitemap">Sitemap.xml</a>
+    
+    <a class="sidebar-link" href="/guides/favicon">Favicon</a>
+    
+    
+    <div class="sidebar-cat">Performance</div>
+    
+    <a class="sidebar-link" href="/guides/response-time">Response Time & Cold Starts</a>
+    
+    <a class="sidebar-link" href="/guides/compression">Response Compression</a>
+    
+    
+    <div class="sidebar-cat">Breakage</div>
+    
+    <a class="sidebar-link" href="/guides/mixed-content">Mixed Content</a>
+    
+    
+    <div class="sidebar-cat">Polish</div>
+    
+    <a class="sidebar-link" href="/guides/custom-404">Custom 404 Page</a>
+    
+    
   </nav>
 
   <main class="content">
 
-    {% if guide_title %}
+    
 
     <nav class="breadcrumb">
       <a href="/">didyouship.com</a><span>›</span>
       <a href="/guides">Guides</a><span>›</span>
-      {{ guide_title }}
+      HSTS Header
     </nav>
 
     <div class="guide-header">
-      <div class="guide-cat">{{ guide_category }}</div>
-      <h1 class="guide-title">{{ guide_title }}</h1>
-      <p class="guide-summary">{{ guide_summary }}</p>
-      {% if guide_severity %}<span class="sev-badge {{ guide_severity }}">{{ guide_severity }} severity</span>{% endif %}
+      <div class="guide-cat">Security Headers</div>
+      <h1 class="guide-title">HSTS Header</h1>
+      <p class="guide-summary">The Strict-Transport-Security header tells browsers to always use HTTPS — even on the very first visit.</p>
+      <span class="sev-badge medium">medium severity</span>
     </div>
 
-    {% if guide_what %}
+    
     <div class="section">
       <h2 class="section-label">What is this?</h2>
-      {{ guide_what | safe }}
+      <p>HSTS (HTTP Strict Transport Security) is a response header that tells browsers: "always use HTTPS for this domain — never HTTP, even if someone types http://."</p>
+<pre>Strict-Transport-Security: max-age=31536000; includeSubDomains</pre>
+<p>Once a browser receives this header, it'll enforce HTTPS for your domain for <code>max-age</code> seconds (31536000 = 1 year), even if the user or a link tries to use HTTP.</p>
     </div>
-    {% endif %}
+    
 
-    {% if guide_why %}
+    
     <div class="section">
       <h2 class="section-label">Why it matters</h2>
-      {{ guide_why | safe }}
+      <p>Even with HTTPS and a redirect, there's a window of vulnerability on the very first visit to your site:</p>
+<ol>
+<li>User types <code>yourdomain.com</code></li>
+<li>Browser connects over HTTP first</li>
+<li>Your server redirects to HTTPS</li>
+<li>Browser follows redirect</li>
+</ol>
+<p>Step 2-3 happens over plain HTTP. On public WiFi, an attacker (man-in-the-middle) can intercept that initial HTTP request, modify it, and keep the user on HTTP the whole time. This is called an SSL stripping attack. HSTS eliminates step 2 entirely — the browser goes straight to HTTPS.</p>
     </div>
-    {% endif %}
+    
 
-    {% if guide_how %}
+    
     <div class="section">
       <h2 class="section-label">How to fix it</h2>
-      {{ guide_how | safe }}
+      <p>Add this header to all HTTPS responses:</p>
+<pre>Strict-Transport-Security: max-age=31536000; includeSubDomains</pre>
     </div>
-    {% endif %}
+    
 
-    {% if guide_providers %}
+    
     <div class="section">
       <h2 class="section-label">Providers &amp; tools</h2>
-      {{ guide_providers | safe }}
+      <table class="provider-table">
+<tr><th>Platform</th><th>How to add HSTS</th></tr>
+<tr><td>Cloudflare</td><td>SSL/TLS → Edge Certificates → HTTP Strict Transport Security → Enable</td></tr>
+<tr><td>Vercel</td><td>vercel.json headers config:<pre>{
+  "headers": [{
+    "source": "/(.*)",
+    "headers": [{"key": "Strict-Transport-Security",
+                 "value": "max-age=31536000; includeSubDomains"}]
+  }]
+}</pre></td></tr>
+<tr><td>Nginx</td><td><code>add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;</code></td></tr>
+<tr><td>Express</td><td>Use the <code>helmet</code> package: <code>app.use(helmet())</code> — includes HSTS by default</td></tr>
+<tr><td>FastAPI</td><td><code>from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware</code></td></tr>
+</table>
     </div>
-    {% endif %}
+    
 
     <div class="guide-cta">
       <p>Check if your domain has this issue</p>
@@ -257,57 +353,18 @@ a:hover { text-decoration: underline; }
       </form>
     </div>
 
-    {% if related_problems %}
+    
     <div class="related-problems">
       <h2 class="section-label">Related problems</h2>
       <div class="related-problems-links">
-        {% for p in related_problems %}
-        <a class="related-problem-link" href="/why/{{ p.slug }}">{{ p.h1 }}</a>
-        {% endfor %}
+        
+        <a class="related-problem-link" href="/why/website-not-secure">Why Does Your Website Say "Not Secure"?</a>
+        
       </div>
     </div>
-    {% endif %}
+    
 
-    {% elif index_groups %}
-
-    <nav class="breadcrumb">
-      <a href="/">didyouship.com</a><span>›</span>
-      All Guides
-    </nav>
-
-    <div class="guide-header">
-      <div class="guide-cat">All categories</div>
-      <h1 class="guide-title">Production Readiness Guides</h1>
-      <p class="guide-summary">Educational guides for every issue didyouship.com scans for. Pick a topic from the sidebar, or scan your domain to see which ones apply to you.</p>
-    </div>
-
-    {% for group in index_groups %}
-    <div class="section">
-      <h2 class="section-label">{{ group.cat }}</h2>
-      <ul>
-        {% for g in group.guides %}
-        <li><a href="/guides/{{ g.slug }}">{{ g.title }}</a> — {{ g.summary }}</li>
-        {% endfor %}
-      </ul>
-    </div>
-    {% endfor %}
-
-    <div class="guide-cta">
-      <p>Run a free scan to see which issues apply to your domain</p>
-      <form class="cta-input-row" onsubmit="window.location.href='/?'+encodeURIComponent(this.querySelector('input').value.trim());return false;">
-        <input type="text" placeholder="yourdomain.com" autocapitalize="none" autocorrect="off" spellcheck="false">
-        <button type="submit">Scan</button>
-      </form>
-    </div>
-
-    {% else %}
-
-    <div class="not-found">
-      <h2>Guide not found</h2>
-      <p>This guide doesn't exist yet. <a href="/">← Scan your domain</a> to check your site.</p>
-    </div>
-
-    {% endif %}
+    
 
   </main>
 </div>

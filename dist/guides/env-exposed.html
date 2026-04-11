@@ -3,20 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{{ title }}</title>
-<meta name="description" content="{{ description }}">
-<link rel="canonical" href="https://didyouship.com/guides/{{ slug }}">
+<title>.env File Exposed: How to Secure Your Environment Variables (2026) | didyouship.com</title>
+<meta name="description" content="A publicly accessible .env file exposes your database passwords and API keys to anyone. Learn how to fix it immediately and rotate compromised credentials.">
+<link rel="canonical" href="https://didyouship.com/guides/env-exposed">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://didyouship.com/guides/{{ slug }}">
-<meta property="og:title" content="{{ title }}">
-<meta property="og:description" content="{{ description }}">
+<meta property="og:url" content="https://didyouship.com/guides/env-exposed">
+<meta property="og:title" content=".env File Exposed: How to Secure Your Environment Variables (2026) | didyouship.com">
+<meta property="og:description" content="A publicly accessible .env file exposes your database passwords and API keys to anyone. Learn how to fix it immediately and rotate compromised credentials.">
 <meta property="og:site_name" content="didyouship.com">
 <meta property="og:image" content="https://didyouship.com/static/og.svg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{{ title }}">
-<meta name="twitter:description" content="{{ description }}">
+<meta name="twitter:title" content=".env File Exposed: How to Secure Your Environment Variables (2026) | didyouship.com">
+<meta name="twitter:description" content="A publicly accessible .env file exposes your database passwords and API keys to anyone. Learn how to fix it immediately and rotate compromised credentials.">
 <meta name="twitter:image" content="https://didyouship.com/static/og.svg">
-{{ schema | safe }}
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: .env File Exposed: How to Secure Your Environment Variables (2026)", "description": "A publicly accessible .env file exposes your database passwords and API keys to anyone. Learn how to fix it immediately and rotate compromised credentials.", "step": [{"@type": "HowToStep", "text": "Immediately rotate all credentials in your .env \u2014 assume they have been compromised.", "position": 1}, {"@type": "HowToStep", "text": "Revoke and reissue: database passwords, API keys, OAuth secrets, and any other secrets in the file.", "position": 2}, {"@type": "HowToStep", "text": "Fix your deployment configuration to serve only the build output folder (e.g. .next/, dist/, build/), not the project root.", "position": 3}, {"@type": "HowToStep", "text": "In Vercel or Netlify, check your project's Output Directory setting in the dashboard.", "position": 4}, {"@type": "HowToStep", "text": "Verify the fix: visit yourdomain.com/.env in a browser \u2014 it should return a 404.", "position": 5}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://didyouship.com"}, {"@type": "ListItem", "position": 2, "name": "Exposed Secrets", "item": "https://didyouship.com/guides/env-exposed"}]}</script>
 <meta name="theme-color" content="#0c0c0e">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/static/favicon.svg">
@@ -196,58 +197,148 @@ a:hover { text-decoration: underline; }
 <div class="layout">
 
   <nav class="sidebar">
-    {% for group in sidebar_nav %}
-    <div class="sidebar-cat">{{ group.cat }}</div>
-    {% for g in group.guides %}
-    <a class="sidebar-link{% if g.slug == slug %} active{% endif %}" href="/guides/{{ g.slug }}">{{ g.title }}</a>
-    {% endfor %}
-    {% endfor %}
+    
+    <div class="sidebar-cat">Email</div>
+    
+    <a class="sidebar-link" href="/guides/spf-record">SPF Record</a>
+    
+    <a class="sidebar-link" href="/guides/dmarc">DMARC Record</a>
+    
+    <a class="sidebar-link" href="/guides/email-spoofing">Email Spoofing Protection</a>
+    
+    <a class="sidebar-link" href="/guides/dkim-setup">DKIM Setup</a>
+    
+    <a class="sidebar-link" href="/guides/ip-blacklisted">Mail Server IP Blacklisted</a>
+    
+    <a class="sidebar-link" href="/guides/email-deliverability">Email Deliverability</a>
+    
+    
+    <div class="sidebar-cat">SSL</div>
+    
+    <a class="sidebar-link" href="/guides/ssl-certificate">SSL Certificate</a>
+    
+    <a class="sidebar-link" href="/guides/https-redirect">HTTP → HTTPS Redirect</a>
+    
+    
+    <div class="sidebar-cat">Secrets</div>
+    
+    <a class="sidebar-link active" href="/guides/env-exposed">.env File Exposed</a>
+    
+    <a class="sidebar-link" href="/guides/git-exposed">.git Directory Exposed</a>
+    
+    <a class="sidebar-link" href="/guides/leaked-secrets">API Keys in Page Source</a>
+    
+    
+    <div class="sidebar-cat">DNS</div>
+    
+    <a class="sidebar-link" href="/guides/www-redirect">www Subdomain & Redirect</a>
+    
+    
+    <div class="sidebar-cat">Security</div>
+    
+    <a class="sidebar-link" href="/guides/hsts-header">HSTS Header</a>
+    
+    
+    <div class="sidebar-cat">SEO</div>
+    
+    <a class="sidebar-link" href="/guides/page-title">Page Title Tag</a>
+    
+    <a class="sidebar-link" href="/guides/meta-description">Meta Description</a>
+    
+    <a class="sidebar-link" href="/guides/open-graph">Open Graph Tags</a>
+    
+    <a class="sidebar-link" href="/guides/twitter-cards">Twitter Card Tags</a>
+    
+    <a class="sidebar-link" href="/guides/viewport-meta">Viewport Meta Tag</a>
+    
+    <a class="sidebar-link" href="/guides/canonical-url">Canonical URL</a>
+    
+    <a class="sidebar-link" href="/guides/sitemap">Sitemap.xml</a>
+    
+    <a class="sidebar-link" href="/guides/favicon">Favicon</a>
+    
+    
+    <div class="sidebar-cat">Performance</div>
+    
+    <a class="sidebar-link" href="/guides/response-time">Response Time & Cold Starts</a>
+    
+    <a class="sidebar-link" href="/guides/compression">Response Compression</a>
+    
+    
+    <div class="sidebar-cat">Breakage</div>
+    
+    <a class="sidebar-link" href="/guides/mixed-content">Mixed Content</a>
+    
+    
+    <div class="sidebar-cat">Polish</div>
+    
+    <a class="sidebar-link" href="/guides/custom-404">Custom 404 Page</a>
+    
+    
   </nav>
 
   <main class="content">
 
-    {% if guide_title %}
+    
 
     <nav class="breadcrumb">
       <a href="/">didyouship.com</a><span>›</span>
       <a href="/guides">Guides</a><span>›</span>
-      {{ guide_title }}
+      .env File Exposed
     </nav>
 
     <div class="guide-header">
-      <div class="guide-cat">{{ guide_category }}</div>
-      <h1 class="guide-title">{{ guide_title }}</h1>
-      <p class="guide-summary">{{ guide_summary }}</p>
-      {% if guide_severity %}<span class="sev-badge {{ guide_severity }}">{{ guide_severity }} severity</span>{% endif %}
+      <div class="guide-cat">Exposed Secrets</div>
+      <h1 class="guide-title">.env File Exposed</h1>
+      <p class="guide-summary">Your .env file is publicly accessible — anyone can read your database passwords, API keys, and other secrets.</p>
+      <span class="sev-badge critical">critical severity</span>
     </div>
 
-    {% if guide_what %}
+    
     <div class="section">
       <h2 class="section-label">What is this?</h2>
-      {{ guide_what | safe }}
+      <p>A <code>.env</code> file is where most apps store sensitive configuration: database credentials, API keys, payment processor secrets, OAuth tokens. It's meant to live on your server only — never served to the web. When your deployment accidentally serves your project root directory (instead of just the build output), <code>/.env</code> becomes publicly accessible to anyone who asks for it.</p>
+<p>Automated bots scan millions of domains daily looking for exposed .env files. Once found, credentials are extracted and exploited within minutes.</p>
     </div>
-    {% endif %}
+    
 
-    {% if guide_why %}
+    
     <div class="section">
       <h2 class="section-label">Why it matters</h2>
-      {{ guide_why | safe }}
+      <ul>
+<li><strong>Database breach</strong> — your full user database, including passwords, emails, and payment data, can be extracted</li>
+<li><strong>API key abuse</strong> — your OpenAI, Stripe, AWS, or other service keys are used to run up charges or steal data</li>
+<li><strong>Complete account takeover</strong> — any service credential in your .env can be used immediately</li>
+<li><strong>Automated exploitation</strong> — this happens within minutes of exposure, not hours</li>
+</ul>
     </div>
-    {% endif %}
+    
 
-    {% if guide_how %}
+    
     <div class="section">
       <h2 class="section-label">How to fix it</h2>
-      {{ guide_how | safe }}
+      <ol>
+<li><strong>Immediately rotate all credentials</strong> in your .env — assume they've been compromised</li>
+<li>Fix your deployment to serve only the build output folder:</li>
+</ol>
     </div>
-    {% endif %}
+    
 
-    {% if guide_providers %}
+    
     <div class="section">
       <h2 class="section-label">Providers &amp; tools</h2>
-      {{ guide_providers | safe }}
+      <table class="provider-table">
+<tr><th>Framework</th><th>Build output directory</th></tr>
+<tr><td>Next.js</td><td><code>.next/</code> — Vercel/Netlify handle this automatically</td></tr>
+<tr><td>Vite / React</td><td><code>dist/</code> — set this as your publish directory</td></tr>
+<tr><td>Create React App</td><td><code>build/</code></td></tr>
+<tr><td>Astro</td><td><code>dist/</code></td></tr>
+<tr><td>Hugo</td><td><code>public/</code></td></tr>
+</table>
+<p>In Nginx: set your <code>root</code> directive to point to the build output folder, not the project root.</p>
+<p>In Vercel/Netlify: if you deployed the root directory by mistake, check your project's "Output Directory" setting in the dashboard.</p>
     </div>
-    {% endif %}
+    
 
     <div class="guide-cta">
       <p>Check if your domain has this issue</p>
@@ -257,57 +348,18 @@ a:hover { text-decoration: underline; }
       </form>
     </div>
 
-    {% if related_problems %}
+    
     <div class="related-problems">
       <h2 class="section-label">Related problems</h2>
       <div class="related-problems-links">
-        {% for p in related_problems %}
-        <a class="related-problem-link" href="/why/{{ p.slug }}">{{ p.h1 }}</a>
-        {% endfor %}
+        
+        <a class="related-problem-link" href="/why/secrets-exposed">Why Are Your Secrets or API Keys Exposed?</a>
+        
       </div>
     </div>
-    {% endif %}
+    
 
-    {% elif index_groups %}
-
-    <nav class="breadcrumb">
-      <a href="/">didyouship.com</a><span>›</span>
-      All Guides
-    </nav>
-
-    <div class="guide-header">
-      <div class="guide-cat">All categories</div>
-      <h1 class="guide-title">Production Readiness Guides</h1>
-      <p class="guide-summary">Educational guides for every issue didyouship.com scans for. Pick a topic from the sidebar, or scan your domain to see which ones apply to you.</p>
-    </div>
-
-    {% for group in index_groups %}
-    <div class="section">
-      <h2 class="section-label">{{ group.cat }}</h2>
-      <ul>
-        {% for g in group.guides %}
-        <li><a href="/guides/{{ g.slug }}">{{ g.title }}</a> — {{ g.summary }}</li>
-        {% endfor %}
-      </ul>
-    </div>
-    {% endfor %}
-
-    <div class="guide-cta">
-      <p>Run a free scan to see which issues apply to your domain</p>
-      <form class="cta-input-row" onsubmit="window.location.href='/?'+encodeURIComponent(this.querySelector('input').value.trim());return false;">
-        <input type="text" placeholder="yourdomain.com" autocapitalize="none" autocorrect="off" spellcheck="false">
-        <button type="submit">Scan</button>
-      </form>
-    </div>
-
-    {% else %}
-
-    <div class="not-found">
-      <h2>Guide not found</h2>
-      <p>This guide doesn't exist yet. <a href="/">← Scan your domain</a> to check your site.</p>
-    </div>
-
-    {% endif %}
+    
 
   </main>
 </div>

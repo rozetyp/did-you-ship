@@ -154,7 +154,7 @@ def scan(domain: str) -> ScanResult:
     r = ScanResult(domain=domain, url=f"https://{domain}")
     r.raw = {
         "email": {}, "ssl": {}, "headers": {}, "dns": {},
-        "seo": {}, "performance": {}, "secrets": {},
+        "seo": {}, "performance": {}, "secrets": {}, "breakage": {},
     }
 
     with ThreadPoolExecutor(max_workers=8) as pool:
@@ -663,8 +663,6 @@ def _check_dns(r: ScanResult):
     """Checks 10-11: www resolves, www ↔ apex redirect."""
 
     # ── Check 10: www subdomain ──
-    # Use socket.getaddrinfo as it follows CNAME chains and works with
-    # Cloudflare-proxied records that flatten to A records.
     www_resolves = False
     try:
         dns_query(f"www.{r.domain}", "A")
@@ -674,12 +672,7 @@ def _check_dns(r: ScanResult):
             dns_query(f"www.{r.domain}", "CNAME")
             www_resolves = True
         except Exception:
-            try:
-                results = socket.getaddrinfo(f"www.{r.domain}", 80, proto=socket.IPPROTO_TCP)
-                if results:
-                    www_resolves = True
-            except Exception:
-                pass
+            pass
 
     r.raw["dns"]["www_resolves"] = www_resolves
 
@@ -1025,7 +1018,7 @@ def _check_mixed_content(r: ScanResult, html: str):
     ):
         mixed.add(match.group(1))
 
-    r.raw["secrets"]["mixed_content"] = list(mixed)
+    r.raw["breakage"]["mixed_content"] = list(mixed)
 
     if mixed:
         urls = "\n".join(list(mixed)[:5])  # Show max 5

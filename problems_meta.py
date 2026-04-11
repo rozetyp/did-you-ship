@@ -6,7 +6,7 @@ Each page answers "why is X broken?" and links to the specific fix guides.
 PROBLEMS = {
 
 "emails-going-to-spam": {
-    "seo_title": "Why Are My Emails Going to Spam? 5 Causes & Fixes | didyouship.com",
+    "seo_title": "Why Are My Emails Going to Spam? 5 Causes & Fixes (2026) | didyouship.com",
     "description": "Emails landing in spam? Missing SPF, DKIM, or DMARC records are the most common causes. Learn why each one matters and how to fix your email deliverability.",
     "h1": "Why Are Your Emails Going to Spam?",
     "intro": "If your signup confirmations, password resets, or invoices are landing in spam — or worse, never arriving at all — it's almost always a DNS configuration problem, not a code problem. Here are the most common causes, in order of impact.",
@@ -46,6 +46,20 @@ PROBLEMS = {
             "guide": "dmarc",
             "fix_title": "How to Enforce DMARC",
         },
+        {
+            "title": "No spoofing protection — anyone can send email as your domain",
+            "severity": "critical",
+            "detail": "Without SPF, DKIM, and DMARC working together, phishing emails can be sent from your domain and delivered to your customers' inboxes. This damages your brand and gets your domain permanently blacklisted by major providers.",
+            "guide": "email-spoofing",
+            "fix_title": "How to Prevent Email Spoofing",
+        },
+        {
+            "title": "General email deliverability issues — multiple factors affecting inbox placement",
+            "severity": "high",
+            "detail": "Email deliverability depends on more than just SPF and DKIM. Sender reputation, IP warming, list hygiene, complaint rates, and sending infrastructure all contribute to inbox placement. If you're passing authentication checks but still landing in spam, dig deeper.",
+            "guide": "email-deliverability",
+            "fix_title": "Full Email Deliverability Guide",
+        },
     ],
     "faqs": [
         {
@@ -76,7 +90,7 @@ PROBLEMS = {
 },
 
 "not-in-google": {
-    "seo_title": "Why Isn't My Website Showing in Google? 5 Causes & Fixes | didyouship.com",
+    "seo_title": "Why Isn't My Website Showing in Google? 5 Causes & Fixes (2026) | didyouship.com",
     "description": "New website not appearing in Google search? Missing sitemap, no title tag, or viewport issues are the most common causes. Here's how to diagnose and fix each one.",
     "h1": "Why Isn't Your Website Showing in Google?",
     "intro": "Getting into Google's index is usually straightforward, but several common mistakes can prevent your site from appearing in search results entirely — or make it rank far lower than it should. Here's what to check.",
@@ -142,7 +156,7 @@ PROBLEMS = {
 },
 
 "link-preview-not-working": {
-    "seo_title": "Why Links Look Bad on Slack, Discord & Twitter? Fix Previews | didyouship.com",
+    "seo_title": "Why Links Look Bad on Slack, Discord & Twitter? Fix Previews (2026) | didyouship.com",
     "description": "Links showing no image or preview on Slack, Discord, LinkedIn, or Twitter? Missing Open Graph tags are the cause. Learn how to fix link previews in under 10 minutes.",
     "h1": "Why Do Your Links Look Bad When Shared?",
     "intro": "When someone shares your URL on Slack, Discord, LinkedIn, iMessage, or Twitter, they expect a rich card — title, description, and an image preview. If they see a plain URL instead, Open Graph or Twitter Card tags are missing from your page. Here's what to add.",
@@ -194,7 +208,7 @@ PROBLEMS = {
 },
 
 "website-not-secure": {
-    "seo_title": "Why Does My Website Say 'Not Secure'? 4 Causes & Fixes | didyouship.com",
+    "seo_title": "Why Does My Website Say 'Not Secure'? 4 Causes & Fixes (2026) | didyouship.com",
     "description": "'Not Secure' in the browser address bar? An expired SSL certificate, no HTTPS, broken redirect, or mixed content could be the cause. Here's how to diagnose and fix each.",
     "h1": "Why Does Your Website Say \"Not Secure\"?",
     "intro": "Chrome, Firefox, and Safari show \"Not Secure\" or \"Your connection is not private\" when something is wrong with your HTTPS configuration. There are several distinct causes — here's how to identify which one applies to you.",
@@ -256,7 +270,7 @@ PROBLEMS = {
 },
 
 "website-loading-slow": {
-    "seo_title": "Why Is My Website Loading Slowly? 4 Causes & How to Fix | didyouship.com",
+    "seo_title": "Why Is My Website Loading Slowly? 4 Causes & How to Fix (2026) | didyouship.com",
     "description": "Website taking too long to load? Cold starts on free hosting, missing compression, or slow database queries are the most common causes. Learn how to diagnose and fix each.",
     "h1": "Why Is Your Website Loading Slowly?",
     "intro": "A slow website is one of the most damaging things for user retention — 53% of mobile users abandon a page that takes more than 3 seconds to load. There are a few distinct causes, and identifying which one you have determines the fix.",
@@ -308,7 +322,7 @@ PROBLEMS = {
 },
 
 "website-broken-on-mobile": {
-    "seo_title": "Why Is My Website Broken on Mobile? How to Fix Mobile Display | didyouship.com",
+    "seo_title": "Why Is My Website Broken on Mobile? How to Fix Mobile Display (2026) | didyouship.com",
     "description": "Website looking tiny on phones or requiring pinch-zoom to read? A missing viewport meta tag is the most common cause. Learn how to fix mobile display in under 5 minutes.",
     "h1": "Why Is Your Website Broken on Mobile?",
     "intro": "If your site looks tiny on phones, renders at desktop width, or requires users to pinch-zoom to read anything — it's most likely a single missing HTML tag. Mobile devices account for over 60% of web traffic, and Google ranks the mobile version of your site first.",
@@ -341,6 +355,137 @@ PROBLEMS = {
         {
             "q": "What percentage of my users are on mobile?",
             "a": "Globally, about 60–65% of web traffic is from mobile. For consumer apps, landing pages, and marketing sites, it's often higher. For developer tools and B2B SaaS, it can be lower. Check your own Google Analytics or Plausible to see your actual split — it's usually surprising how high mobile is even for 'developer' audiences.",
+        },
+    ],
+},
+
+
+"secrets-exposed": {
+    "seo_title": "Why Are My API Keys or Secrets Exposed? 3 Causes & Fixes (2026) | didyouship.com",
+    "description": "API keys, .env files, or .git directories publicly accessible? Find out why secrets get exposed and how to secure them immediately before they're exploited.",
+    "h1": "Why Are Your Secrets or API Keys Exposed?",
+    "intro": "Exposed secrets are one of the most dangerous production mistakes — scrapers and bots scan GitHub and common URLs for leaked credentials within minutes of exposure. If your API keys, database passwords, or .env file are publicly accessible, assume they have already been read. Here is what to check and how to fix it.",
+    "causes": [
+        {
+            "title": ".env file is publicly accessible at /.env",
+            "severity": "critical",
+            "detail": "When a project is deployed from the project root instead of the build output folder, the .env file becomes publicly accessible at yourdomain.com/.env. Anyone can visit that URL and read your database passwords, API keys, and OAuth secrets in plain text. This is extremely common on misconfigured VPS and shared hosting deployments.",
+            "guide": "env-exposed",
+            "fix_title": "How to Secure Your .env File",
+        },
+        {
+            "title": ".git directory is accessible — full source code downloadable",
+            "severity": "critical",
+            "detail": "If yourdomain.com/.git/config returns a 200 response, your entire git history is downloadable. This includes every file ever committed — even secrets you deleted in a later commit. Attackers can reconstruct your full source code and extract credentials that were committed at any point in time.",
+            "guide": "git-exposed",
+            "fix_title": "How to Block .git Directory Access",
+        },
+        {
+            "title": "API keys hardcoded in frontend JavaScript",
+            "severity": "critical",
+            "detail": "Any key in your frontend JavaScript — including bundled React, Vue, or Svelte code — is visible to anyone who opens browser DevTools. Bots scan public GitHub repos and sites for patterns matching API keys (OpenAI, Stripe, AWS) within minutes of publication. Secret keys must stay on the server.",
+            "guide": "leaked-secrets",
+            "fix_title": "How to Remove Exposed API Keys",
+        },
+    ],
+    "faqs": [
+        {
+            "q": "How quickly can exposed secrets be exploited?",
+            "a": "Within minutes. Automated bots continuously scan GitHub commits, public source code, and common URL paths (/.env, /.git/config) looking for credentials. GitGuardian has documented cases where secrets were accessed within 4 seconds of a GitHub push. Treat any exposure as an immediate incident: rotate credentials first, then fix the leak.",
+        },
+        {
+            "q": "I removed the secret from my code — am I safe?",
+            "a": "Not necessarily. If the secret was ever committed to git, it still exists in git history even after deletion. Anyone who cloned the repo or downloaded it before your fix still has the secret. Rotate the credential regardless, and use git filter-repo or BFG Repo Cleaner to remove it from history if the repo is public.",
+        },
+        {
+            "q": "How do I check if my .env is exposed?",
+            "a": "Visit https://yourdomain.com/.env in a browser. If you see your environment variables, it's exposed. Also check https://yourdomain.com/.git/config. Use didyouship.com to run an automated scan that checks both endpoints plus looks for API key patterns in your page source.",
+        },
+        {
+            "q": "What should I do if I find my secrets were exposed?",
+            "a": "1. Rotate all credentials immediately — assume they were read. 2. Check provider dashboards for unexpected API usage (OpenAI, Stripe, AWS). 3. Fix the deployment configuration so the secret is no longer accessible. 4. Review git history and remove secrets using git filter-repo. 5. Add pre-commit hooks or GitGuardian to prevent future leaks.",
+        },
+    ],
+},
+
+"www-not-working": {
+    "seo_title": "Why Doesn't www.mydomain.com Work? Causes & DNS Fixes (2026) | didyouship.com",
+    "description": "www.yourdomain.com returns an error or doesn't redirect correctly? A missing DNS record or redirect misconfiguration is the cause. Here's how to fix it.",
+    "h1": "Why Doesn't www.yourdomain.com Work?",
+    "intro": "Many users type www before a domain name out of habit. If www.yourdomain.com shows a browser error, an SSL warning, or serves different content from your apex domain, you have a DNS or redirect configuration problem. Both versions should work — and one should 301-redirect to the other.",
+    "causes": [
+        {
+            "title": "No CNAME or A record for www — DNS lookup fails",
+            "severity": "high",
+            "detail": "Your apex domain (yourdomain.com) has DNS records pointing to your server, but the www subdomain has no record at all. Browsers can't resolve www.yourdomain.com and show 'This site can't be reached'. The fix is to add a CNAME record for www pointing to your apex domain, or an A record pointing to your server IP.",
+            "guide": "www-redirect",
+            "fix_title": "How to Fix www DNS and Redirect",
+        },
+        {
+            "title": "www resolves but doesn't redirect — duplicate content splits SEO",
+            "severity": "high",
+            "detail": "Both yourdomain.com and www.yourdomain.com work and serve the same content. From a user perspective this seems fine, but Google sees them as two different websites with identical content. This splits your backlinks, PageRank, and search rankings across two versions instead of concentrating them on one. Set up a 301 redirect from one to the other.",
+            "guide": "www-redirect",
+            "fix_title": "How to Set Up a 301 www Redirect",
+        },
+    ],
+    "faqs": [
+        {
+            "q": "Should I use www or the apex domain (without www)?",
+            "a": "Either works — pick one and stick with it. The apex domain (yourdomain.com) is simpler and more modern. www is sometimes preferred for large companies that need to use CNAME for CDN routing (apex domains can't be CNAME'd in standard DNS). For most indie and SaaS products, yourdomain.com is the right choice. Whatever you choose, 301-redirect the other to it.",
+        },
+        {
+            "q": "Why does www work in some browsers but not others?",
+            "a": "Browsers and ISPs cache DNS responses differently. A CNAME record you just added might be cached from before (NXDOMAIN cached). Try from a different network or use Google's DNS checker: toolbox.googleapps.com/apps/checkmx. If www was never set up, some DNS resolvers cache the 'not found' result for hours.",
+        },
+        {
+            "q": "Does it matter for SEO which version I use?",
+            "a": "What matters is consistency — pick one canonical version and redirect the other. Google will consolidate all ranking signals (backlinks, content) to the canonical version. Using a canonical tag on each page pointing to the chosen version also helps. The choice between www and apex doesn't directly affect rankings.",
+        },
+        {
+            "q": "I set up a redirect but it's not working — why?",
+            "a": "Common reasons: the redirect is set at the app level but DNS for www doesn't point to your server at all (browser never reaches the app to follow the redirect), SSL certificate doesn't cover www (HTTPS error before redirect), or DNS propagation hasn't completed (wait up to 48 hours). Use curl -I https://www.yourdomain.com to check the response headers.",
+        },
+    ],
+},
+
+"broken-page-errors": {
+    "seo_title": "Why Do My Broken Links Show a Bare Error Page? How to Fix (2026) | didyouship.com",
+    "description": "404 errors showing a blank white page or default server error? A missing custom 404 page is hurting your UX and SEO. Here's how to create one.",
+    "h1": "Why Do Your Broken Links Show a Bare Error Page?",
+    "intro": "Every website has broken links — old URLs that changed, mistyped paths, deleted pages. What varies is what users see when they land on one. A bare browser or server error page sends users straight back to Google. A custom 404 page keeps them on your site and gives them a path forward.",
+    "causes": [
+        {
+            "title": "No custom 404 page configured",
+            "severity": "low",
+            "detail": "Your server returns a default error response for missing pages — either a blank white page, a generic 'Cannot GET /path' Node error, or an nginx/Apache default page with no navigation. Visitors who land on a broken URL have no way to find what they were looking for and leave immediately.",
+            "guide": "custom-404",
+            "fix_title": "How to Create a Custom 404 Page",
+        },
+        {
+            "title": "Missing favicon — 404 error on every page load",
+            "severity": "low",
+            "detail": "Every browser automatically requests /favicon.ico when loading a page. Without a favicon file, this generates a 404 error on every single page visit. These appear in your server logs, count against your error rate, and leave the browser tab with a blank icon.",
+            "guide": "favicon",
+            "fix_title": "How to Add a Favicon",
+        },
+    ],
+    "faqs": [
+        {
+            "q": "Does a custom 404 page affect SEO?",
+            "a": "Indirectly, yes. A good 404 page reduces bounce rate on error pages (Google can see when users immediately click back). It keeps users on your site who might otherwise leave and never return. It also avoids the scenario where Googlebot finds a broken link and sees a 200 OK with an error message instead of a proper 404 status code — which can pollute your index.",
+        },
+        {
+            "q": "My 404 page returns a 200 status code — is that a problem?",
+            "a": "Yes — this is called a 'soft 404'. Google sees a 200 OK and tries to index the page, but the content says 'page not found'. Google may then try to index the error page itself and will eventually demote it. Make sure your 404 page returns HTTP status code 404 — check with curl -I https://yourdomain.com/nonexistent-page.",
+        },
+        {
+            "q": "What should a good 404 page include?",
+            "a": "At minimum: your site's navigation header (so users can go anywhere), a clear 'Page not found' heading, a link back to the homepage, and optionally links to your most popular sections. More advanced: a search box, recently published content, or a friendly error illustration. Keep it consistent with your site design so it doesn't feel like an error.",
+        },
+        {
+            "q": "How do I find all the broken links on my site?",
+            "a": "Google Search Console → Pages → Not Found (404) shows URLs Googlebot is hitting that return 404s. Screaming Frog (free up to 500 URLs) crawls your entire site and finds internal broken links. Ahrefs or Semrush show external broken links (other sites linking to pages that no longer exist on your site).",
         },
     ],
 },

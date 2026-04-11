@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Production Readiness Guides (2026) | didyouship.com</title>
+<meta name="description" content="Educational guides for SPF, DKIM, DMARC, SSL, security headers, SEO, and performance.">
+<link rel="canonical" href="https://didyouship.com/guides/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://didyouship.com/guides/">
+<meta property="og:title" content="Production Readiness Guides (2026) | didyouship.com">
+<meta property="og:description" content="Educational guides for SPF, DKIM, DMARC, SSL, security headers, SEO, and performance.">
+<meta property="og:site_name" content="didyouship.com">
+<meta property="og:image" content="https://didyouship.com/static/og.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Production Readiness Guides (2026) | didyouship.com">
+<meta name="twitter:description" content="Educational guides for SPF, DKIM, DMARC, SSL, security headers, SEO, and performance.">
+<meta name="twitter:image" content="https://didyouship.com/static/og.svg">
+
+<meta name="theme-color" content="#0c0c0e">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/static/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0c0c0e; --bg2: #131316; --bg3: #1a1a1f;
+  --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+  --text: #e8e8ec; --text2: #b4b4c4; --text3: #808091;
+  --green: #22c55e; --amber: #f59e0b; --red: #ef4444; --blue: #3b82f6;
+  --accent: #6ee7b7;
+  --mono: 'DM Mono', monospace; --sans: 'DM Sans', sans-serif;
+}
+
+body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── HEADER ── */
+.header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 24px; border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; background: var(--bg); z-index: 100;
+}
+.logo { font-family: var(--mono); font-size: 13px; color: var(--accent); }
+.logo span { color: var(--text3); }
+.scan-btn {
+  font-family: var(--mono); font-size: 11px; color: var(--text3);
+  border: 1px solid var(--border2); padding: 5px 12px; border-radius: 4px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.scan-btn:hover { color: var(--accent); border-color: rgba(110,231,183,0.3); text-decoration: none; }
+
+/* ── LAYOUT ── */
+.layout { display: flex; min-height: calc(100vh - 53px); }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 220px; flex-shrink: 0; padding: 24px 0;
+  border-right: 1px solid var(--border);
+  position: sticky; top: 53px; height: calc(100vh - 53px);
+  overflow-y: auto;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+.sidebar-cat {
+  font-family: var(--mono); font-size: 10px; color: var(--text3);
+  padding: 12px 20px 4px; text-transform: uppercase; letter-spacing: 0.08em;
+}
+.sidebar-cat:not(:first-child) { margin-top: 8px; }
+
+.sidebar-link {
+  display: block; padding: 5px 20px; font-size: 13px; color: var(--text2);
+  transition: color 0.15s, background 0.15s;
+  cursor: pointer; text-decoration: none;
+}
+.sidebar-link:hover { color: var(--text); background: var(--bg2); text-decoration: none; }
+.sidebar-link.active { color: var(--accent); background: rgba(110,231,183,0.06); }
+
+/* ── CONTENT ── */
+.content { flex: 1; padding: 40px 48px; max-width: 760px; }
+
+.breadcrumb { font-size: 12px; color: var(--text3); margin-bottom: 24px; font-family: var(--mono); }
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--accent); }
+.breadcrumb span { margin: 0 6px; }
+
+.guide-header { margin-bottom: 32px; }
+.guide-cat { font-family: var(--mono); font-size: 11px; color: var(--accent); margin-bottom: 8px; }
+.guide-title { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 10px; }
+.guide-summary { font-size: 15px; color: var(--text2); font-weight: 300; line-height: 1.7; }
+
+.sev-badge {
+  display: inline-block; font-family: var(--mono); font-size: 10px;
+  padding: 3px 10px; border-radius: 3px; margin-top: 12px;
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.sev-badge.critical { color: var(--red); background: rgba(239,68,68,0.12); }
+.sev-badge.high     { color: var(--amber); background: rgba(245,158,11,0.12); }
+.sev-badge.medium   { color: var(--blue); background: rgba(59,130,246,0.12); }
+.sev-badge.low      { color: var(--text3); background: var(--bg3); }
+
+/* ── SECTIONS ── */
+.section { margin-bottom: 36px; }
+.section-label {
+  font-family: var(--mono); font-size: 11px; font-weight: 400; color: var(--text3);
+  text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;
+}
+.section p { font-size: 14px; color: var(--text2); line-height: 1.8; margin-bottom: 10px; font-weight: 300; }
+.section p:last-child { margin-bottom: 0; }
+.section ul, .section ol { padding-left: 20px; }
+.section li { font-size: 14px; color: var(--text2); line-height: 1.8; font-weight: 300; margin-bottom: 4px; }
+.section strong { color: var(--text); font-weight: 500; }
+
+/* ── CODE / PRE ── */
+.section code {
+  font-family: var(--mono); font-size: 12px; color: var(--accent);
+  background: rgba(110,231,183,0.08); padding: 1px 6px; border-radius: 3px;
+}
+.section pre {
+  font-family: var(--mono); font-size: 12px; line-height: 1.7;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 6px; padding: 16px; overflow-x: auto; margin: 12px 0;
+  color: var(--text2);
+}
+.section pre code { background: none; padding: 0; color: inherit; }
+
+/* ── PROVIDER TABLE ── */
+.provider-table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+.provider-table th {
+  font-family: var(--mono); font-size: 11px; color: var(--text3);
+  text-align: left; padding: 6px 12px; border-bottom: 1px solid var(--border2);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.provider-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); font-size: 13px; }
+.provider-table td:first-child { color: var(--text); }
+.provider-table td code { font-family: var(--mono); font-size: 11px; color: var(--accent); background: rgba(110,231,183,0.08); padding: 1px 6px; border-radius: 3px; }
+
+/* ── CTA ── */
+.guide-cta {
+  margin-top: 48px; padding: 24px; background: var(--bg2);
+  border: 1px solid var(--border); border-radius: 8px; text-align: center;
+}
+.guide-cta p { font-size: 13px; color: var(--text3); margin-bottom: 14px; }
+.guide-cta .cta-input-row {
+  display: flex; max-width: 400px; margin: 0 auto;
+  background: var(--bg3); border: 1px solid var(--border2); border-radius: 6px; overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.guide-cta .cta-input-row:focus-within {
+  border-color: rgba(110,231,183,0.3); box-shadow: 0 0 0 3px rgba(110,231,183,0.06);
+}
+.guide-cta .cta-input-row input {
+  flex: 1; background: transparent; border: none; outline: none;
+  padding: 10px 14px; font-family: var(--mono); font-size: 13px;
+  color: var(--text); caret-color: var(--accent); min-width: 0;
+}
+.guide-cta .cta-input-row input::placeholder { color: var(--text3); }
+.guide-cta .cta-input-row button {
+  padding: 10px 18px; background: var(--accent); color: #0a1a12;
+  font-family: var(--mono); font-size: 12px; font-weight: 500;
+  border: none; cursor: pointer; white-space: nowrap; transition: background 0.15s;
+}
+.guide-cta .cta-input-row button:hover { background: #86efac; }
+
+/* ── RELATED PROBLEMS ── */
+.related-problems { margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--border); }
+.related-problems-links { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.related-problem-link { font-size: 13px; color: var(--text2); }
+.related-problem-link:hover { color: var(--accent); }
+
+/* ── NOT FOUND ── */
+.not-found { padding: 80px 40px; text-align: center; }
+.not-found h2 { font-size: 20px; margin-bottom: 12px; }
+.not-found p { color: var(--text3); font-size: 14px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .content { padding: 24px 20px; }
+  .guide-title { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="/" class="logo">didyouship<span>.com</span></a>
+  <a href="/" class="scan-btn">← Scan your domain</a>
+</header>
+
+<div class="layout">
+
+  <nav class="sidebar">
+    
+    <div class="sidebar-cat">Email</div>
+    
+    <a class="sidebar-link" href="/guides/spf-record">SPF Record</a>
+    
+    <a class="sidebar-link" href="/guides/dmarc">DMARC Record</a>
+    
+    <a class="sidebar-link" href="/guides/email-spoofing">Email Spoofing Protection</a>
+    
+    <a class="sidebar-link" href="/guides/dkim-setup">DKIM Setup</a>
+    
+    <a class="sidebar-link" href="/guides/ip-blacklisted">Mail Server IP Blacklisted</a>
+    
+    <a class="sidebar-link" href="/guides/email-deliverability">Email Deliverability</a>
+    
+    
+    <div class="sidebar-cat">SSL</div>
+    
+    <a class="sidebar-link" href="/guides/ssl-certificate">SSL Certificate</a>
+    
+    <a class="sidebar-link" href="/guides/https-redirect">HTTP → HTTPS Redirect</a>
+    
+    
+    <div class="sidebar-cat">Secrets</div>
+    
+    <a class="sidebar-link" href="/guides/env-exposed">.env File Exposed</a>
+    
+    <a class="sidebar-link" href="/guides/git-exposed">.git Directory Exposed</a>
+    
+    <a class="sidebar-link" href="/guides/leaked-secrets">API Keys in Page Source</a>
+    
+    
+    <div class="sidebar-cat">DNS</div>
+    
+    <a class="sidebar-link" href="/guides/www-redirect">www Subdomain & Redirect</a>
+    
+    
+    <div class="sidebar-cat">Security</div>
+    
+    <a class="sidebar-link" href="/guides/hsts-header">HSTS Header</a>
+    
+    
+    <div class="sidebar-cat">SEO</div>
+    
+    <a class="sidebar-link" href="/guides/page-title">Page Title Tag</a>
+    
+    <a class="sidebar-link" href="/guides/meta-description">Meta Description</a>
+    
+    <a class="sidebar-link" href="/guides/open-graph">Open Graph Tags</a>
+    
+    <a class="sidebar-link" href="/guides/twitter-cards">Twitter Card Tags</a>
+    
+    <a class="sidebar-link" href="/guides/viewport-meta">Viewport Meta Tag</a>
+    
+    <a class="sidebar-link" href="/guides/canonical-url">Canonical URL</a>
+    
+    <a class="sidebar-link" href="/guides/sitemap">Sitemap.xml</a>
+    
+    <a class="sidebar-link" href="/guides/favicon">Favicon</a>
+    
+    
+    <div class="sidebar-cat">Performance</div>
+    
+    <a class="sidebar-link" href="/guides/response-time">Response Time & Cold Starts</a>
+    
+    <a class="sidebar-link" href="/guides/compression">Response Compression</a>
+    
+    
+    <div class="sidebar-cat">Breakage</div>
+    
+    <a class="sidebar-link" href="/guides/mixed-content">Mixed Content</a>
+    
+    
+    <div class="sidebar-cat">Polish</div>
+    
+    <a class="sidebar-link" href="/guides/custom-404">Custom 404 Page</a>
+    
+    
+  </nav>
+
+  <main class="content">
+
+    
+
+    <nav class="breadcrumb">
+      <a href="/">didyouship.com</a><span>›</span>
+      All Guides
+    </nav>
+
+    <div class="guide-header">
+      <div class="guide-cat">All categories</div>
+      <h1 class="guide-title">Production Readiness Guides</h1>
+      <p class="guide-summary">Educational guides for every issue didyouship.com scans for. Pick a topic from the sidebar, or scan your domain to see which ones apply to you.</p>
+    </div>
+
+    
+    <div class="section">
+      <h2 class="section-label">Email</h2>
+      <ul>
+        
+        <li><a href="/guides/spf-record">SPF Record</a> — A DNS record that tells the internet which servers are allowed to send email from your domain.</li>
+        
+        <li><a href="/guides/dmarc">DMARC Record</a> — A DNS policy that enforces what happens when someone tries to send email pretending to be from your domain.</li>
+        
+        <li><a href="/guides/email-spoofing">Email Spoofing Protection</a> — How to prevent anyone from sending email that appears to come from your domain.</li>
+        
+        <li><a href="/guides/dkim-setup">DKIM Setup</a> — Cryptographic signatures that prove your emails haven't been tampered with and came from your authorized server.</li>
+        
+        <li><a href="/guides/ip-blacklisted">Mail Server IP Blacklisted</a> — Your mail server's IP address appears on spam blacklists — email providers silently drop or spam-folder everything you send.</li>
+        
+        <li><a href="/guides/email-deliverability">Email Deliverability</a> — Why your emails land in spam — and the three DNS records every domain needs to reach the inbox reliably.</li>
+        
+      </ul>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-label">SSL</h2>
+      <ul>
+        
+        <li><a href="/guides/ssl-certificate">SSL Certificate</a> — Your SSL certificate encrypts traffic and proves your domain identity. Expired or invalid certs block your site completely.</li>
+        
+        <li><a href="/guides/https-redirect">HTTP → HTTPS Redirect</a> — Visitors who type your URL without https:// get the insecure version unless you force a redirect.</li>
+        
+      </ul>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-label">Secrets</h2>
+      <ul>
+        
+        <li><a href="/guides/env-exposed">.env File Exposed</a> — Your .env file is publicly accessible — anyone can read your database passwords, API keys, and other secrets.</li>
+        
+        <li><a href="/guides/git-exposed">.git Directory Exposed</a> — Your entire source code and git history are downloadable — including secrets you committed and later deleted.</li>
+        
+        <li><a href="/guides/leaked-secrets">API Keys in Page Source</a> — Secret keys found in your page's HTML source — visible to anyone who clicks "View Source".</li>
+        
+      </ul>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-label">DNS</h2>
+      <ul>
+        
+        <li><a href="/guides/www-redirect">www Subdomain & Redirect</a> — www.yourdomain.com should either work (and redirect to the apex) or not exist — having both serve independent content splits your SEO.</li>
+        
+      </ul>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-label">Security</h2>
+      <ul>
+        
+        <li><a href="/guides/hsts-header">HSTS Header</a> — The Strict-Transport-Security header tells browsers to always use HTTPS — even on the very first visit.</li>
+        
+      </ul>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-label">SEO</h2>
+      <ul>
+        
+        <li><a href="/guides/page-title">Page Title Tag</a> — The title tag controls what appears in browser tabs and as your headline in Google search results.</li>
+        
+        <li><a href="/guides/meta-description">Meta Description</a> — The snippet shown under your title in Google results — without it, Google picks random text from your page.</li>
+        
+        <li><a href="/guides/open-graph">Open Graph Tags</a> — Meta tags that control how your links look when shared on Slack, LinkedIn, Discord, iMessage, and most social platforms.</li>
+        
+        <li><a href="/guides/twitter-cards">Twitter Card Tags</a> — X/Twitter uses its own meta tags for link previews — Open Graph tags aren't enough.</li>
+        
+        <li><a href="/guides/viewport-meta">Viewport Meta Tag</a> — Without the viewport tag, your site renders at desktop width on phones — everything is tiny and users must pinch-zoom.</li>
+        
+        <li><a href="/guides/canonical-url">Canonical URL</a> — Tells Google which version of a URL is the "real" one — prevents duplicate content from splitting your search rankings.</li>
+        
+        <li><a href="/guides/sitemap">Sitemap.xml</a> — A file that tells search engines what pages exist on your site — required for Google Search Console and full indexing.</li>
+        
+        <li><a href="/guides/favicon">Favicon</a> — The small icon shown in browser tabs. Missing = 404 errors on every page load + blank tab icon.</li>
+        
+      </ul>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-label">Performance</h2>
+      <ul>
+        
+        <li><a href="/guides/response-time">Response Time & Cold Starts</a> — Slow response times drive users away — and free hosting tiers put your server to sleep, causing 10–30 second cold starts.</li>
+        
+        <li><a href="/guides/compression">Response Compression</a> — Enabling gzip or Brotli compression reduces page size by 60–80%, making your site load significantly faster.</li>
+        
+      </ul>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-label">Breakage</h2>
+      <ul>
+        
+        <li><a href="/guides/mixed-content">Mixed Content</a> — HTTP resources on an HTTPS page are silently blocked by browsers — images don't show, scripts don't run.</li>
+        
+      </ul>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-label">Polish</h2>
+      <ul>
+        
+        <li><a href="/guides/custom-404">Custom 404 Page</a> — When someone hits a broken link, a custom 404 page keeps them on your site instead of showing a bare error.</li>
+        
+      </ul>
+    </div>
+    
+
+    <div class="guide-cta">
+      <p>Run a free scan to see which issues apply to your domain</p>
+      <form class="cta-input-row" onsubmit="window.location.href='/?'+encodeURIComponent(this.querySelector('input').value.trim());return false;">
+        <input type="text" placeholder="yourdomain.com" autocapitalize="none" autocorrect="off" spellcheck="false">
+        <button type="submit">Scan</button>
+      </form>
+    </div>
+
+    
+
+  </main>
+</div>
+
+
+</body>
+</html>

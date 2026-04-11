@@ -3,20 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{{ title }}</title>
-<meta name="description" content="{{ description }}">
-<link rel="canonical" href="https://didyouship.com/guides/{{ slug }}">
+<title>Favicon Missing: Add a Browser Tab Icon to Your Site (2026) | didyouship.com</title>
+<meta name="description" content="A missing favicon causes a 404 error on every page load and leaves your browser tab blank. Learn how to create and add one in 5 minutes.">
+<link rel="canonical" href="https://didyouship.com/guides/favicon">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://didyouship.com/guides/{{ slug }}">
-<meta property="og:title" content="{{ title }}">
-<meta property="og:description" content="{{ description }}">
+<meta property="og:url" content="https://didyouship.com/guides/favicon">
+<meta property="og:title" content="Favicon Missing: Add a Browser Tab Icon to Your Site (2026) | didyouship.com">
+<meta property="og:description" content="A missing favicon causes a 404 error on every page load and leaves your browser tab blank. Learn how to create and add one in 5 minutes.">
 <meta property="og:site_name" content="didyouship.com">
 <meta property="og:image" content="https://didyouship.com/static/og.svg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{{ title }}">
-<meta name="twitter:description" content="{{ description }}">
+<meta name="twitter:title" content="Favicon Missing: Add a Browser Tab Icon to Your Site (2026) | didyouship.com">
+<meta name="twitter:description" content="A missing favicon causes a 404 error on every page load and leaves your browser tab blank. Learn how to create and add one in 5 minutes.">
 <meta name="twitter:image" content="https://didyouship.com/static/og.svg">
-{{ schema | safe }}
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: Favicon Missing: Add a Browser Tab Icon to Your Site (2026)", "description": "A missing favicon causes a 404 error on every page load and leaves your browser tab blank. Learn how to create and add one in 5 minutes.", "step": [{"@type": "HowToStep", "text": "Create a 32x32px icon using Figma, favicon.io, or any image editor.", "position": 1}, {"@type": "HowToStep", "text": "Save it as favicon.ico and place it in your public directory.", "position": 2}, {"@type": "HowToStep", "text": "Add a link tag inside your <head>: <link rel=\"icon\" href=\"/favicon.ico\">", "position": 3}, {"@type": "HowToStep", "text": "For better quality on retina screens, also add an SVG version: <link rel=\"icon\" href=\"/favicon.svg\" type=\"image/svg+xml\">", "position": 4}, {"@type": "HowToStep", "text": "Verify: open your site and check the browser tab shows the icon.", "position": 5}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://didyouship.com"}, {"@type": "ListItem", "position": 2, "name": "SEO", "item": "https://didyouship.com/guides/favicon"}]}</script>
 <meta name="theme-color" content="#0c0c0e">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/static/favicon.svg">
@@ -196,58 +197,149 @@ a:hover { text-decoration: underline; }
 <div class="layout">
 
   <nav class="sidebar">
-    {% for group in sidebar_nav %}
-    <div class="sidebar-cat">{{ group.cat }}</div>
-    {% for g in group.guides %}
-    <a class="sidebar-link{% if g.slug == slug %} active{% endif %}" href="/guides/{{ g.slug }}">{{ g.title }}</a>
-    {% endfor %}
-    {% endfor %}
+    
+    <div class="sidebar-cat">Email</div>
+    
+    <a class="sidebar-link" href="/guides/spf-record">SPF Record</a>
+    
+    <a class="sidebar-link" href="/guides/dmarc">DMARC Record</a>
+    
+    <a class="sidebar-link" href="/guides/email-spoofing">Email Spoofing Protection</a>
+    
+    <a class="sidebar-link" href="/guides/dkim-setup">DKIM Setup</a>
+    
+    <a class="sidebar-link" href="/guides/ip-blacklisted">Mail Server IP Blacklisted</a>
+    
+    <a class="sidebar-link" href="/guides/email-deliverability">Email Deliverability</a>
+    
+    
+    <div class="sidebar-cat">SSL</div>
+    
+    <a class="sidebar-link" href="/guides/ssl-certificate">SSL Certificate</a>
+    
+    <a class="sidebar-link" href="/guides/https-redirect">HTTP → HTTPS Redirect</a>
+    
+    
+    <div class="sidebar-cat">Secrets</div>
+    
+    <a class="sidebar-link" href="/guides/env-exposed">.env File Exposed</a>
+    
+    <a class="sidebar-link" href="/guides/git-exposed">.git Directory Exposed</a>
+    
+    <a class="sidebar-link" href="/guides/leaked-secrets">API Keys in Page Source</a>
+    
+    
+    <div class="sidebar-cat">DNS</div>
+    
+    <a class="sidebar-link" href="/guides/www-redirect">www Subdomain & Redirect</a>
+    
+    
+    <div class="sidebar-cat">Security</div>
+    
+    <a class="sidebar-link" href="/guides/hsts-header">HSTS Header</a>
+    
+    
+    <div class="sidebar-cat">SEO</div>
+    
+    <a class="sidebar-link" href="/guides/page-title">Page Title Tag</a>
+    
+    <a class="sidebar-link" href="/guides/meta-description">Meta Description</a>
+    
+    <a class="sidebar-link" href="/guides/open-graph">Open Graph Tags</a>
+    
+    <a class="sidebar-link" href="/guides/twitter-cards">Twitter Card Tags</a>
+    
+    <a class="sidebar-link" href="/guides/viewport-meta">Viewport Meta Tag</a>
+    
+    <a class="sidebar-link" href="/guides/canonical-url">Canonical URL</a>
+    
+    <a class="sidebar-link" href="/guides/sitemap">Sitemap.xml</a>
+    
+    <a class="sidebar-link active" href="/guides/favicon">Favicon</a>
+    
+    
+    <div class="sidebar-cat">Performance</div>
+    
+    <a class="sidebar-link" href="/guides/response-time">Response Time & Cold Starts</a>
+    
+    <a class="sidebar-link" href="/guides/compression">Response Compression</a>
+    
+    
+    <div class="sidebar-cat">Breakage</div>
+    
+    <a class="sidebar-link" href="/guides/mixed-content">Mixed Content</a>
+    
+    
+    <div class="sidebar-cat">Polish</div>
+    
+    <a class="sidebar-link" href="/guides/custom-404">Custom 404 Page</a>
+    
+    
   </nav>
 
   <main class="content">
 
-    {% if guide_title %}
+    
 
     <nav class="breadcrumb">
       <a href="/">didyouship.com</a><span>›</span>
       <a href="/guides">Guides</a><span>›</span>
-      {{ guide_title }}
+      Favicon
     </nav>
 
     <div class="guide-header">
-      <div class="guide-cat">{{ guide_category }}</div>
-      <h1 class="guide-title">{{ guide_title }}</h1>
-      <p class="guide-summary">{{ guide_summary }}</p>
-      {% if guide_severity %}<span class="sev-badge {{ guide_severity }}">{{ guide_severity }} severity</span>{% endif %}
+      <div class="guide-cat">SEO</div>
+      <h1 class="guide-title">Favicon</h1>
+      <p class="guide-summary">The small icon shown in browser tabs. Missing = 404 errors on every page load + blank tab icon.</p>
+      <span class="sev-badge low">low severity</span>
     </div>
 
-    {% if guide_what %}
+    
     <div class="section">
       <h2 class="section-label">What is this?</h2>
-      {{ guide_what | safe }}
+      <p>A favicon is the small icon shown in the browser tab next to your page title. Every browser requests <code>/favicon.ico</code> automatically on every page load, even if you don't link to it. If it's missing, you get a 404 error in your server logs on every visit.</p>
+<pre>&lt;link rel="icon" href="/favicon.ico"&gt;
+&lt;!-- Or SVG, which scales better: --&gt;
+&lt;link rel="icon" href="/favicon.svg" type="image/svg+xml"&gt;</pre>
     </div>
-    {% endif %}
+    
 
-    {% if guide_why %}
+    
     <div class="section">
       <h2 class="section-label">Why it matters</h2>
-      {{ guide_why | safe }}
+      <ul>
+<li><strong>404 error on every page load</strong> pollutes your server logs and analytics</li>
+<li><strong>Blank tab looks unfinished</strong> — a small but visible signal of quality</li>
+<li><strong>Users with many tabs</strong> rely on favicons to identify tabs — blank icons are confusing</li>
+</ul>
     </div>
-    {% endif %}
+    
 
-    {% if guide_how %}
+    
     <div class="section">
       <h2 class="section-label">How to fix it</h2>
-      {{ guide_how | safe }}
+      <ol>
+<li>Create a 32×32 PNG (or SVG for best results)</li>
+<li>Save as <code>favicon.ico</code> or <code>favicon.svg</code> in your public directory</li>
+<li>Add to your <code>&lt;head&gt;</code>: <code>&lt;link rel="icon" href="/favicon.ico"&gt;</code></li>
+</ol>
     </div>
-    {% endif %}
+    
 
-    {% if guide_providers %}
+    
     <div class="section">
       <h2 class="section-label">Providers &amp; tools</h2>
-      {{ guide_providers | safe }}
+      <p><strong>Quick favicon creation:</strong></p>
+<ul>
+<li><strong>favicon.io</strong> — generate from text, emoji, or image; free</li>
+<li><strong>realfavicongenerator.net</strong> — generates all sizes for all platforms</li>
+<li><strong>Figma</strong> — design a 32×32 icon, export as PNG</li>
+</ul>
+<p>For best compatibility, use both an SVG (for modern browsers) and a PNG fallback:</p>
+<pre>&lt;link rel="icon" href="/favicon.svg" type="image/svg+xml"&gt;
+&lt;link rel="icon" href="/favicon.png" type="image/png"&gt;</pre>
     </div>
-    {% endif %}
+    
 
     <div class="guide-cta">
       <p>Check if your domain has this issue</p>
@@ -257,57 +349,18 @@ a:hover { text-decoration: underline; }
       </form>
     </div>
 
-    {% if related_problems %}
+    
     <div class="related-problems">
       <h2 class="section-label">Related problems</h2>
       <div class="related-problems-links">
-        {% for p in related_problems %}
-        <a class="related-problem-link" href="/why/{{ p.slug }}">{{ p.h1 }}</a>
-        {% endfor %}
+        
+        <a class="related-problem-link" href="/why/broken-page-errors">Why Do Your Broken Links Show a Bare Error Page?</a>
+        
       </div>
     </div>
-    {% endif %}
+    
 
-    {% elif index_groups %}
-
-    <nav class="breadcrumb">
-      <a href="/">didyouship.com</a><span>›</span>
-      All Guides
-    </nav>
-
-    <div class="guide-header">
-      <div class="guide-cat">All categories</div>
-      <h1 class="guide-title">Production Readiness Guides</h1>
-      <p class="guide-summary">Educational guides for every issue didyouship.com scans for. Pick a topic from the sidebar, or scan your domain to see which ones apply to you.</p>
-    </div>
-
-    {% for group in index_groups %}
-    <div class="section">
-      <h2 class="section-label">{{ group.cat }}</h2>
-      <ul>
-        {% for g in group.guides %}
-        <li><a href="/guides/{{ g.slug }}">{{ g.title }}</a> — {{ g.summary }}</li>
-        {% endfor %}
-      </ul>
-    </div>
-    {% endfor %}
-
-    <div class="guide-cta">
-      <p>Run a free scan to see which issues apply to your domain</p>
-      <form class="cta-input-row" onsubmit="window.location.href='/?'+encodeURIComponent(this.querySelector('input').value.trim());return false;">
-        <input type="text" placeholder="yourdomain.com" autocapitalize="none" autocorrect="off" spellcheck="false">
-        <button type="submit">Scan</button>
-      </form>
-    </div>
-
-    {% else %}
-
-    <div class="not-found">
-      <h2>Guide not found</h2>
-      <p>This guide doesn't exist yet. <a href="/">← Scan your domain</a> to check your site.</p>
-    </div>
-
-    {% endif %}
+    
 
   </main>
 </div>

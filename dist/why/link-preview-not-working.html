@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Links Look Bad on Slack, Discord & Twitter? Fix Previews (2026) | didyouship.com</title>
+<meta name="description" content="Links showing no image or preview on Slack, Discord, LinkedIn, or Twitter? Missing Open Graph tags are the cause. Learn how to fix link previews in under 10 minutes.">
+<link rel="canonical" href="https://didyouship.com/why/link-preview-not-working">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://didyouship.com/why/link-preview-not-working">
+<meta property="og:title" content="Why Links Look Bad on Slack, Discord & Twitter? Fix Previews (2026) | didyouship.com">
+<meta property="og:description" content="Links showing no image or preview on Slack, Discord, LinkedIn, or Twitter? Missing Open Graph tags are the cause. Learn how to fix link previews in under 10 minutes.">
+<meta property="og:site_name" content="didyouship.com">
+<meta property="og:image" content="https://didyouship.com/static/og.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Why Links Look Bad on Slack, Discord & Twitter? Fix Previews (2026) | didyouship.com">
+<meta name="twitter:description" content="Links showing no image or preview on Slack, Discord, LinkedIn, or Twitter? Missing Open Graph tags are the cause. Learn how to fix link previews in under 10 minutes.">
+<meta name="twitter:image" content="https://didyouship.com/static/og.svg">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why does my link preview work on some platforms but not others?", "acceptedAnswer": {"@type": "Answer", "text": "Different platforms use different standards. LinkedIn, Slack, Discord, iMessage, and WhatsApp all use Open Graph tags. Twitter/X uses Twitter Card tags. Facebook uses Open Graph. If only Twitter is broken, you're missing twitter:card tags. If it's broken everywhere, you're missing Open Graph tags entirely."}}, {"@type": "Question", "name": "My preview is showing the wrong image or old content \u2014 how do I force a refresh?", "acceptedAnswer": {"@type": "Answer", "text": "Platforms cache previews aggressively. Each has a scrape/debug tool: Facebook Sharing Debugger (developers.facebook.com/tools/debug), LinkedIn Post Inspector (linkedin.com/post-inspector), and Twitter Card Validator (cards-dev.twitter.com/validator). Paste your URL and click 'Scrape Again' or 'Re-inspect'. Slack clears its cache automatically within ~30 minutes."}}, {"@type": "Question", "name": "What size should my OG image be?", "acceptedAnswer": {"@type": "Answer", "text": "1200\u00d7630px is the universal standard that works well on all platforms. Use PNG or JPG, keep file size under 1MB. Don't put critical text in the bottom 15% \u2014 some platforms crop it. For Twitter's summary card, a square 1:1 image at 800\u00d7800px also works well."}}, {"@type": "Question", "name": "Can I have different link previews for different pages?", "acceptedAnswer": {"@type": "Answer", "text": "Yes \u2014 and you should. Set OG tags dynamically based on each page's content. Product pages should show the product image; blog posts should show the post's featured image. For programmatically generated OG images (with your branding and page title), use Vercel OG (@vercel/og) or the Satori library."}}, {"@type": "Question", "name": "Do link previews affect SEO or search rankings?", "acceptedAnswer": {"@type": "Answer", "text": "Not directly. OG tags aren't a Google ranking factor. But better link previews mean more clicks on shared links, more social traffic, and more backlinks \u2014 all of which indirectly improve SEO. For search results specifically, focus on your title tag and meta description instead."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Why Do Your Links Look Bad When Shared?", "description": "Links showing no image or preview on Slack, Discord, LinkedIn, or Twitter? Missing Open Graph tags are the cause. Learn how to fix link previews in under 10 minutes.", "url": "https://didyouship.com/why/link-preview-not-working", "publisher": {"@type": "Organization", "name": "didyouship.com", "url": "https://didyouship.com"}}</script>
+<meta name="theme-color" content="#0c0c0e">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/static/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0c0c0e; --bg2: #131316; --bg3: #1a1a1f;
+  --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+  --text: #e8e8ec; --text2: #b4b4c4; --text3: #808091;
+  --green: #22c55e; --amber: #f59e0b; --red: #ef4444; --blue: #3b82f6;
+  --accent: #6ee7b7;
+  --mono: 'DM Mono', monospace; --sans: 'DM Sans', sans-serif;
+}
+
+body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── HEADER ── */
+.header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 24px; border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; background: var(--bg); z-index: 100;
+}
+.logo { font-family: var(--mono); font-size: 13px; color: var(--accent); }
+.logo span { color: var(--text3); }
+.scan-btn {
+  font-family: var(--mono); font-size: 11px; color: var(--text3);
+  border: 1px solid var(--border2); padding: 5px 12px; border-radius: 4px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.scan-btn:hover { color: var(--accent); border-color: rgba(110,231,183,0.3); text-decoration: none; }
+
+/* ── CONTENT ── */
+.page { max-width: 720px; margin: 0 auto; padding: 48px 24px 80px; }
+
+.breadcrumb {
+  font-family: var(--mono); font-size: 11px; color: var(--text3);
+  margin-bottom: 28px;
+}
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--accent); }
+.breadcrumb span { margin: 0 6px; }
+
+h1 {
+  font-size: 28px; font-weight: 600; letter-spacing: -0.02em;
+  line-height: 1.3; margin-bottom: 16px;
+}
+
+.intro {
+  font-size: 15px; color: var(--text2); line-height: 1.8;
+  font-weight: 300; margin-bottom: 48px;
+  padding-bottom: 32px; border-bottom: 1px solid var(--border);
+}
+
+/* ── SECTION HEADINGS ── */
+.section-heading {
+  font-family: var(--mono); font-size: 11px; font-weight: 400; color: var(--text3);
+  text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 20px;
+}
+
+/* ── CAUSE CARDS ── */
+.causes { display: flex; flex-direction: column; gap: 16px; margin-bottom: 48px; }
+
+.cause {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 20px 24px;
+}
+.cause-top { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+
+.sev {
+  font-family: var(--mono); font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.05em; padding: 2px 8px; border-radius: 3px; flex-shrink: 0;
+}
+.sev.critical { color: var(--red); background: rgba(239,68,68,0.12); }
+.sev.high     { color: var(--amber); background: rgba(245,158,11,0.12); }
+.sev.medium   { color: var(--blue); background: rgba(59,130,246,0.12); }
+.sev.low      { color: var(--text3); background: var(--bg3); }
+
+.cause h3 { font-size: 15px; font-weight: 500; line-height: 1.4; }
+.cause p { font-size: 13px; color: var(--text2); line-height: 1.75; font-weight: 300; margin-bottom: 14px; }
+.cause-link {
+  display: inline-block; font-family: var(--mono); font-size: 11px;
+  color: var(--accent); border: 1px solid rgba(110,231,183,0.2);
+  padding: 4px 12px; border-radius: 4px;
+  transition: background 0.15s, border-color 0.15s;
+}
+.cause-link:hover { background: rgba(110,231,183,0.06); border-color: rgba(110,231,183,0.4); text-decoration: none; }
+
+/* ── SCAN CTA ── */
+.cta-block {
+  background: var(--bg2); border: 1px solid rgba(110,231,183,0.15);
+  border-radius: 8px; padding: 28px 32px; text-align: center; margin-bottom: 48px;
+}
+.cta-block p { font-size: 14px; color: var(--text2); margin-bottom: 16px; font-weight: 300; }
+.cta-block strong { color: var(--text); font-weight: 500; }
+.cta-input-row {
+  display: flex; max-width: 400px; margin: 0 auto;
+  background: var(--bg3); border: 1px solid var(--border2); border-radius: 6px; overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.cta-input-row:focus-within {
+  border-color: rgba(110,231,183,0.3); box-shadow: 0 0 0 3px rgba(110,231,183,0.06);
+}
+.cta-input-row input {
+  flex: 1; background: transparent; border: none; outline: none;
+  padding: 10px 14px; font-family: var(--mono); font-size: 13px;
+  color: var(--text); caret-color: var(--accent); min-width: 0;
+}
+.cta-input-row input::placeholder { color: var(--text3); }
+.cta-input-row button {
+  padding: 10px 18px; background: var(--accent); color: #0a1a12;
+  font-family: var(--mono); font-size: 12px; font-weight: 500;
+  border: none; cursor: pointer; white-space: nowrap; transition: background 0.15s;
+}
+.cta-input-row button:hover { background: #86efac; }
+.cta-sub { display: block; font-size: 11px; color: var(--text3); margin-top: 10px; font-family: var(--mono); }
+
+/* ── FAQ ── */
+.faqs { margin-bottom: 48px; }
+
+details {
+  border-bottom: 1px solid var(--border);
+}
+details:first-of-type { border-top: 1px solid var(--border); }
+
+summary {
+  padding: 16px 0; font-size: 14px; font-weight: 500; cursor: pointer;
+  list-style: none; display: flex; justify-content: space-between; align-items: center;
+  color: var(--text);
+}
+summary::-webkit-details-marker { display: none; }
+summary::after {
+  content: '+'; font-family: var(--mono); font-size: 16px; color: var(--text3);
+  transition: transform 0.2s;
+}
+details[open] summary::after { content: '−'; }
+
+.faq-answer {
+  font-size: 13px; color: var(--text2); line-height: 1.8; font-weight: 300;
+  padding: 0 0 16px;
+}
+
+/* ── RELATED GUIDES ── */
+.related { margin-bottom: 48px; }
+.guide-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.guide-pill {
+  font-family: var(--mono); font-size: 11px; color: var(--text2);
+  border: 1px solid var(--border2); padding: 5px 12px; border-radius: 4px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.guide-pill:hover { color: var(--accent); border-color: rgba(110,231,183,0.3); text-decoration: none; }
+
+/* ── OTHER PROBLEMS ── */
+.other-problems { border-top: 1px solid var(--border); padding-top: 32px; }
+.problem-links { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+.problem-link { font-size: 13px; color: var(--text2); }
+.problem-link:hover { color: var(--accent); }
+
+@media (max-width: 600px) {
+  .page { padding: 32px 16px 60px; }
+  h1 { font-size: 22px; }
+  .cta-block { padding: 20px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="/" class="logo">didyouship<span>.com</span></a>
+  <a href="/" class="scan-btn">← Scan your domain</a>
+</header>
+
+<main class="page">
+
+  <nav class="breadcrumb">
+    <a href="/">didyouship.com</a><span>›</span>
+    <a href="/">Why is my...</a><span>›</span>
+    Why Do Your Links Look Bad When Shared?
+  </nav>
+
+  <h1>Why Do Your Links Look Bad When Shared?</h1>
+  <p class="intro">When someone shares your URL on Slack, Discord, LinkedIn, iMessage, or Twitter, they expect a rich card — title, description, and an image preview. If they see a plain URL instead, Open Graph or Twitter Card tags are missing from your page. Here's what to add.</p>
+
+  <!-- Causes -->
+  <h2 class="section-heading">Why this happens</h2>
+  <div class="causes">
+    
+    <div class="cause">
+      <div class="cause-top">
+        <span class="sev medium">medium</span>
+        <h3>No Open Graph tags — no preview on Slack, Discord, LinkedIn, or iMessage</h3>
+      </div>
+      <p>Open Graph is the universal standard for link previews. Slack, Discord, LinkedIn, Facebook, WhatsApp, iMessage, and most other platforms use og:title, og:description, og:image, and og:url to build the preview card. Without these four tags, every shared link looks like a plain URL.</p>
+      <a class="cause-link" href="/guides/open-graph">How to Add Open Graph Tags →</a>
+    </div>
+    
+    <div class="cause">
+      <div class="cause-top">
+        <span class="sev medium">medium</span>
+        <h3>OG image missing — preview shows text but no image</h3>
+      </div>
+      <p>You have og:title and og:description but no og:image. Most platforms show a large image card when an image is present — links with images get dramatically more clicks than text-only previews. A 1200×630px image is the standard that works on all platforms.</p>
+      <a class="cause-link" href="/guides/open-graph">How to Add an OG Image →</a>
+    </div>
+    
+    <div class="cause">
+      <div class="cause-top">
+        <span class="sev medium">medium</span>
+        <h3>No Twitter Card tags — no preview on X/Twitter</h3>
+      </div>
+      <p>X (formerly Twitter) uses its own meta tag system, separate from Open Graph. Even with perfect OG tags, Twitter won't show a rich preview without twitter:card, twitter:title, twitter:description, and twitter:image tags.</p>
+      <a class="cause-link" href="/guides/twitter-cards">How to Add Twitter Card Tags →</a>
+    </div>
+    
+  </div>
+
+  <!-- Scan CTA -->
+  <div class="cta-block">
+    <p><strong>Not sure which of these apply to your domain?</strong><br>
+    Run a free scan — 26 checks in under 10 seconds.</p>
+    <form class="cta-input-row" onsubmit="window.location.href='/?'+encodeURIComponent(this.querySelector('input').value.trim());return false;">
+      <input type="text" placeholder="yourdomain.com" autocapitalize="none" autocorrect="off" spellcheck="false">
+      <button type="submit">Scan</button>
+    </form>
+    <span class="cta-sub">No signup. No install. Just enter your domain.</span>
+  </div>
+
+  <!-- FAQ -->
+  <h2 class="section-heading">Frequently asked questions</h2>
+  <div class="faqs">
+    
+    <details>
+      <summary>Why does my link preview work on some platforms but not others?</summary>
+      <div class="faq-answer">Different platforms use different standards. LinkedIn, Slack, Discord, iMessage, and WhatsApp all use Open Graph tags. Twitter/X uses Twitter Card tags. Facebook uses Open Graph. If only Twitter is broken, you're missing twitter:card tags. If it's broken everywhere, you're missing Open Graph tags entirely.</div>
+    </details>
+    
+    <details>
+      <summary>My preview is showing the wrong image or old content — how do I force a refresh?</summary>
+      <div class="faq-answer">Platforms cache previews aggressively. Each has a scrape/debug tool: Facebook Sharing Debugger (developers.facebook.com/tools/debug), LinkedIn Post Inspector (linkedin.com/post-inspector), and Twitter Card Validator (cards-dev.twitter.com/validator). Paste your URL and click 'Scrape Again' or 'Re-inspect'. Slack clears its cache automatically within ~30 minutes.</div>
+    </details>
+    
+    <details>
+      <summary>What size should my OG image be?</summary>
+      <div class="faq-answer">1200×630px is the universal standard that works well on all platforms. Use PNG or JPG, keep file size under 1MB. Don't put critical text in the bottom 15% — some platforms crop it. For Twitter's summary card, a square 1:1 image at 800×800px also works well.</div>
+    </details>
+    
+    <details>
+      <summary>Can I have different link previews for different pages?</summary>
+      <div class="faq-answer">Yes — and you should. Set OG tags dynamically based on each page's content. Product pages should show the product image; blog posts should show the post's featured image. For programmatically generated OG images (with your branding and page title), use Vercel OG (@vercel/og) or the Satori library.</div>
+    </details>
+    
+    <details>
+      <summary>Do link previews affect SEO or search rankings?</summary>
+      <div class="faq-answer">Not directly. OG tags aren't a Google ranking factor. But better link previews mean more clicks on shared links, more social traffic, and more backlinks — all of which indirectly improve SEO. For search results specifically, focus on your title tag and meta description instead.</div>
+    </details>
+    
+  </div>
+
+  <!-- Related fix guides -->
+  <div class="related">
+    <h2 class="section-heading">Fix guides</h2>
+    <div class="guide-links">
+      
+      <a class="guide-pill" href="/guides/open-graph">How to Add Open Graph Tags</a>
+      
+      <a class="guide-pill" href="/guides/open-graph">How to Add an OG Image</a>
+      
+      <a class="guide-pill" href="/guides/twitter-cards">How to Add Twitter Card Tags</a>
+      
+    </div>
+  </div>
+
+  <!-- Other problems -->
+  
+  <div class="other-problems">
+    <h2 class="section-heading">Other common problems</h2>
+    <div class="problem-links">
+      
+      <a class="problem-link" href="/why/emails-going-to-spam">Why Are Your Emails Going to Spam?</a>
+      
+      <a class="problem-link" href="/why/not-in-google">Why Isn't Your Website Showing in Google?</a>
+      
+      <a class="problem-link" href="/why/website-not-secure">Why Does Your Website Say "Not Secure"?</a>
+      
+      <a class="problem-link" href="/why/website-loading-slow">Why Is Your Website Loading Slowly?</a>
+      
+      <a class="problem-link" href="/why/website-broken-on-mobile">Why Is Your Website Broken on Mobile?</a>
+      
+      <a class="problem-link" href="/why/secrets-exposed">Why Are Your Secrets or API Keys Exposed?</a>
+      
+      <a class="problem-link" href="/why/www-not-working">Why Doesn't www.yourdomain.com Work?</a>
+      
+      <a class="problem-link" href="/why/broken-page-errors">Why Do Your Broken Links Show a Bare Error Page?</a>
+      
+    </div>
+  </div>
+  
+
+</main>
+
+</body>
+</html>

@@ -3,20 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{{ title }}</title>
-<meta name="description" content="{{ description }}">
-<link rel="canonical" href="https://didyouship.com/guides/{{ slug }}">
+<title>Email Spoofing Protection: SPF, DKIM and DMARC Explained (2026) | didyouship.com</title>
+<meta name="description" content="Without SPF, DKIM, and DMARC, anyone can send email pretending to be from your domain. Learn how all three work and how to set them up.">
+<link rel="canonical" href="https://didyouship.com/guides/email-spoofing">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://didyouship.com/guides/{{ slug }}">
-<meta property="og:title" content="{{ title }}">
-<meta property="og:description" content="{{ description }}">
+<meta property="og:url" content="https://didyouship.com/guides/email-spoofing">
+<meta property="og:title" content="Email Spoofing Protection: SPF, DKIM and DMARC Explained (2026) | didyouship.com">
+<meta property="og:description" content="Without SPF, DKIM, and DMARC, anyone can send email pretending to be from your domain. Learn how all three work and how to set them up.">
 <meta property="og:site_name" content="didyouship.com">
 <meta property="og:image" content="https://didyouship.com/static/og.svg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{{ title }}">
-<meta name="twitter:description" content="{{ description }}">
+<meta name="twitter:title" content="Email Spoofing Protection: SPF, DKIM and DMARC Explained (2026) | didyouship.com">
+<meta name="twitter:description" content="Without SPF, DKIM, and DMARC, anyone can send email pretending to be from your domain. Learn how all three work and how to set them up.">
 <meta name="twitter:image" content="https://didyouship.com/static/og.svg">
-{{ schema | safe }}
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: Email Spoofing Protection: SPF, DKIM and DMARC Explained (2026)", "description": "Without SPF, DKIM, and DMARC, anyone can send email pretending to be from your domain. Learn how all three work and how to set them up.", "step": [{"@type": "HowToStep", "text": "Add an SPF record \u2014 TXT record at your root domain listing your authorised sending services.", "position": 1}, {"@type": "HowToStep", "text": "Enable DKIM signing in your email provider dashboard and add the DNS record they give you.", "position": 2}, {"@type": "HowToStep", "text": "Add a DMARC record at _dmarc.yourdomain.com with p=quarantine or p=reject.", "position": 3}, {"@type": "HowToStep", "text": "Monitor DMARC reports for a week to confirm no legitimate email is being rejected.", "position": 4}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://didyouship.com"}, {"@type": "ListItem", "position": 2, "name": "Email Deliverability", "item": "https://didyouship.com/guides/email-spoofing"}]}</script>
 <meta name="theme-color" content="#0c0c0e">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/static/favicon.svg">
@@ -196,58 +197,153 @@ a:hover { text-decoration: underline; }
 <div class="layout">
 
   <nav class="sidebar">
-    {% for group in sidebar_nav %}
-    <div class="sidebar-cat">{{ group.cat }}</div>
-    {% for g in group.guides %}
-    <a class="sidebar-link{% if g.slug == slug %} active{% endif %}" href="/guides/{{ g.slug }}">{{ g.title }}</a>
-    {% endfor %}
-    {% endfor %}
+    
+    <div class="sidebar-cat">Email</div>
+    
+    <a class="sidebar-link" href="/guides/spf-record">SPF Record</a>
+    
+    <a class="sidebar-link" href="/guides/dmarc">DMARC Record</a>
+    
+    <a class="sidebar-link active" href="/guides/email-spoofing">Email Spoofing Protection</a>
+    
+    <a class="sidebar-link" href="/guides/dkim-setup">DKIM Setup</a>
+    
+    <a class="sidebar-link" href="/guides/ip-blacklisted">Mail Server IP Blacklisted</a>
+    
+    <a class="sidebar-link" href="/guides/email-deliverability">Email Deliverability</a>
+    
+    
+    <div class="sidebar-cat">SSL</div>
+    
+    <a class="sidebar-link" href="/guides/ssl-certificate">SSL Certificate</a>
+    
+    <a class="sidebar-link" href="/guides/https-redirect">HTTP → HTTPS Redirect</a>
+    
+    
+    <div class="sidebar-cat">Secrets</div>
+    
+    <a class="sidebar-link" href="/guides/env-exposed">.env File Exposed</a>
+    
+    <a class="sidebar-link" href="/guides/git-exposed">.git Directory Exposed</a>
+    
+    <a class="sidebar-link" href="/guides/leaked-secrets">API Keys in Page Source</a>
+    
+    
+    <div class="sidebar-cat">DNS</div>
+    
+    <a class="sidebar-link" href="/guides/www-redirect">www Subdomain & Redirect</a>
+    
+    
+    <div class="sidebar-cat">Security</div>
+    
+    <a class="sidebar-link" href="/guides/hsts-header">HSTS Header</a>
+    
+    
+    <div class="sidebar-cat">SEO</div>
+    
+    <a class="sidebar-link" href="/guides/page-title">Page Title Tag</a>
+    
+    <a class="sidebar-link" href="/guides/meta-description">Meta Description</a>
+    
+    <a class="sidebar-link" href="/guides/open-graph">Open Graph Tags</a>
+    
+    <a class="sidebar-link" href="/guides/twitter-cards">Twitter Card Tags</a>
+    
+    <a class="sidebar-link" href="/guides/viewport-meta">Viewport Meta Tag</a>
+    
+    <a class="sidebar-link" href="/guides/canonical-url">Canonical URL</a>
+    
+    <a class="sidebar-link" href="/guides/sitemap">Sitemap.xml</a>
+    
+    <a class="sidebar-link" href="/guides/favicon">Favicon</a>
+    
+    
+    <div class="sidebar-cat">Performance</div>
+    
+    <a class="sidebar-link" href="/guides/response-time">Response Time & Cold Starts</a>
+    
+    <a class="sidebar-link" href="/guides/compression">Response Compression</a>
+    
+    
+    <div class="sidebar-cat">Breakage</div>
+    
+    <a class="sidebar-link" href="/guides/mixed-content">Mixed Content</a>
+    
+    
+    <div class="sidebar-cat">Polish</div>
+    
+    <a class="sidebar-link" href="/guides/custom-404">Custom 404 Page</a>
+    
+    
   </nav>
 
   <main class="content">
 
-    {% if guide_title %}
+    
 
     <nav class="breadcrumb">
       <a href="/">didyouship.com</a><span>›</span>
       <a href="/guides">Guides</a><span>›</span>
-      {{ guide_title }}
+      Email Spoofing Protection
     </nav>
 
     <div class="guide-header">
-      <div class="guide-cat">{{ guide_category }}</div>
-      <h1 class="guide-title">{{ guide_title }}</h1>
-      <p class="guide-summary">{{ guide_summary }}</p>
-      {% if guide_severity %}<span class="sev-badge {{ guide_severity }}">{{ guide_severity }} severity</span>{% endif %}
+      <div class="guide-cat">Email Deliverability</div>
+      <h1 class="guide-title">Email Spoofing Protection</h1>
+      <p class="guide-summary">How to prevent anyone from sending email that appears to come from your domain.</p>
+      <span class="sev-badge critical">critical severity</span>
     </div>
 
-    {% if guide_what %}
+    
     <div class="section">
       <h2 class="section-label">What is this?</h2>
-      {{ guide_what | safe }}
+      <p>Email spoofing is when someone sends an email that looks like it's from your domain — but isn't. It's trivially easy to do: email's core protocol (SMTP) doesn't verify the sender by default. Without additional protections, anyone can claim to be from you@yourdomain.com.</p>
+<p>The three defenses work together:</p>
+<ul>
+<li><strong>SPF</strong> — lists which servers are allowed to send as you</li>
+<li><strong>DKIM</strong> — adds a cryptographic signature to emails from your authorized servers</li>
+<li><strong>DMARC</strong> — tells receivers what to do when email fails SPF or DKIM, and sends you reports</li>
+</ul>
     </div>
-    {% endif %}
+    
 
-    {% if guide_why %}
+    
     <div class="section">
       <h2 class="section-label">Why it matters</h2>
-      {{ guide_why | safe }}
+      <p>Spoofed emails from your domain can:</p>
+<ul>
+<li>Send phishing emails to your customers, tricking them into giving up passwords or payment details</li>
+<li>Damage your brand reputation — users get suspicious emails "from you" and lose trust</li>
+<li>Get your domain blacklisted, affecting your own email deliverability</li>
+<li>Be used in business email compromise (BEC) attacks, one of the most costly types of cybercrime</li>
+</ul>
     </div>
-    {% endif %}
+    
 
-    {% if guide_how %}
+    
     <div class="section">
       <h2 class="section-label">How to fix it</h2>
-      {{ guide_how | safe }}
+      <ol>
+<li><strong>Add an SPF record</strong> — TXT record at your root domain listing your sending services</li>
+<li><strong>Enable DKIM</strong> — in your email provider dashboard; they'll give you a TXT record to add</li>
+<li><strong>Add a DMARC record</strong> — TXT record at <code>_dmarc.yourdomain.com</code> with <code>p=quarantine</code> or <code>p=reject</code></li>
+</ol>
+<p>In order of priority: DMARC first (biggest impact), then SPF, then DKIM. All three together give complete protection.</p>
     </div>
-    {% endif %}
+    
 
-    {% if guide_providers %}
+    
     <div class="section">
       <h2 class="section-label">Providers &amp; tools</h2>
-      {{ guide_providers | safe }}
+      <p>Check each service's documentation for DKIM/SPF setup:</p>
+<ul>
+<li><strong>Google Workspace:</strong> Admin Console → Apps → Gmail → Authenticate email</li>
+<li><strong>Resend:</strong> resend.com → Domains → your domain → DKIM records</li>
+<li><strong>Postmark:</strong> Account → Sender Signatures → your domain → DKIM</li>
+<li><strong>Microsoft 365:</strong> Defender portal → Email authentication settings</li>
+</ul>
     </div>
-    {% endif %}
+    
 
     <div class="guide-cta">
       <p>Check if your domain has this issue</p>
@@ -257,57 +353,18 @@ a:hover { text-decoration: underline; }
       </form>
     </div>
 
-    {% if related_problems %}
+    
     <div class="related-problems">
       <h2 class="section-label">Related problems</h2>
       <div class="related-problems-links">
-        {% for p in related_problems %}
-        <a class="related-problem-link" href="/why/{{ p.slug }}">{{ p.h1 }}</a>
-        {% endfor %}
+        
+        <a class="related-problem-link" href="/why/emails-going-to-spam">Why Are Your Emails Going to Spam?</a>
+        
       </div>
     </div>
-    {% endif %}
+    
 
-    {% elif index_groups %}
-
-    <nav class="breadcrumb">
-      <a href="/">didyouship.com</a><span>›</span>
-      All Guides
-    </nav>
-
-    <div class="guide-header">
-      <div class="guide-cat">All categories</div>
-      <h1 class="guide-title">Production Readiness Guides</h1>
-      <p class="guide-summary">Educational guides for every issue didyouship.com scans for. Pick a topic from the sidebar, or scan your domain to see which ones apply to you.</p>
-    </div>
-
-    {% for group in index_groups %}
-    <div class="section">
-      <h2 class="section-label">{{ group.cat }}</h2>
-      <ul>
-        {% for g in group.guides %}
-        <li><a href="/guides/{{ g.slug }}">{{ g.title }}</a> — {{ g.summary }}</li>
-        {% endfor %}
-      </ul>
-    </div>
-    {% endfor %}
-
-    <div class="guide-cta">
-      <p>Run a free scan to see which issues apply to your domain</p>
-      <form class="cta-input-row" onsubmit="window.location.href='/?'+encodeURIComponent(this.querySelector('input').value.trim());return false;">
-        <input type="text" placeholder="yourdomain.com" autocapitalize="none" autocorrect="off" spellcheck="false">
-        <button type="submit">Scan</button>
-      </form>
-    </div>
-
-    {% else %}
-
-    <div class="not-found">
-      <h2>Guide not found</h2>
-      <p>This guide doesn't exist yet. <a href="/">← Scan your domain</a> to check your site.</p>
-    </div>
-
-    {% endif %}
+    
 
   </main>
 </div>

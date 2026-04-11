@@ -343,6 +343,7 @@ body {
   .input-prefix { display: none; }
   .issue-tags { flex-direction: column; gap: 2px; align-items: flex-end; }
 }
+
 </style>
 </head>
 <body>
@@ -538,7 +539,6 @@ function render(d) {
   h += '<div class="grade-meta">';
   h += '<div class="grade-domain">' + esc(d.domain) + '</div>';
   h += '<div class="grade-score">' + d.score + ' / 100</div>';
-  if (d.summary) h += '<div class="grade-summary">' + esc(d.summary) + '</div>';
   const cr = d.critical_count || 0, hi = d.high_count || 0;
   const me = d.issues.filter(i=>i.severity==='medium').length;
   const lo = d.issues.filter(i=>i.severity==='low').length;
@@ -594,7 +594,7 @@ function render(d) {
       h += '</span>';
       h += '</div>';
       h += '<div class="issue-body" id="b-' + uid + '">';
-      h += '<div class="issue-detail">' + esc(issue.ai_explanation || issue.detail) + '</div>';
+      h += '<div class="issue-detail">' + esc(issue.detail) + '</div>';
       if (issue.fix) {
         h += '<div class="fix-box"><div class="fix-label">How to fix</div>';
         h += '<div class="fix-code">' + esc(issue.fix) + '</div>';

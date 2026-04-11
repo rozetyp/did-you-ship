@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Is My Website Loading Slowly? 4 Causes & How to Fix (2026) | didyouship.com</title>
+<meta name="description" content="Website taking too long to load? Cold starts on free hosting, missing compression, or slow database queries are the most common causes. Learn how to diagnose and fix each.">
+<link rel="canonical" href="https://didyouship.com/why/website-loading-slow">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://didyouship.com/why/website-loading-slow">
+<meta property="og:title" content="Why Is My Website Loading Slowly? 4 Causes & How to Fix (2026) | didyouship.com">
+<meta property="og:description" content="Website taking too long to load? Cold starts on free hosting, missing compression, or slow database queries are the most common causes. Learn how to diagnose and fix each.">
+<meta property="og:site_name" content="didyouship.com">
+<meta property="og:image" content="https://didyouship.com/static/og.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Why Is My Website Loading Slowly? 4 Causes & How to Fix (2026) | didyouship.com">
+<meta name="twitter:description" content="Website taking too long to load? Cold starts on free hosting, missing compression, or slow database queries are the most common causes. Learn how to diagnose and fix each.">
+<meta name="twitter:image" content="https://didyouship.com/static/og.svg">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why is my site fast for me but slow for my users?", "acceptedAnswer": {"@type": "Answer", "text": "Several reasons: you're physically close to your server (fewer network hops), your browser caches assets after the first visit so repeat visits are faster, and you test after the server is already warm. Use GTmetrix or WebPageTest to measure from specific regions. The first-visit cold start is invisible to you but hits every new visitor."}}, {"@type": "Question", "name": "What's a good page load time?", "acceptedAnswer": {"@type": "Answer", "text": "Under 1 second for Time to First Byte (server response) is ideal. Under 3 seconds for full page load. Google's Core Web Vitals consider Largest Contentful Paint over 2.5 seconds 'needs improvement' and over 4 seconds 'poor'. Check your real-world scores in Google Search Console \u2192 Core Web Vitals."}}, {"@type": "Question", "name": "Why is the first visit always slow but every visit after is fast?", "acceptedAnswer": {"@type": "Answer", "text": "Classic cold start. Your hosting provider spins down your server after inactivity to save resources on free/hobby tiers. The first request wakes it up \u2014 which can take 10\u201330 seconds. Subsequent requests hit the already-running server and are fast. Fix: upgrade to a paid plan (always-on) or use a keep-alive ping service (cron-job.org, BetterStack) that hits your /health endpoint every 5 minutes."}}, {"@type": "Question", "name": "Does page speed affect SEO?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Google's Core Web Vitals \u2014 which include Time to First Byte, Largest Contentful Paint, and Interaction to Next Paint \u2014 are ranking factors. Slow sites rank lower. Google Search Console shows your Core Web Vitals score and flags pages that are underperforming. A fast site is a ranking advantage, not just a UX nicety."}}, {"@type": "Question", "name": "My database queries seem fine locally \u2014 why are they slow in production?", "acceptedAnswer": {"@type": "Answer", "text": "Local databases have no network latency and small datasets. In production, network round-trips add 1\u201310ms per query (more if your database is in a different region than your server), and larger datasets expose missing indexes. Use EXPLAIN on slow queries to find missing indexes, and check that your database is in the same region as your app server."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Why Is Your Website Loading Slowly?", "description": "Website taking too long to load? Cold starts on free hosting, missing compression, or slow database queries are the most common causes. Learn how to diagnose and fix each.", "url": "https://didyouship.com/why/website-loading-slow", "publisher": {"@type": "Organization", "name": "didyouship.com", "url": "https://didyouship.com"}}</script>
+<meta name="theme-color" content="#0c0c0e">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/static/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0c0c0e; --bg2: #131316; --bg3: #1a1a1f;
+  --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+  --text: #e8e8ec; --text2: #b4b4c4; --text3: #808091;
+  --green: #22c55e; --amber: #f59e0b; --red: #ef4444; --blue: #3b82f6;
+  --accent: #6ee7b7;
+  --mono: 'DM Mono', monospace; --sans: 'DM Sans', sans-serif;
+}
+
+body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── HEADER ── */
+.header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 24px; border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; background: var(--bg); z-index: 100;
+}
+.logo { font-family: var(--mono); font-size: 13px; color: var(--accent); }
+.logo span { color: var(--text3); }
+.scan-btn {
+  font-family: var(--mono); font-size: 11px; color: var(--text3);
+  border: 1px solid var(--border2); padding: 5px 12px; border-radius: 4px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.scan-btn:hover { color: var(--accent); border-color: rgba(110,231,183,0.3); text-decoration: none; }
+
+/* ── CONTENT ── */
+.page { max-width: 720px; margin: 0 auto; padding: 48px 24px 80px; }
+
+.breadcrumb {
+  font-family: var(--mono); font-size: 11px; color: var(--text3);
+  margin-bottom: 28px;
+}
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--accent); }
+.breadcrumb span { margin: 0 6px; }
+
+h1 {
+  font-size: 28px; font-weight: 600; letter-spacing: -0.02em;
+  line-height: 1.3; margin-bottom: 16px;
+}
+
+.intro {
+  font-size: 15px; color: var(--text2); line-height: 1.8;
+  font-weight: 300; margin-bottom: 48px;
+  padding-bottom: 32px; border-bottom: 1px solid var(--border);
+}
+
+/* ── SECTION HEADINGS ── */
+.section-heading {
+  font-family: var(--mono); font-size: 11px; font-weight: 400; color: var(--text3);
+  text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 20px;
+}
+
+/* ── CAUSE CARDS ── */
+.causes { display: flex; flex-direction: column; gap: 16px; margin-bottom: 48px; }
+
+.cause {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 20px 24px;
+}
+.cause-top { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+
+.sev {
+  font-family: var(--mono); font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.05em; padding: 2px 8px; border-radius: 3px; flex-shrink: 0;
+}
+.sev.critical { color: var(--red); background: rgba(239,68,68,0.12); }
+.sev.high     { color: var(--amber); background: rgba(245,158,11,0.12); }
+.sev.medium   { color: var(--blue); background: rgba(59,130,246,0.12); }
+.sev.low      { color: var(--text3); background: var(--bg3); }
+
+.cause h3 { font-size: 15px; font-weight: 500; line-height: 1.4; }
+.cause p { font-size: 13px; color: var(--text2); line-height: 1.75; font-weight: 300; margin-bottom: 14px; }
+.cause-link {
+  display: inline-block; font-family: var(--mono); font-size: 11px;
+  color: var(--accent); border: 1px solid rgba(110,231,183,0.2);
+  padding: 4px 12px; border-radius: 4px;
+  transition: background 0.15s, border-color 0.15s;
+}
+.cause-link:hover { background: rgba(110,231,183,0.06); border-color: rgba(110,231,183,0.4); text-decoration: none; }
+
+/* ── SCAN CTA ── */
+.cta-block {
+  background: var(--bg2); border: 1px solid rgba(110,231,183,0.15);
+  border-radius: 8px; padding: 28px 32px; text-align: center; margin-bottom: 48px;
+}
+.cta-block p { font-size: 14px; color: var(--text2); margin-bottom: 16px; font-weight: 300; }
+.cta-block strong { color: var(--text); font-weight: 500; }
+.cta-input-row {
+  display: flex; max-width: 400px; margin: 0 auto;
+  background: var(--bg3); border: 1px solid var(--border2); border-radius: 6px; overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.cta-input-row:focus-within {
+  border-color: rgba(110,231,183,0.3); box-shadow: 0 0 0 3px rgba(110,231,183,0.06);
+}
+.cta-input-row input {
+  flex: 1; background: transparent; border: none; outline: none;
+  padding: 10px 14px; font-family: var(--mono); font-size: 13px;
+  color: var(--text); caret-color: var(--accent); min-width: 0;
+}
+.cta-input-row input::placeholder { color: var(--text3); }
+.cta-input-row button {
+  padding: 10px 18px; background: var(--accent); color: #0a1a12;
+  font-family: var(--mono); font-size: 12px; font-weight: 500;
+  border: none; cursor: pointer; white-space: nowrap; transition: background 0.15s;
+}
+.cta-input-row button:hover { background: #86efac; }
+.cta-sub { display: block; font-size: 11px; color: var(--text3); margin-top: 10px; font-family: var(--mono); }
+
+/* ── FAQ ── */
+.faqs { margin-bottom: 48px; }
+
+details {
+  border-bottom: 1px solid var(--border);
+}
+details:first-of-type { border-top: 1px solid var(--border); }
+
+summary {
+  padding: 16px 0; font-size: 14px; font-weight: 500; cursor: pointer;
+  list-style: none; display: flex; justify-content: space-between; align-items: center;
+  color: var(--text);
+}
+summary::-webkit-details-marker { display: none; }
+summary::after {
+  content: '+'; font-family: var(--mono); font-size: 16px; color: var(--text3);
+  transition: transform 0.2s;
+}
+details[open] summary::after { content: '−'; }
+
+.faq-answer {
+  font-size: 13px; color: var(--text2); line-height: 1.8; font-weight: 300;
+  padding: 0 0 16px;
+}
+
+/* ── RELATED GUIDES ── */
+.related { margin-bottom: 48px; }
+.guide-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.guide-pill {
+  font-family: var(--mono); font-size: 11px; color: var(--text2);
+  border: 1px solid var(--border2); padding: 5px 12px; border-radius: 4px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.guide-pill:hover { color: var(--accent); border-color: rgba(110,231,183,0.3); text-decoration: none; }
+
+/* ── OTHER PROBLEMS ── */
+.other-problems { border-top: 1px solid var(--border); padding-top: 32px; }
+.problem-links { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+.problem-link { font-size: 13px; color: var(--text2); }
+.problem-link:hover { color: var(--accent); }
+
+@media (max-width: 600px) {
+  .page { padding: 32px 16px 60px; }
+  h1 { font-size: 22px; }
+  .cta-block { padding: 20px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="/" class="logo">didyouship<span>.com</span></a>
+  <a href="/" class="scan-btn">← Scan your domain</a>
+</header>
+
+<main class="page">
+
+  <nav class="breadcrumb">
+    <a href="/">didyouship.com</a><span>›</span>
+    <a href="/">Why is my...</a><span>›</span>
+    Why Is Your Website Loading Slowly?
+  </nav>
+
+  <h1>Why Is Your Website Loading Slowly?</h1>
+  <p class="intro">A slow website is one of the most damaging things for user retention — 53% of mobile users abandon a page that takes more than 3 seconds to load. There are a few distinct causes, and identifying which one you have determines the fix.</p>
+
+  <!-- Causes -->
+  <h2 class="section-heading">Why this happens</h2>
+  <div class="causes">
+    
+    <div class="cause">
+      <div class="cause-top">
+        <span class="sev high">high</span>
+        <h3>Server cold start — your app is sleeping between visitors</h3>
+      </div>
+      <p>Free and hobby tiers of Railway, Render, and Fly.io spin your server down after 15–30 minutes of inactivity. The first visitor after idle has to wait 10–30 seconds for the server to wake up. Subsequent requests are fast. This is the most common cause for indie and side projects.</p>
+      <a class="cause-link" href="/guides/response-time">How to Fix Cold Starts →</a>
+    </div>
+    
+    <div class="cause">
+      <div class="cause-top">
+        <span class="sev medium">medium</span>
+        <h3>Response compression not enabled — pages are 3–5× bigger than needed</h3>
+      </div>
+      <p>Your server sends HTML, CSS, and JavaScript without compressing it first. Enabling gzip or Brotli typically reduces page size by 60–80% — a 200KB page becomes 40KB. This is a free performance improvement that affects every page load for every user.</p>
+      <a class="cause-link" href="/guides/compression">How to Enable Gzip Compression →</a>
+    </div>
+    
+    <div class="cause">
+      <div class="cause-top">
+        <span class="sev high">high</span>
+        <h3>Slow server response time — something heavy is on the request path</h3>
+      </div>
+      <p>Your server consistently takes more than 3 seconds to respond, even when warm. Usually caused by slow database queries (missing indexes), heavy computation on the main request thread, or a server deployed in a region far from your users.</p>
+      <a class="cause-link" href="/guides/response-time">How to Improve Server Response Time →</a>
+    </div>
+    
+  </div>
+
+  <!-- Scan CTA -->
+  <div class="cta-block">
+    <p><strong>Not sure which of these apply to your domain?</strong><br>
+    Run a free scan — 26 checks in under 10 seconds.</p>
+    <form class="cta-input-row" onsubmit="window.location.href='/?'+encodeURIComponent(this.querySelector('input').value.trim());return false;">
+      <input type="text" placeholder="yourdomain.com" autocapitalize="none" autocorrect="off" spellcheck="false">
+      <button type="submit">Scan</button>
+    </form>
+    <span class="cta-sub">No signup. No install. Just enter your domain.</span>
+  </div>
+
+  <!-- FAQ -->
+  <h2 class="section-heading">Frequently asked questions</h2>
+  <div class="faqs">
+    
+    <details>
+      <summary>Why is my site fast for me but slow for my users?</summary>
+      <div class="faq-answer">Several reasons: you're physically close to your server (fewer network hops), your browser caches assets after the first visit so repeat visits are faster, and you test after the server is already warm. Use GTmetrix or WebPageTest to measure from specific regions. The first-visit cold start is invisible to you but hits every new visitor.</div>
+    </details>
+    
+    <details>
+      <summary>What's a good page load time?</summary>
+      <div class="faq-answer">Under 1 second for Time to First Byte (server response) is ideal. Under 3 seconds for full page load. Google's Core Web Vitals consider Largest Contentful Paint over 2.5 seconds 'needs improvement' and over 4 seconds 'poor'. Check your real-world scores in Google Search Console → Core Web Vitals.</div>
+    </details>
+    
+    <details>
+      <summary>Why is the first visit always slow but every visit after is fast?</summary>
+      <div class="faq-answer">Classic cold start. Your hosting provider spins down your server after inactivity to save resources on free/hobby tiers. The first request wakes it up — which can take 10–30 seconds. Subsequent requests hit the already-running server and are fast. Fix: upgrade to a paid plan (always-on) or use a keep-alive ping service (cron-job.org, BetterStack) that hits your /health endpoint every 5 minutes.</div>
+    </details>
+    
+    <details>
+      <summary>Does page speed affect SEO?</summary>
+      <div class="faq-answer">Yes. Google's Core Web Vitals — which include Time to First Byte, Largest Contentful Paint, and Interaction to Next Paint — are ranking factors. Slow sites rank lower. Google Search Console shows your Core Web Vitals score and flags pages that are underperforming. A fast site is a ranking advantage, not just a UX nicety.</div>
+    </details>
+    
+    <details>
+      <summary>My database queries seem fine locally — why are they slow in production?</summary>
+      <div class="faq-answer">Local databases have no network latency and small datasets. In production, network round-trips add 1–10ms per query (more if your database is in a different region than your server), and larger datasets expose missing indexes. Use EXPLAIN on slow queries to find missing indexes, and check that your database is in the same region as your app server.</div>
+    </details>
+    
+  </div>
+
+  <!-- Related fix guides -->
+  <div class="related">
+    <h2 class="section-heading">Fix guides</h2>
+    <div class="guide-links">
+      
+      <a class="guide-pill" href="/guides/response-time">How to Fix Cold Starts</a>
+      
+      <a class="guide-pill" href="/guides/compression">How to Enable Gzip Compression</a>
+      
+      <a class="guide-pill" href="/guides/response-time">How to Improve Server Response Time</a>
+      
+    </div>
+  </div>
+
+  <!-- Other problems -->
+  
+  <div class="other-problems">
+    <h2 class="section-heading">Other common problems</h2>
+    <div class="problem-links">
+      
+      <a class="problem-link" href="/why/emails-going-to-spam">Why Are Your Emails Going to Spam?</a>
+      
+      <a class="problem-link" href="/why/not-in-google">Why Isn't Your Website Showing in Google?</a>
+      
+      <a class="problem-link" href="/why/link-preview-not-working">Why Do Your Links Look Bad When Shared?</a>
+      
+      <a class="problem-link" href="/why/website-not-secure">Why Does Your Website Say "Not Secure"?</a>
+      
+      <a class="problem-link" href="/why/website-broken-on-mobile">Why Is Your Website Broken on Mobile?</a>
+      
+      <a class="problem-link" href="/why/secrets-exposed">Why Are Your Secrets or API Keys Exposed?</a>
+      
+      <a class="problem-link" href="/why/www-not-working">Why Doesn't www.yourdomain.com Work?</a>
+      
+      <a class="problem-link" href="/why/broken-page-errors">Why Do Your Broken Links Show a Bare Error Page?</a>
+      
+    </div>
+  </div>
+  
+
+</main>
+
+</body>
+</html>
