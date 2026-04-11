@@ -215,29 +215,18 @@ Each page includes multiple causes with severity ratings, FAQ section with schem
 
 ## Architecture
 
-```
-                    ┌──────────────┐
-                    │  Cloudflare  │  DNS + CDN + SSL
-                    └──────┬───────┘
-                           │
-                    ┌──────┴───────┐
-                    │   Railway    │  Auto-deploy from GitHub
-                    │   (uvicorn)  │
-                    └──────┬───────┘
-                           │
-              ┌────────────┼────────────┐
-              │            │            │
-        ┌─────┴─────┐ ┌───┴────┐
-        │  app.py   │ │scanner │
-        │  FastAPI  │ │  .py   │
-        │  routes   │ │26checks│
-        └───────────┘ └───┬────┘
-                          │
-              ┌───────────┼───────────┐
-              │           │           │
-          DNS queries  HTTP reqs   SSL handshake
-          (dnspython)  (urllib     (ssl module)
-                       via proxy)
+```mermaid
+flowchart TD
+    CF["Cloudflare\nDNS + CDN + SSL"]
+    RW["Railway · uvicorn\nAuto-deploy from GitHub"]
+    AP["app.py\nFastAPI routes"]
+    SC["scanner.py\n26 checks"]
+    DNS["DNS queries\ndnspython"]
+    HTTP["HTTP requests\nurllib · proxy"]
+    SSL["SSL handshake\nssl module"]
+
+    CF --> RW --> AP --> SC
+    SC --> DNS & HTTP & SSL
 ```
 
 **Scanner internals**: The `scan()` function runs checks in parallel using a ThreadPool with 8 workers. DNS-only checks (email, DKIM, blacklist, DNS) start immediately. The main thread fetches the page HTML, then submits HTML-dependent checks (SEO, secrets, performance, headers). DKIM waits for the email check to complete first (needs SPF data to handle non-sending domains). Total scan time: 3-8 seconds.
