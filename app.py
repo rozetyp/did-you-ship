@@ -2,7 +2,7 @@
 didyouship.com — production readiness scanner.
 
 GET /             → landing page
-GET /api/scan/{domain} → run 24 checks, return issues + fixes + score
+GET /api/scan/{domain} → run 26 checks, return issues + fixes + score
 GET /health       → health check
 """
 
@@ -31,7 +31,7 @@ limiter = Limiter(key_func=get_ipaddr)
 
 app = FastAPI(
     title="didyouship.com",
-    description="You shipped. But did you check? 24 production readiness checks in 8 seconds.",
+    description="You shipped. But did you check? 26 production readiness checks in 8 seconds.",
     version="1.0.0",
 )
 app.state.limiter = limiter
@@ -62,7 +62,7 @@ def _static_file(path: str):
 @limiter.limit("10/minute")
 async def public_scan(domain: str, request: Request):
     """Full production readiness scan.
-    24 checks across 9 categories: email, SSL, secrets, DNS, security,
+    26 checks across 9 categories: email, SSL, secrets, DNS, security,
     SEO, performance, breakage, polish.
     Returns issues with fixes, score, and grade."""
     from scanner import scan

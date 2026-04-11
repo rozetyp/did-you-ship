@@ -1,7 +1,7 @@
 """
 didyouship.com — production readiness scanner.
 
-24 checks across 9 categories. Every check answers:
+26 checks across 9 categories. Every check answers:
 "What breaks if I don't fix this?"
 
 All from public data. Zero server access needed.
@@ -144,7 +144,7 @@ SECRET_PATTERNS = [
 # ── Main entry ───────────────────────────────────────────────────────────────
 
 def scan(domain: str) -> ScanResult:
-    """Run all 24 checks against a domain."""
+    """Run all 26 checks against a domain."""
     domain = (domain.strip().lower()
               .replace("https://", "").replace("http://", "")
               .replace("www.", "").rstrip("/").split("/")[0])
@@ -160,13 +160,13 @@ def scan(domain: str) -> ScanResult:
     with ThreadPoolExecutor(max_workers=8) as pool:
         # Start slow I/O checks immediately — no page HTML needed
         # ssl + redirect are grouped to avoid a write race on r.raw["ssl"]
-        email_future = pool.submit(_check_email, r)          # checks 1-4  (DNS)
+        email_future = pool.submit(_check_email, r)          # checks 1-4  (email)
         futures = [
             email_future,
-            pool.submit(_check_blacklist, r),                # check 6     (DNS)
-            pool.submit(_check_ssl_and_redirect, r),         # checks 7-8  (SSL + HTTP)
-            pool.submit(_check_dns, r),                      # checks 9-10 (DNS)
-            pool.submit(_check_404, r),                      # check 24    (HTTP)
+            pool.submit(_check_blacklist, r),                # check 6     (email)
+            pool.submit(_check_ssl_and_redirect, r),         # checks 7-8  (SSL)
+            pool.submit(_check_dns, r),                      # checks 12-13 (DNS)
+            pool.submit(_check_404, r),                      # check 26    (polish)
         ]
 
         # Fetch page in main thread — provides html/headers for remaining checks
@@ -174,15 +174,15 @@ def scan(domain: str) -> ScanResult:
 
         # DKIM must run after email check (reads r.raw["email"]["spf"])
         email_future.result()
-        futures.append(pool.submit(_check_dkim, r))          # check 5     (DNS)
+        futures.append(pool.submit(_check_dkim, r))          # check 5     (email)
 
         # Submit html-dependent checks now that fetch is done
         futures += [
-            pool.submit(_check_secrets, r, html),            # checks 7-9
-            pool.submit(_check_security_headers, r, headers),# check 12
-            pool.submit(_check_seo, r, html, fetch_ok),      # checks 13-20
-            pool.submit(_check_performance, r, html, headers),# checks 21-22
-            pool.submit(_check_mixed_content, r, html),      # check 23
+            pool.submit(_check_secrets, r, html),            # checks 9-11  (secrets)
+            pool.submit(_check_security_headers, r, headers),# check 14    (security)
+            pool.submit(_check_seo, r, html, fetch_ok),      # checks 15-22 (SEO)
+            pool.submit(_check_performance, r, html, headers),# checks 23-24 (performance)
+            pool.submit(_check_mixed_content, r, html),      # check 25    (breakage)
         ]
 
         # Wait for all; each check handles its own exceptions internally
