@@ -11,11 +11,11 @@
 <meta property="og:title" content="SPF Record Missing: How to Fix Email Authentication (2026) | didyouship.com">
 <meta property="og:description" content="No SPF record means Gmail can't verify your emails and routes them to spam. Step-by-step fix for Google Workspace, Resend, SendGrid, Postmark, and more.">
 <meta property="og:site_name" content="didyouship.com">
-<meta property="og:image" content="https://didyouship.com/static/og.svg">
+<meta property="og:image" content="https://didyouship.com/static/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="SPF Record Missing: How to Fix Email Authentication (2026) | didyouship.com">
 <meta name="twitter:description" content="No SPF record means Gmail can't verify your emails and routes them to spam. Step-by-step fix for Google Workspace, Resend, SendGrid, Postmark, and more.">
-<meta name="twitter:image" content="https://didyouship.com/static/og.svg">
+<meta name="twitter:image" content="https://didyouship.com/static/og.png">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: SPF Record Missing: How to Fix Email Authentication (2026)", "description": "No SPF record means Gmail can't verify your emails and routes them to spam. Step-by-step fix for Google Workspace, Resend, SendGrid, Postmark, and more.", "step": [{"@type": "HowToStep", "text": "List every service that sends email from your domain \u2014 your email provider, transactional email service, CRM, and newsletter tool.", "position": 1}, {"@type": "HowToStep", "text": "Get the SPF include value from each service's documentation (usually under 'Authentication' or 'Domain setup').", "position": 2}, {"@type": "HowToStep", "text": "Create a single TXT record at your root domain combining all your senders. Example: v=spf1 include:_spf.google.com include:_spf.resend.com ~all", "position": 3}, {"@type": "HowToStep", "text": "Add the TXT record in your DNS registrar (Cloudflare, Namecheap, Route 53, etc.) for the @ or root domain.", "position": 4}, {"@type": "HowToStep", "text": "Verify with: nslookup -type=TXT yourdomain.com or mxtoolbox.com/spf.aspx", "position": 5}, {"@type": "HowToStep", "text": "Once all your sending is confirmed covered, change ~all to -all for full enforcement.", "position": 6}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://didyouship.com"}, {"@type": "ListItem", "position": 2, "name": "Email Deliverability", "item": "https://didyouship.com/guides/spf-record"}]}</script>
 <meta name="theme-color" content="#0c0c0e">

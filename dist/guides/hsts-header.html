@@ -11,11 +11,11 @@
 <meta property="og:title" content="HSTS Header Missing: Add Strict-Transport-Security to Your Site (2026) | didyouship.com">
 <meta property="og:description" content="Without HSTS, the first visit to your site on public WiFi can be intercepted. Learn how to add the Strict-Transport-Security header.">
 <meta property="og:site_name" content="didyouship.com">
-<meta property="og:image" content="https://didyouship.com/static/og.svg">
+<meta property="og:image" content="https://didyouship.com/static/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="HSTS Header Missing: Add Strict-Transport-Security to Your Site (2026) | didyouship.com">
 <meta name="twitter:description" content="Without HSTS, the first visit to your site on public WiFi can be intercepted. Learn how to add the Strict-Transport-Security header.">
-<meta name="twitter:image" content="https://didyouship.com/static/og.svg">
+<meta name="twitter:image" content="https://didyouship.com/static/og.png">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: HSTS Header Missing: Add Strict-Transport-Security to Your Site (2026)", "description": "Without HSTS, the first visit to your site on public WiFi can be intercepted. Learn how to add the Strict-Transport-Security header.", "step": [{"@type": "HowToStep", "text": "Add the Strict-Transport-Security response header to all HTTPS responses.", "position": 1}, {"@type": "HowToStep", "text": "Use value: max-age=31536000; includeSubDomains (1 year, including subdomains).", "position": 2}, {"@type": "HowToStep", "text": "For Cloudflare: SSL/TLS \u2192 Edge Certificates \u2192 HTTP Strict Transport Security \u2192 Enable.", "position": 3}, {"@type": "HowToStep", "text": "For Vercel: add a headers config in vercel.json with the Strict-Transport-Security key-value pair.", "position": 4}, {"@type": "HowToStep", "text": "For Nginx: add_header Strict-Transport-Security 'max-age=31536000; includeSubDomains' always;", "position": 5}, {"@type": "HowToStep", "text": "For Express/Node: use the helmet package \u2014 app.use(helmet()) enables HSTS by default.", "position": 6}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://didyouship.com"}, {"@type": "ListItem", "position": 2, "name": "Security Headers", "item": "https://didyouship.com/guides/hsts-header"}]}</script>
 <meta name="theme-color" content="#0c0c0e">
