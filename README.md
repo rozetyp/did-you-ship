@@ -2,7 +2,7 @@
 
 **You shipped your app. But did you check?**
 
-Free production readiness scanner that finds everything you forgot before launch — email going to spam, secrets exposed, SSL broken, SEO missing, slow cold starts. 24 checks in 8 seconds. One domain. Zero signup.
+Free production readiness scanner that finds everything you forgot before launch — email going to spam, secrets exposed, SSL broken, SEO missing, slow cold starts. 26 checks in under 10 seconds. One domain. Zero signup.
 
 **Live at [didyouship.com](https://didyouship.com)**
 
@@ -28,7 +28,7 @@ Indie hackers, solo founders, and developers who ship fast and want a single che
 
 ---
 
-## All 24 checks in detail
+## All 26 checks in detail
 
 ### Category 1: Email Deliverability (6 checks)
 
@@ -204,7 +204,7 @@ Every issue the scanner can find has a dedicated educational guide at `/guides/{
 
 ---
 
-## Problem pages (6 symptom-driven pages)
+## Problem pages (9 symptom-driven pages)
 
 Users don't search for "SPF record missing" — they search for "why are my emails going to spam." These pages target symptom-driven queries and link to the relevant guides.
 
@@ -218,6 +218,9 @@ Each page includes multiple causes with severity ratings, FAQ section with schem
 | Why Does Your Website Say "Not Secure"? | `/why/website-not-secure` | 5 | 4 |
 | Why Is Your Website Loading Slowly? | `/why/website-loading-slow` | 3 | 5 |
 | Why Is Your Website Broken on Mobile? | `/why/website-broken-on-mobile` | 1 | 5 |
+| Why Are Secrets or API Keys Exposed? | `/why/secrets-exposed` | 3 | 4 |
+| Why Doesn't www Work? | `/why/www-not-working` | 2 | 4 |
+| Why Are There Broken Page Errors? | `/why/broken-page-errors` | 2 | 4 |
 
 ---
 
@@ -238,7 +241,7 @@ Each page includes multiple causes with severity ratings, FAQ section with schem
         ┌─────┴─────┐ ┌───┴────┐ ┌────┴─────┐
         │  app.py   │ │scanner │ │ai_report │
         │  FastAPI  │ │  .py   │ │   .py    │
-        │  routes   │ │24checks│ │ xAI Grok │
+        │  routes   │ │26checks│ │ xAI Grok │
         └───────────┘ └───┬────┘ └──────────┘
                           │
               ┌───────────┼───────────┐
@@ -298,9 +301,9 @@ uvicorn app:app --port 8000
 | Endpoint | Description |
 |----------|-------------|
 | `GET /` | Landing page with scanner |
-| `GET /api/scan/{domain}` | Full 24-check scan, returns JSON with issues, fixes, score, grade, AI explanations |
+| `GET /api/scan/{domain}` | Full scan (up to 26 checks), returns JSON with issues, fixes, score, grade, AI explanations |
 | `GET /guides/{slug}` | Educational guide page (25 guides) |
-| `GET /why/{slug}` | Problem/symptom page (6 pages) |
+| `GET /why/{slug}` | Problem/symptom page (9 pages) |
 | `GET /sitemap.xml` | Auto-generated sitemap |
 | `GET /health` | Health check |
 
