@@ -16,7 +16,7 @@
 <meta name="twitter:title" content="HSTS Header Missing: Add Strict-Transport-Security to Your Site (2026) | didyouship.com">
 <meta name="twitter:description" content="Without HSTS, the first visit to your site on public WiFi can be intercepted. Learn how to add the Strict-Transport-Security header.">
 <meta name="twitter:image" content="https://didyouship.com/static/og.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: HSTS Header Missing: Add Strict-Transport-Security to Your Site (2026)", "description": "Without HSTS, the first visit to your site on public WiFi can be intercepted. Learn how to add the Strict-Transport-Security header.", "step": [{"@type": "HowToStep", "text": "Add the Strict-Transport-Security response header to all HTTPS responses.", "position": 1}, {"@type": "HowToStep", "text": "Use value: max-age=31536000; includeSubDomains (1 year, including subdomains).", "position": 2}, {"@type": "HowToStep", "text": "For Cloudflare: SSL/TLS \u2192 Edge Certificates \u2192 HTTP Strict Transport Security \u2192 Enable.", "position": 3}, {"@type": "HowToStep", "text": "For Vercel: add a headers config in vercel.json with the Strict-Transport-Security key-value pair.", "position": 4}, {"@type": "HowToStep", "text": "For Nginx: add_header Strict-Transport-Security 'max-age=31536000; includeSubDomains' always;", "position": 5}, {"@type": "HowToStep", "text": "For Express/Node: use the helmet package \u2013 app.use(helmet()) enables HSTS by default.", "position": 6}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: HSTS Header Missing: Add Strict-Transport-Security to Your Site (2026)", "description": "Without HSTS, the first visit to your site on public WiFi can be intercepted. Learn how to add the Strict-Transport-Security header.", "step": [{"@type": "HowToStep", "text": "Add the Strict-Transport-Security response header to all HTTPS responses.", "position": 1}, {"@type": "HowToStep", "text": "Use value: max-age=31536000; includeSubDomains (1 year, including subdomains).", "position": 2}, {"@type": "HowToStep", "text": "For Cloudflare: SSL/TLS \u2192 Edge Certificates \u2192 HTTP Strict Transport Security \u2192 Enable.", "position": 3}, {"@type": "HowToStep", "text": "For Vercel: add a headers config in vercel.json with the Strict-Transport-Security key-value pair.", "position": 4}, {"@type": "HowToStep", "text": "For Nginx: add_header Strict-Transport-Security 'max-age=31536000; includeSubDomains' always;", "position": 5}, {"@type": "HowToStep", "text": "For Express/Node: use the helmet package - app.use(helmet()) enables HSTS by default.", "position": 6}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://didyouship.com"}, {"@type": "ListItem", "position": 2, "name": "Security Headers", "item": "https://didyouship.com/guides/hsts-header"}]}</script>
 <meta name="theme-color" content="#0c0c0e">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
@@ -290,14 +290,14 @@ a:hover { text-decoration: underline; }
     <div class="guide-header">
       <div class="guide-cat">Security Headers</div>
       <h1 class="guide-title">HSTS Header</h1>
-      <p class="guide-summary">The Strict-Transport-Security header tells browsers to always use HTTPS – even on the very first visit.</p>
+      <p class="guide-summary">The Strict-Transport-Security header tells browsers to always use HTTPS - even on the very first visit.</p>
       <span class="sev-badge medium">medium severity</span>
     </div>
 
     
     <div class="section">
       <h2 class="section-label">What is this?</h2>
-      <p>HSTS (HTTP Strict Transport Security) is a response header that tells browsers: "always use HTTPS for this domain – never HTTP, even if someone types http://."</p>
+      <p>HSTS (HTTP Strict Transport Security) is a response header that tells browsers: "always use HTTPS for this domain - never HTTP, even if someone types http://."</p>
 <pre>Strict-Transport-Security: max-age=31536000; includeSubDomains</pre>
 <p>Once a browser receives this header, it'll enforce HTTPS for your domain for <code>max-age</code> seconds (31536000 = 1 year), even if the user or a link tries to use HTTP.</p>
     </div>
@@ -313,7 +313,7 @@ a:hover { text-decoration: underline; }
 <li>Your server redirects to HTTPS</li>
 <li>Browser follows redirect</li>
 </ol>
-<p>Step 2-3 happens over plain HTTP. On public WiFi, an attacker (man-in-the-middle) can intercept that initial HTTP request, modify it, and keep the user on HTTP the whole time. This is called an SSL stripping attack. HSTS eliminates step 2 entirely – the browser goes straight to HTTPS.</p>
+<p>Step 2-3 happens over plain HTTP. On public WiFi, an attacker (man-in-the-middle) can intercept that initial HTTP request, modify it, and keep the user on HTTP the whole time. This is called an SSL stripping attack. HSTS eliminates step 2 entirely - the browser goes straight to HTTPS.</p>
     </div>
     
 
@@ -339,7 +339,7 @@ a:hover { text-decoration: underline; }
   }]
 }</pre></td></tr>
 <tr><td>Nginx</td><td><code>add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;</code></td></tr>
-<tr><td>Express</td><td>Use the <code>helmet</code> package: <code>app.use(helmet())</code> – includes HSTS by default</td></tr>
+<tr><td>Express</td><td>Use the <code>helmet</code> package: <code>app.use(helmet())</code> - includes HSTS by default</td></tr>
 <tr><td>FastAPI</td><td><code>from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware</code></td></tr>
 </table>
     </div>

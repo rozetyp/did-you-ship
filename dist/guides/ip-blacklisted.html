@@ -290,14 +290,14 @@ a:hover { text-decoration: underline; }
     <div class="guide-header">
       <div class="guide-cat">Email Deliverability</div>
       <h1 class="guide-title">Mail Server IP Blacklisted</h1>
-      <p class="guide-summary">Your mail server's IP address appears on spam blacklists – email providers silently drop or spam-folder everything you send.</p>
+      <p class="guide-summary">Your mail server's IP address appears on spam blacklists - email providers silently drop or spam-folder everything you send.</p>
       <span class="sev-badge critical">critical severity</span>
     </div>
 
     
     <div class="section">
       <h2 class="section-label">What is this?</h2>
-      <p>Email providers (Gmail, Outlook, Yahoo) check multiple real-time blacklists before accepting email. If the IP address your mail server sends from is listed on a blacklist like Spamhaus, Barracuda, SpamCop, or SORBS, your emails are either silently dropped or sent directly to spam – including password resets, signups, and invoices.</p>
+      <p>Email providers (Gmail, Outlook, Yahoo) check multiple real-time blacklists before accepting email. If the IP address your mail server sends from is listed on a blacklist like Spamhaus, Barracuda, SpamCop, or SORBS, your emails are either silently dropped or sent directly to spam - including password resets, signups, and invoices.</p>
 <p>This commonly happens on shared hosting where you share a server IP with other tenants, one of whom got their IP listed.</p>
     </div>
     
@@ -310,7 +310,7 @@ a:hover { text-decoration: underline; }
 <li>Users sign up but never get verification emails</li>
 <li>Password reset emails never arrive</li>
 <li>Invoices and receipts disappear</li>
-<li>No errors – your app thinks emails sent successfully</li>
+<li>No errors - your app thinks emails sent successfully</li>
 </ul>
 <p>You can be blacklisted because of your own behavior, or because you're on shared infrastructure with bad neighbors.</p>
     </div>
@@ -320,12 +320,12 @@ a:hover { text-decoration: underline; }
     <div class="section">
       <h2 class="section-label">How to fix it</h2>
       <ol>
-<li>Check your mail server IP at <strong>mxtoolbox.com/blacklists.aspx</strong> – enter the IP to see which lists it's on</li>
+<li>Check your mail server IP at <strong>mxtoolbox.com/blacklists.aspx</strong> - enter the IP to see which lists it's on</li>
 <li>For each blacklist, visit their website and follow the delisting process (usually a form requesting removal)</li>
 <li><strong>Spamhaus:</strong> spamhaus.org/lookup → follow removal instructions</li>
 <li><strong>Barracuda:</strong> barracudacentral.org/rbl/removal-request</li>
 <li><strong>SpamCop:</strong> listings expire automatically after 24 hours of no spam reports</li>
-<li>If you're on shared hosting, strongly consider switching to a managed transactional email service – they maintain clean IP pools</li>
+<li>If you're on shared hosting, strongly consider switching to a managed transactional email service - they maintain clean IP pools</li>
 </ol>
     </div>
     
@@ -335,10 +335,10 @@ a:hover { text-decoration: underline; }
       <h2 class="section-label">Providers &amp; tools</h2>
       <p><strong>Managed sending services with clean IP pools:</strong></p>
 <ul>
-<li><strong>Resend</strong> – resend.com – developer-friendly, free tier available</li>
-<li><strong>Postmark</strong> – postmarkapp.com – excellent deliverability track record</li>
-<li><strong>SendGrid</strong> – sendgrid.com – large scale, dedicated IPs available</li>
-<li><strong>Mailgun</strong> – mailgun.com – flexible, good for transactional email</li>
+<li><strong>Resend</strong> - resend.com - developer-friendly, free tier available</li>
+<li><strong>Postmark</strong> - postmarkapp.com - excellent deliverability track record</li>
+<li><strong>SendGrid</strong> - sendgrid.com - large scale, dedicated IPs available</li>
+<li><strong>Mailgun</strong> - mailgun.com - flexible, good for transactional email</li>
 </ul>
 <p>With these services, your email shares their reputation IP pools which are actively maintained and monitored.</p>
     </div>

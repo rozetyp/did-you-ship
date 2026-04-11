@@ -4,19 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Email Deliverability: Why Emails Land in Spam and How to Fix It (2026) | didyouship.com</title>
-<meta name="description" content="Emails landing in spam? Learn the three DNS records every domain needs – SPF, DKIM, and DMARC – to reliably reach the inbox.">
+<meta name="description" content="Emails landing in spam? Learn the three DNS records every domain needs - SPF, DKIM, and DMARC - to reliably reach the inbox.">
 <link rel="canonical" href="https://didyouship.com/guides/email-deliverability">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://didyouship.com/guides/email-deliverability">
 <meta property="og:title" content="Email Deliverability: Why Emails Land in Spam and How to Fix It (2026) | didyouship.com">
-<meta property="og:description" content="Emails landing in spam? Learn the three DNS records every domain needs – SPF, DKIM, and DMARC – to reliably reach the inbox.">
+<meta property="og:description" content="Emails landing in spam? Learn the three DNS records every domain needs - SPF, DKIM, and DMARC - to reliably reach the inbox.">
 <meta property="og:site_name" content="didyouship.com">
 <meta property="og:image" content="https://didyouship.com/static/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Email Deliverability: Why Emails Land in Spam and How to Fix It (2026) | didyouship.com">
-<meta name="twitter:description" content="Emails landing in spam? Learn the three DNS records every domain needs – SPF, DKIM, and DMARC – to reliably reach the inbox.">
+<meta name="twitter:description" content="Emails landing in spam? Learn the three DNS records every domain needs - SPF, DKIM, and DMARC - to reliably reach the inbox.">
 <meta name="twitter:image" content="https://didyouship.com/static/og.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: Email Deliverability: Why Emails Land in Spam and How to Fix It (2026)", "description": "Emails landing in spam? Learn the three DNS records every domain needs \u2013 SPF, DKIM, and DMARC \u2013 to reliably reach the inbox.", "step": [{"@type": "HowToStep", "text": "Run an email health check at mxtoolbox.com/emailhealth.aspx to see what's missing.", "position": 1}, {"@type": "HowToStep", "text": "Add an SPF record \u2013 TXT record at your root domain listing your email sending services.", "position": 2}, {"@type": "HowToStep", "text": "Enable DKIM in your email provider dashboard and add the DNS record provided.", "position": 3}, {"@type": "HowToStep", "text": "Add a DMARC record at _dmarc.yourdomain.com with p=quarantine.", "position": 4}, {"@type": "HowToStep", "text": "Use a reputable transactional email service for all automated email (password resets, receipts, notifications).", "position": 5}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: Email Deliverability: Why Emails Land in Spam and How to Fix It (2026)", "description": "Emails landing in spam? Learn the three DNS records every domain needs - SPF, DKIM, and DMARC - to reliably reach the inbox.", "step": [{"@type": "HowToStep", "text": "Run an email health check at mxtoolbox.com/emailhealth.aspx to see what's missing.", "position": 1}, {"@type": "HowToStep", "text": "Add an SPF record - TXT record at your root domain listing your email sending services.", "position": 2}, {"@type": "HowToStep", "text": "Enable DKIM in your email provider dashboard and add the DNS record provided.", "position": 3}, {"@type": "HowToStep", "text": "Add a DMARC record at _dmarc.yourdomain.com with p=quarantine.", "position": 4}, {"@type": "HowToStep", "text": "Use a reputable transactional email service for all automated email (password resets, receipts, notifications).", "position": 5}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://didyouship.com"}, {"@type": "ListItem", "position": 2, "name": "Email Deliverability", "item": "https://didyouship.com/guides/email-deliverability"}]}</script>
 <meta name="theme-color" content="#0c0c0e">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
@@ -290,7 +290,7 @@ a:hover { text-decoration: underline; }
     <div class="guide-header">
       <div class="guide-cat">Email Deliverability</div>
       <h1 class="guide-title">Email Deliverability</h1>
-      <p class="guide-summary">Why your emails land in spam – and the three DNS records every domain needs to reach the inbox reliably.</p>
+      <p class="guide-summary">Why your emails land in spam - and the three DNS records every domain needs to reach the inbox reliably.</p>
       <span class="sev-badge high">high severity</span>
     </div>
 
@@ -299,11 +299,11 @@ a:hover { text-decoration: underline; }
       <h2 class="section-label">What is this?</h2>
       <p>Email deliverability is whether your emails actually reach the inbox vs. going to spam or being silently dropped. It depends on three DNS records working together:</p>
 <ul>
-<li><strong>SPF</strong> – lists which servers are allowed to send as your domain</li>
-<li><strong>DKIM</strong> – cryptographically signs each email to prove it's genuine</li>
-<li><strong>DMARC</strong> – enforces what happens when email fails SPF/DKIM, and provides reporting</li>
+<li><strong>SPF</strong> - lists which servers are allowed to send as your domain</li>
+<li><strong>DKIM</strong> - cryptographically signs each email to prove it's genuine</li>
+<li><strong>DMARC</strong> - enforces what happens when email fails SPF/DKIM, and provides reporting</li>
 </ul>
-<p>All three are DNS TXT records – no code changes required, just DNS configuration.</p>
+<p>All three are DNS TXT records - no code changes required, just DNS configuration.</p>
     </div>
     
 
@@ -333,10 +333,10 @@ a:hover { text-decoration: underline; }
       <h2 class="section-label">Providers &amp; tools</h2>
       <p><strong>Recommended sending services:</strong></p>
 <ul>
-<li><strong>Resend</strong> – modern API, great DX, free tier includes 3,000 emails/month</li>
-<li><strong>Postmark</strong> – best-in-class deliverability, 100 free emails/month</li>
-<li><strong>SendGrid</strong> – 100 free/day, scales to millions</li>
-<li><strong>Brevo (formerly Sendinblue)</strong> – 300 free/day, good EU option</li>
+<li><strong>Resend</strong> - modern API, great DX, free tier includes 3,000 emails/month</li>
+<li><strong>Postmark</strong> - best-in-class deliverability, 100 free emails/month</li>
+<li><strong>SendGrid</strong> - 100 free/day, scales to millions</li>
+<li><strong>Brevo (formerly Sendinblue)</strong> - 300 free/day, good EU option</li>
 </ul>
     </div>
     

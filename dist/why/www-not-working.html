@@ -16,7 +16,7 @@
 <meta name="twitter:title" content="Why Doesn't www.mydomain.com Work? Causes & DNS Fixes (2026) | didyouship.com">
 <meta name="twitter:description" content="www.yourdomain.com returns an error or doesn't redirect correctly? A missing DNS record or redirect misconfiguration is the cause. Here's how to fix it.">
 <meta name="twitter:image" content="https://didyouship.com/static/og.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Should I use www or the apex domain (without www)?", "acceptedAnswer": {"@type": "Answer", "text": "Either works \u2013 pick one and stick with it. The apex domain (yourdomain.com) is simpler and more modern. www is sometimes preferred for large companies that need to use CNAME for CDN routing (apex domains can't be CNAME'd in standard DNS). For most indie and SaaS products, yourdomain.com is the right choice. Whatever you choose, 301-redirect the other to it."}}, {"@type": "Question", "name": "Why does www work in some browsers but not others?", "acceptedAnswer": {"@type": "Answer", "text": "Browsers and ISPs cache DNS responses differently. A CNAME record you just added might be cached from before (NXDOMAIN cached). Try from a different network or use Google's DNS checker: toolbox.googleapps.com/apps/checkmx. If www was never set up, some DNS resolvers cache the 'not found' result for hours."}}, {"@type": "Question", "name": "Does it matter for SEO which version I use?", "acceptedAnswer": {"@type": "Answer", "text": "What matters is consistency \u2013 pick one canonical version and redirect the other. Google will consolidate all ranking signals (backlinks, content) to the canonical version. Using a canonical tag on each page pointing to the chosen version also helps. The choice between www and apex doesn't directly affect rankings."}}, {"@type": "Question", "name": "I set up a redirect but it's not working \u2013 why?", "acceptedAnswer": {"@type": "Answer", "text": "Common reasons: the redirect is set at the app level but DNS for www doesn't point to your server at all (browser never reaches the app to follow the redirect), SSL certificate doesn't cover www (HTTPS error before redirect), or DNS propagation hasn't completed (wait up to 48 hours). Use curl -I https://www.yourdomain.com to check the response headers."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Should I use www or the apex domain (without www)?", "acceptedAnswer": {"@type": "Answer", "text": "Either works - pick one and stick with it. The apex domain (yourdomain.com) is simpler and more modern. www is sometimes preferred for large companies that need to use CNAME for CDN routing (apex domains can't be CNAME'd in standard DNS). For most indie and SaaS products, yourdomain.com is the right choice. Whatever you choose, 301-redirect the other to it."}}, {"@type": "Question", "name": "Why does www work in some browsers but not others?", "acceptedAnswer": {"@type": "Answer", "text": "Browsers and ISPs cache DNS responses differently. A CNAME record you just added might be cached from before (NXDOMAIN cached). Try from a different network or use Google's DNS checker: toolbox.googleapps.com/apps/checkmx. If www was never set up, some DNS resolvers cache the 'not found' result for hours."}}, {"@type": "Question", "name": "Does it matter for SEO which version I use?", "acceptedAnswer": {"@type": "Answer", "text": "What matters is consistency - pick one canonical version and redirect the other. Google will consolidate all ranking signals (backlinks, content) to the canonical version. Using a canonical tag on each page pointing to the chosen version also helps. The choice between www and apex doesn't directly affect rankings."}}, {"@type": "Question", "name": "I set up a redirect but it's not working - why?", "acceptedAnswer": {"@type": "Answer", "text": "Common reasons: the redirect is set at the app level but DNS for www doesn't point to your server at all (browser never reaches the app to follow the redirect), SSL certificate doesn't cover www (HTTPS error before redirect), or DNS propagation hasn't completed (wait up to 48 hours). Use curl -I https://www.yourdomain.com to check the response headers."}}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Why Doesn't www.yourdomain.com Work?", "description": "www.yourdomain.com returns an error or doesn't redirect correctly? A missing DNS record or redirect misconfiguration is the cause. Here's how to fix it.", "url": "https://didyouship.com/why/www-not-working", "publisher": {"@type": "Organization", "name": "didyouship.com", "url": "https://didyouship.com"}}</script>
 <meta name="theme-color" content="#0c0c0e">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
@@ -203,7 +203,7 @@ details[open] summary::after { content: '−'; }
   </nav>
 
   <h1>Why Doesn't www.yourdomain.com Work?</h1>
-  <p class="intro">Many users type www before a domain name out of habit. If www.yourdomain.com shows a browser error, an SSL warning, or serves different content from your apex domain, you have a DNS or redirect configuration problem. Both versions should work – and one should 301-redirect to the other.</p>
+  <p class="intro">Many users type www before a domain name out of habit. If www.yourdomain.com shows a browser error, an SSL warning, or serves different content from your apex domain, you have a DNS or redirect configuration problem. Both versions should work - and one should 301-redirect to the other.</p>
 
   <!-- Causes -->
   <h2 class="section-heading">Why this happens</h2>
@@ -212,7 +212,7 @@ details[open] summary::after { content: '−'; }
     <div class="cause">
       <div class="cause-top">
         <span class="sev high">high</span>
-        <h3>No CNAME or A record for www – DNS lookup fails</h3>
+        <h3>No CNAME or A record for www - DNS lookup fails</h3>
       </div>
       <p>Your apex domain (yourdomain.com) has DNS records pointing to your server, but the www subdomain has no record at all. Browsers can't resolve www.yourdomain.com and show 'This site can't be reached'. The fix is to add a CNAME record for www pointing to your apex domain, or an A record pointing to your server IP.</p>
       <a class="cause-link" href="/guides/www-redirect">How to Fix www DNS and Redirect →</a>
@@ -221,7 +221,7 @@ details[open] summary::after { content: '−'; }
     <div class="cause">
       <div class="cause-top">
         <span class="sev high">high</span>
-        <h3>www resolves but doesn't redirect – duplicate content splits SEO</h3>
+        <h3>www resolves but doesn't redirect - duplicate content splits SEO</h3>
       </div>
       <p>Both yourdomain.com and www.yourdomain.com work and serve the same content. From a user perspective this seems fine, but Google sees them as two different websites with identical content. This splits your backlinks, PageRank, and search rankings across two versions instead of concentrating them on one. Set up a 301 redirect from one to the other.</p>
       <a class="cause-link" href="/guides/www-redirect">How to Set Up a 301 www Redirect →</a>
@@ -232,7 +232,7 @@ details[open] summary::after { content: '−'; }
   <!-- Scan CTA -->
   <div class="cta-block">
     <p><strong>Not sure which of these apply to your domain?</strong><br>
-    Run a free scan – 26 checks in under 10 seconds.</p>
+    Run a free scan - 26 checks in under 10 seconds.</p>
     <form class="cta-input-row" onsubmit="window.location.href='/?'+encodeURIComponent(this.querySelector('input').value.trim());return false;">
       <input type="text" placeholder="yourdomain.com" autocapitalize="none" autocorrect="off" spellcheck="false">
       <button type="submit">Scan</button>
@@ -246,7 +246,7 @@ details[open] summary::after { content: '−'; }
     
     <details>
       <summary>Should I use www or the apex domain (without www)?</summary>
-      <div class="faq-answer">Either works – pick one and stick with it. The apex domain (yourdomain.com) is simpler and more modern. www is sometimes preferred for large companies that need to use CNAME for CDN routing (apex domains can't be CNAME'd in standard DNS). For most indie and SaaS products, yourdomain.com is the right choice. Whatever you choose, 301-redirect the other to it.</div>
+      <div class="faq-answer">Either works - pick one and stick with it. The apex domain (yourdomain.com) is simpler and more modern. www is sometimes preferred for large companies that need to use CNAME for CDN routing (apex domains can't be CNAME'd in standard DNS). For most indie and SaaS products, yourdomain.com is the right choice. Whatever you choose, 301-redirect the other to it.</div>
     </details>
     
     <details>
@@ -256,11 +256,11 @@ details[open] summary::after { content: '−'; }
     
     <details>
       <summary>Does it matter for SEO which version I use?</summary>
-      <div class="faq-answer">What matters is consistency – pick one canonical version and redirect the other. Google will consolidate all ranking signals (backlinks, content) to the canonical version. Using a canonical tag on each page pointing to the chosen version also helps. The choice between www and apex doesn't directly affect rankings.</div>
+      <div class="faq-answer">What matters is consistency - pick one canonical version and redirect the other. Google will consolidate all ranking signals (backlinks, content) to the canonical version. Using a canonical tag on each page pointing to the chosen version also helps. The choice between www and apex doesn't directly affect rankings.</div>
     </details>
     
     <details>
-      <summary>I set up a redirect but it's not working – why?</summary>
+      <summary>I set up a redirect but it's not working - why?</summary>
       <div class="faq-answer">Common reasons: the redirect is set at the app level but DNS for www doesn't point to your server at all (browser never reaches the app to follow the redirect), SSL certificate doesn't cover www (HTTPS error before redirect), or DNS propagation hasn't completed (wait up to 48 hours). Use curl -I https://www.yourdomain.com to check the response headers.</div>
     </details>
     

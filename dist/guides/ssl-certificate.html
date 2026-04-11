@@ -16,7 +16,7 @@
 <meta name="twitter:title" content="SSL Certificate Expired or Invalid: How to Renew and Fix It (2026) | didyouship.com">
 <meta name="twitter:description" content="An expired SSL certificate blocks your site with a full-page browser warning. Learn how to renew it, enable auto-renewal, and fix invalid cert errors.">
 <meta name="twitter:image" content="https://didyouship.com/static/og.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: SSL Certificate Expired or Invalid: How to Renew and Fix It (2026)", "description": "An expired SSL certificate blocks your site with a full-page browser warning. Learn how to renew it, enable auto-renewal, and fix invalid cert errors.", "step": [{"@type": "HowToStep", "text": "Check your cert expiry: openssl s_client -connect yourdomain.com:443 | openssl x509 -noout -dates", "position": 1}, {"@type": "HowToStep", "text": "Log in to your hosting dashboard and look for SSL or Certificate settings.", "position": 2}, {"@type": "HowToStep", "text": "Enable auto-renewal \u2013 Vercel, Netlify, Cloudflare, and Render do this automatically.", "position": 3}, {"@type": "HowToStep", "text": "If renewal failed, verify your domain's DNS A/CNAME records still point to your host.", "position": 4}, {"@type": "HowToStep", "text": "For custom servers using certbot, run: certbot renew --dry-run to confirm the renewal process works.", "position": 5}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: SSL Certificate Expired or Invalid: How to Renew and Fix It (2026)", "description": "An expired SSL certificate blocks your site with a full-page browser warning. Learn how to renew it, enable auto-renewal, and fix invalid cert errors.", "step": [{"@type": "HowToStep", "text": "Check your cert expiry: openssl s_client -connect yourdomain.com:443 | openssl x509 -noout -dates", "position": 1}, {"@type": "HowToStep", "text": "Log in to your hosting dashboard and look for SSL or Certificate settings.", "position": 2}, {"@type": "HowToStep", "text": "Enable auto-renewal - Vercel, Netlify, Cloudflare, and Render do this automatically.", "position": 3}, {"@type": "HowToStep", "text": "If renewal failed, verify your domain's DNS A/CNAME records still point to your host.", "position": 4}, {"@type": "HowToStep", "text": "For custom servers using certbot, run: certbot renew --dry-run to confirm the renewal process works.", "position": 5}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://didyouship.com"}, {"@type": "ListItem", "position": 2, "name": "SSL & HTTPS", "item": "https://didyouship.com/guides/ssl-certificate"}]}</script>
 <meta name="theme-color" content="#0c0c0e">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
@@ -298,7 +298,7 @@ a:hover { text-decoration: underline; }
     <div class="section">
       <h2 class="section-label">What is this?</h2>
       <p>An SSL/TLS certificate does two things: it encrypts traffic between your server and visitors (so no one can read it in transit), and it proves your server actually controls yourdomain.com (not an impersonator). Browsers show the padlock icon when the certificate is valid.</p>
-<p>Certificates expire – typically every 90 days for Let's Encrypt or 1-2 years for commercial CAs. When they expire, browsers show a full-page warning that blocks most users from accessing your site.</p>
+<p>Certificates expire - typically every 90 days for Let's Encrypt or 1-2 years for commercial CAs. When they expire, browsers show a full-page warning that blocks most users from accessing your site.</p>
     </div>
     
 
@@ -332,11 +332,11 @@ a:hover { text-decoration: underline; }
       <h2 class="section-label">Providers &amp; tools</h2>
       <table class="provider-table">
 <tr><th>Host</th><th>Auto-renewal</th><th>Action</th></tr>
-<tr><td>Vercel</td><td>Automatic</td><td>Nothing needed – managed for you</td></tr>
-<tr><td>Netlify</td><td>Automatic</td><td>Nothing needed – managed for you</td></tr>
+<tr><td>Vercel</td><td>Automatic</td><td>Nothing needed - managed for you</td></tr>
+<tr><td>Netlify</td><td>Automatic</td><td>Nothing needed - managed for you</td></tr>
 <tr><td>Cloudflare</td><td>Automatic</td><td>SSL/TLS → Overview → enable "Full (strict)"</td></tr>
 <tr><td>Railway</td><td>Automatic</td><td>Check domain settings for cert status</td></tr>
-<tr><td>Render</td><td>Automatic</td><td>Managed – check Settings → Custom Domains</td></tr>
+<tr><td>Render</td><td>Automatic</td><td>Managed - check Settings → Custom Domains</td></tr>
 <tr><td>Custom VPS</td><td>Manual</td><td>Use certbot with cron: <code>0 0 * * * certbot renew</code></td></tr>
 </table>
     </div>

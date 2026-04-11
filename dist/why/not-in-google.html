@@ -16,7 +16,7 @@
 <meta name="twitter:title" content="Why Isn't My Website Showing in Google? 5 Causes & Fixes (2026) | didyouship.com">
 <meta name="twitter:description" content="New website not appearing in Google search? Missing sitemap, no title tag, or viewport issues are the most common causes. Here's how to diagnose and fix each one.">
 <meta name="twitter:image" content="https://didyouship.com/static/og.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How long does it take to appear in Google after launching a site?", "acceptedAnswer": {"@type": "Answer", "text": "For new sites, it typically takes 1\u20134 weeks after your sitemap is submitted to Google Search Console. Submit your sitemap at search.google.com/search-console and use the URL Inspection tool to request indexing of your most important pages. Established domains with regular content see changes indexed within days."}}, {"@type": "Question", "name": "How do I check if Google has indexed my site?", "acceptedAnswer": {"@type": "Answer", "text": "Search for site:yourdomain.com in Google \u2013 if no results appear, your site isn't indexed. More detail is available in Google Search Console under Pages, which shows exactly which URLs are indexed, which have errors, and why specific pages were excluded."}}, {"@type": "Question", "name": "Why did my site disappear from Google?", "acceptedAnswer": {"@type": "Answer", "text": "Common causes: the site was down when Google crawled it, a robots.txt change accidentally blocked crawling (disallow: / is a common mistake), a noindex meta tag was added to the wrong pages, or the domain expired briefly. Check Google Search Console \u2192 Pages \u2192 Not Indexed for specific error reasons."}}, {"@type": "Question", "name": "Does a single-page React or Vue app have trouble getting indexed?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, often. Google can index JavaScript-rendered content, but it's a two-step process \u2013 Google first crawls the empty HTML, then comes back later to render the JS. This indexing lag can be weeks. For SEO-critical pages, use server-side rendering (Next.js, Nuxt, Astro) to put content directly in the HTML response."}}, {"@type": "Question", "name": "My site is indexed but not ranking \u2013 why?", "acceptedAnswer": {"@type": "Answer", "text": "Being indexed and ranking are different things. To rank well, you need relevant content targeting specific search queries, quality external links pointing to your site, good Core Web Vitals (page speed, mobile experience), and proper on-page optimisation (title, descriptions, headings). Run a scan to find the technical issues first, then focus on content."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How long does it take to appear in Google after launching a site?", "acceptedAnswer": {"@type": "Answer", "text": "For new sites, it typically takes 1-4 weeks after your sitemap is submitted to Google Search Console. Submit your sitemap at search.google.com/search-console and use the URL Inspection tool to request indexing of your most important pages. Established domains with regular content see changes indexed within days."}}, {"@type": "Question", "name": "How do I check if Google has indexed my site?", "acceptedAnswer": {"@type": "Answer", "text": "Search for site:yourdomain.com in Google - if no results appear, your site isn't indexed. More detail is available in Google Search Console under Pages, which shows exactly which URLs are indexed, which have errors, and why specific pages were excluded."}}, {"@type": "Question", "name": "Why did my site disappear from Google?", "acceptedAnswer": {"@type": "Answer", "text": "Common causes: the site was down when Google crawled it, a robots.txt change accidentally blocked crawling (disallow: / is a common mistake), a noindex meta tag was added to the wrong pages, or the domain expired briefly. Check Google Search Console \u2192 Pages \u2192 Not Indexed for specific error reasons."}}, {"@type": "Question", "name": "Does a single-page React or Vue app have trouble getting indexed?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, often. Google can index JavaScript-rendered content, but it's a two-step process - Google first crawls the empty HTML, then comes back later to render the JS. This indexing lag can be weeks. For SEO-critical pages, use server-side rendering (Next.js, Nuxt, Astro) to put content directly in the HTML response."}}, {"@type": "Question", "name": "My site is indexed but not ranking - why?", "acceptedAnswer": {"@type": "Answer", "text": "Being indexed and ranking are different things. To rank well, you need relevant content targeting specific search queries, quality external links pointing to your site, good Core Web Vitals (page speed, mobile experience), and proper on-page optimisation (title, descriptions, headings). Run a scan to find the technical issues first, then focus on content."}}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Why Isn't Your Website Showing in Google?", "description": "New website not appearing in Google search? Missing sitemap, no title tag, or viewport issues are the most common causes. Here's how to diagnose and fix each one.", "url": "https://didyouship.com/why/not-in-google", "publisher": {"@type": "Organization", "name": "didyouship.com", "url": "https://didyouship.com"}}</script>
 <meta name="theme-color" content="#0c0c0e">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
@@ -203,7 +203,7 @@ details[open] summary::after { content: '−'; }
   </nav>
 
   <h1>Why Isn't Your Website Showing in Google?</h1>
-  <p class="intro">Getting into Google's index is usually straightforward, but several common mistakes can prevent your site from appearing in search results entirely – or make it rank far lower than it should. Here's what to check.</p>
+  <p class="intro">Getting into Google's index is usually straightforward, but several common mistakes can prevent your site from appearing in search results entirely - or make it rank far lower than it should. Here's what to check.</p>
 
   <!-- Causes -->
   <h2 class="section-heading">Why this happens</h2>
@@ -212,7 +212,7 @@ details[open] summary::after { content: '−'; }
     <div class="cause">
       <div class="cause-top">
         <span class="sev medium">medium</span>
-        <h3>No sitemap.xml – Google doesn't know your pages exist</h3>
+        <h3>No sitemap.xml - Google doesn't know your pages exist</h3>
       </div>
       <p>Without a sitemap, Google discovers your pages only by following links. New sites or sites with few external links may never be fully crawled. A sitemap.xml at /sitemap.xml tells Google exactly which pages exist and when they were last updated, and you can submit it directly in Google Search Console.</p>
       <a class="cause-link" href="/guides/sitemap">How to Create a Sitemap.xml →</a>
@@ -221,7 +221,7 @@ details[open] summary::after { content: '−'; }
     <div class="cause">
       <div class="cause-top">
         <span class="sev high">high</span>
-        <h3>No page title tag – Google can't understand what your page is about</h3>
+        <h3>No page title tag - Google can't understand what your page is about</h3>
       </div>
       <p>The <title> tag is Google's primary signal for what a page is about. Without it, Google either invents a title from your page content or ranks you lower for relevant queries. The title is also the clickable headline shown in search results.</p>
       <a class="cause-link" href="/guides/page-title">How to Add a Page Title Tag →</a>
@@ -230,16 +230,16 @@ details[open] summary::after { content: '−'; }
     <div class="cause">
       <div class="cause-top">
         <span class="sev high">high</span>
-        <h3>No viewport meta tag – broken mobile experience hurts rankings</h3>
+        <h3>No viewport meta tag - broken mobile experience hurts rankings</h3>
       </div>
-      <p>Google uses mobile-first indexing, meaning it crawls and ranks the mobile version of your site. A missing viewport meta tag means your site is broken on mobile – everything is tiny and users must pinch-zoom. Google penalises sites with poor mobile experience.</p>
+      <p>Google uses mobile-first indexing, meaning it crawls and ranks the mobile version of your site. A missing viewport meta tag means your site is broken on mobile - everything is tiny and users must pinch-zoom. Google penalises sites with poor mobile experience.</p>
       <a class="cause-link" href="/guides/viewport-meta">How to Fix Mobile Display →</a>
     </div>
     
     <div class="cause">
       <div class="cause-top">
         <span class="sev medium">medium</span>
-        <h3>No canonical URL – Google may be indexing the wrong version</h3>
+        <h3>No canonical URL - Google may be indexing the wrong version</h3>
       </div>
       <p>Your page might be accessible at yourdomain.com, www.yourdomain.com, and yourdomain.com/? as separate URLs. Without a canonical tag, Google might index all of them as duplicate pages and split your ranking signals instead of consolidating them.</p>
       <a class="cause-link" href="/guides/canonical-url">How to Add Canonical URLs →</a>
@@ -248,9 +248,9 @@ details[open] summary::after { content: '−'; }
     <div class="cause">
       <div class="cause-top">
         <span class="sev medium">medium</span>
-        <h3>No meta description – lower click-through from search results</h3>
+        <h3>No meta description - lower click-through from search results</h3>
       </div>
-      <p>Meta description doesn't directly affect rankings, but it's the snippet shown under your title in Google results. Without one, Google picks random text from your page – usually something unhelpful. Better descriptions mean more clicks, which over time signals to Google that your result is worth ranking higher.</p>
+      <p>Meta description doesn't directly affect rankings, but it's the snippet shown under your title in Google results. Without one, Google picks random text from your page - usually something unhelpful. Better descriptions mean more clicks, which over time signals to Google that your result is worth ranking higher.</p>
       <a class="cause-link" href="/guides/meta-description">How to Write a Meta Description →</a>
     </div>
     
@@ -259,7 +259,7 @@ details[open] summary::after { content: '−'; }
   <!-- Scan CTA -->
   <div class="cta-block">
     <p><strong>Not sure which of these apply to your domain?</strong><br>
-    Run a free scan – 26 checks in under 10 seconds.</p>
+    Run a free scan - 26 checks in under 10 seconds.</p>
     <form class="cta-input-row" onsubmit="window.location.href='/?'+encodeURIComponent(this.querySelector('input').value.trim());return false;">
       <input type="text" placeholder="yourdomain.com" autocapitalize="none" autocorrect="off" spellcheck="false">
       <button type="submit">Scan</button>
@@ -273,12 +273,12 @@ details[open] summary::after { content: '−'; }
     
     <details>
       <summary>How long does it take to appear in Google after launching a site?</summary>
-      <div class="faq-answer">For new sites, it typically takes 1–4 weeks after your sitemap is submitted to Google Search Console. Submit your sitemap at search.google.com/search-console and use the URL Inspection tool to request indexing of your most important pages. Established domains with regular content see changes indexed within days.</div>
+      <div class="faq-answer">For new sites, it typically takes 1-4 weeks after your sitemap is submitted to Google Search Console. Submit your sitemap at search.google.com/search-console and use the URL Inspection tool to request indexing of your most important pages. Established domains with regular content see changes indexed within days.</div>
     </details>
     
     <details>
       <summary>How do I check if Google has indexed my site?</summary>
-      <div class="faq-answer">Search for site:yourdomain.com in Google – if no results appear, your site isn't indexed. More detail is available in Google Search Console under Pages, which shows exactly which URLs are indexed, which have errors, and why specific pages were excluded.</div>
+      <div class="faq-answer">Search for site:yourdomain.com in Google - if no results appear, your site isn't indexed. More detail is available in Google Search Console under Pages, which shows exactly which URLs are indexed, which have errors, and why specific pages were excluded.</div>
     </details>
     
     <details>
@@ -288,11 +288,11 @@ details[open] summary::after { content: '−'; }
     
     <details>
       <summary>Does a single-page React or Vue app have trouble getting indexed?</summary>
-      <div class="faq-answer">Yes, often. Google can index JavaScript-rendered content, but it's a two-step process – Google first crawls the empty HTML, then comes back later to render the JS. This indexing lag can be weeks. For SEO-critical pages, use server-side rendering (Next.js, Nuxt, Astro) to put content directly in the HTML response.</div>
+      <div class="faq-answer">Yes, often. Google can index JavaScript-rendered content, but it's a two-step process - Google first crawls the empty HTML, then comes back later to render the JS. This indexing lag can be weeks. For SEO-critical pages, use server-side rendering (Next.js, Nuxt, Astro) to put content directly in the HTML response.</div>
     </details>
     
     <details>
-      <summary>My site is indexed but not ranking – why?</summary>
+      <summary>My site is indexed but not ranking - why?</summary>
       <div class="faq-answer">Being indexed and ranking are different things. To rank well, you need relevant content targeting specific search queries, quality external links pointing to your site, good Core Web Vitals (page speed, mobile experience), and proper on-page optimisation (title, descriptions, headings). Run a scan to find the technical issues first, then focus on content.</div>
     </details>
     

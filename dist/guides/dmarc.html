@@ -16,7 +16,7 @@
 <meta name="twitter:title" content="DMARC Record Missing: Stop Email Spoofing on Your Domain (2026) | didyouship.com">
 <meta name="twitter:description" content="No DMARC record lets anyone send phishing emails pretending to be from your domain. Learn how to add DMARC and what policy to use.">
 <meta name="twitter:image" content="https://didyouship.com/static/og.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: DMARC Record Missing: Stop Email Spoofing on Your Domain (2026)", "description": "No DMARC record lets anyone send phishing emails pretending to be from your domain. Learn how to add DMARC and what policy to use.", "step": [{"@type": "HowToStep", "text": "Confirm SPF and DKIM are already set up \u2013 DMARC enforces them.", "position": 1}, {"@type": "HowToStep", "text": "Add a TXT record at _dmarc.yourdomain.com with value: v=DMARC1; p=quarantine; rua=mailto:dmarc@yourdomain.com", "position": 2}, {"@type": "HowToStep", "text": "Replace the rua address with your own, or use a free DMARC reporting service like Postmark's DMARC monitor.", "position": 3}, {"@type": "HowToStep", "text": "If unsure whether all your legitimate email passes, start with p=none to observe reports for a week.", "position": 4}, {"@type": "HowToStep", "text": "Escalate to p=quarantine, then p=reject once you've confirmed all your real email passes.", "position": 5}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: DMARC Record Missing: Stop Email Spoofing on Your Domain (2026)", "description": "No DMARC record lets anyone send phishing emails pretending to be from your domain. Learn how to add DMARC and what policy to use.", "step": [{"@type": "HowToStep", "text": "Confirm SPF and DKIM are already set up - DMARC enforces them.", "position": 1}, {"@type": "HowToStep", "text": "Add a TXT record at _dmarc.yourdomain.com with value: v=DMARC1; p=quarantine; rua=mailto:dmarc@yourdomain.com", "position": 2}, {"@type": "HowToStep", "text": "Replace the rua address with your own, or use a free DMARC reporting service like Postmark's DMARC monitor.", "position": 3}, {"@type": "HowToStep", "text": "If unsure whether all your legitimate email passes, start with p=none to observe reports for a week.", "position": 4}, {"@type": "HowToStep", "text": "Escalate to p=quarantine, then p=reject once you've confirmed all your real email passes.", "position": 5}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://didyouship.com"}, {"@type": "ListItem", "position": 2, "name": "Email Deliverability", "item": "https://didyouship.com/guides/dmarc"}]}</script>
 <meta name="theme-color" content="#0c0c0e">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
@@ -300,9 +300,9 @@ a:hover { text-decoration: underline; }
       <p>DMARC (Domain-based Message Authentication, Reporting and Conformance) is a DNS TXT record at <code>_dmarc.yourdomain.com</code>. It builds on SPF and DKIM to give receiving email servers a clear instruction: <em>if an email claiming to be from us fails authentication, here's what to do with it.</em></p>
 <p>There are three policies:</p>
 <ul>
-<li><code>p=none</code> – do nothing, just send me reports (monitoring mode)</li>
-<li><code>p=quarantine</code> – move suspicious emails to spam</li>
-<li><code>p=reject</code> – drop suspicious emails entirely</li>
+<li><code>p=none</code> - do nothing, just send me reports (monitoring mode)</li>
+<li><code>p=quarantine</code> - move suspicious emails to spam</li>
+<li><code>p=reject</code> - drop suspicious emails entirely</li>
 </ul>
 <pre>v=DMARC1; p=quarantine; rua=mailto:dmarc@yourdomain.com</pre>
     </div>
@@ -324,7 +324,7 @@ a:hover { text-decoration: underline; }
     <div class="section">
       <h2 class="section-label">How to fix it</h2>
       <ol>
-<li>Make sure you have SPF and DKIM set up first – DMARC enforces them, so they need to work.</li>
+<li>Make sure you have SPF and DKIM set up first - DMARC enforces them, so they need to work.</li>
 <li>Add a TXT record at <code>_dmarc.yourdomain.com</code>:<pre>v=DMARC1; p=quarantine; rua=mailto:dmarc@yourdomain.com</pre></li>
 <li>Replace the <code>rua</code> address with your own, or use a free DMARC reporting service (see below).</li>
 <li>If unsure whether all your legitimate email will pass, start with <code>p=none</code> to observe for a week, then escalate to <code>p=quarantine</code>, then <code>p=reject</code>.</li>
@@ -337,10 +337,10 @@ a:hover { text-decoration: underline; }
       <h2 class="section-label">Providers &amp; tools</h2>
       <p><strong>Free DMARC report monitoring:</strong></p>
 <ul>
-<li><strong>Postmark DMARC:</strong> dmarc.postmarkapp.com – free weekly digest</li>
-<li><strong>MXToolbox:</strong> mxtoolbox.com/dmarc.aspx – instant lookup and validation</li>
-<li><strong>Dmarcian:</strong> dmarcian.com – free tier for small senders</li>
-<li><strong>EasyDMARC:</strong> easydmarc.com – free monitoring dashboard</li>
+<li><strong>Postmark DMARC:</strong> dmarc.postmarkapp.com - free weekly digest</li>
+<li><strong>MXToolbox:</strong> mxtoolbox.com/dmarc.aspx - instant lookup and validation</li>
+<li><strong>Dmarcian:</strong> dmarcian.com - free tier for small senders</li>
+<li><strong>EasyDMARC:</strong> easydmarc.com - free monitoring dashboard</li>
 </ul>
     </div>
     

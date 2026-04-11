@@ -16,7 +16,7 @@
 <meta name="twitter:title" content="DKIM Not Configured: How to Set Up Email Signing (2026) | didyouship.com">
 <meta name="twitter:description" content="Without DKIM, Gmail can't verify your emails are genuine and inbox placement drops. Learn how to enable DKIM for any email provider in minutes.">
 <meta name="twitter:image" content="https://didyouship.com/static/og.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: DKIM Not Configured: How to Set Up Email Signing (2026)", "description": "Without DKIM, Gmail can't verify your emails are genuine and inbox placement drops. Learn how to enable DKIM for any email provider in minutes.", "step": [{"@type": "HowToStep", "text": "Log in to your email sending service (Resend, Postmark, Google Workspace, SendGrid, etc.).", "position": 1}, {"@type": "HowToStep", "text": "Navigate to domain authentication, sender verification, or DKIM settings.", "position": 2}, {"@type": "HowToStep", "text": "The service will generate one or two DNS TXT records \u2013 copy them exactly.", "position": 3}, {"@type": "HowToStep", "text": "Add those TXT records to your DNS, named exactly as instructed (e.g. google._domainkey or s1._domainkey).", "position": 4}, {"@type": "HowToStep", "text": "Click Verify in the service dashboard \u2013 DNS propagation may take a few minutes.", "position": 5}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: DKIM Not Configured: How to Set Up Email Signing (2026)", "description": "Without DKIM, Gmail can't verify your emails are genuine and inbox placement drops. Learn how to enable DKIM for any email provider in minutes.", "step": [{"@type": "HowToStep", "text": "Log in to your email sending service (Resend, Postmark, Google Workspace, SendGrid, etc.).", "position": 1}, {"@type": "HowToStep", "text": "Navigate to domain authentication, sender verification, or DKIM settings.", "position": 2}, {"@type": "HowToStep", "text": "The service will generate one or two DNS TXT records - copy them exactly.", "position": 3}, {"@type": "HowToStep", "text": "Add those TXT records to your DNS, named exactly as instructed (e.g. google._domainkey or s1._domainkey).", "position": 4}, {"@type": "HowToStep", "text": "Click Verify in the service dashboard - DNS propagation may take a few minutes.", "position": 5}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://didyouship.com"}, {"@type": "ListItem", "position": 2, "name": "Email Deliverability", "item": "https://didyouship.com/guides/dkim-setup"}]}</script>
 <meta name="theme-color" content="#0c0c0e">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
@@ -298,9 +298,9 @@ a:hover { text-decoration: underline; }
     <div class="section">
       <h2 class="section-label">What is this?</h2>
       <p>DKIM (DomainKeys Identified Mail) adds a digital signature to every email you send. Your mail server signs each email with a private key, and publishes the matching public key as a DNS TXT record. When receiving servers get your email, they look up your public key and verify the signature.</p>
-<p>The DNS record looks like this – at <code>selector._domainkey.yourdomain.com</code>:</p>
+<p>The DNS record looks like this - at <code>selector._domainkey.yourdomain.com</code>:</p>
 <pre>v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ...</pre>
-<p>You don't write this by hand – your email provider generates it and tells you exactly what to add.</p>
+<p>You don't write this by hand - your email provider generates it and tells you exactly what to add.</p>
     </div>
     
 
@@ -324,7 +324,7 @@ a:hover { text-decoration: underline; }
 <li>Find the DKIM/domain authentication setup page</li>
 <li>The service will give you one or two TXT records to add to your DNS</li>
 <li>Add those records exactly as instructed (name like <code>google._domainkey</code> or <code>s1._domainkey</code>)</li>
-<li>Click "Verify" in the service dashboard – it may take a few minutes for DNS to propagate</li>
+<li>Click "Verify" in the service dashboard - it may take a few minutes for DNS to propagate</li>
 </ol>
     </div>
     

@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>didyouship.com – you shipped, but did you check?</title>
+<title>didyouship.com - you shipped, but did you check?</title>
 <meta name="description" content="Free production readiness scanner. Checks email deliverability, SSL, exposed secrets, DNS, SEO, and performance in one scan. Built for developers who ship with Cursor, Replit, and Bolt.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://didyouship.com/">
-<meta property="og:title" content="didyouship.com – you shipped, but did you check?">
+<meta property="og:title" content="didyouship.com - you shipped, but did you check?">
 <meta property="og:description" content="24 checks in 8 seconds. Email going to spam? Secrets exposed? Links look ugly? Find everything you forgot.">
 <meta property="og:site_name" content="didyouship.com">
 <meta property="og:image" content="https://didyouship.com/static/og.png">
 <meta name="twitter:image" content="https://didyouship.com/static/og.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="didyouship.com – you shipped, but did you check?">
+<meta name="twitter:title" content="didyouship.com - you shipped, but did you check?">
 <meta name="twitter:description" content="24 checks in 8 seconds. Email going to spam? Secrets exposed? Links look ugly? Find everything you forgot.">
 <link rel="canonical" href="https://didyouship.com/">
 <meta name="theme-color" content="#0c0c0e">
@@ -196,7 +196,7 @@ body {
   padding: 2px 8px; border: 1px solid var(--border2); border-radius: 3px;
 }
 
-/* issues – sorted by severity, not category */
+/* issues - sorted by severity, not category */
 .issues-header {
   font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
   text-transform: uppercase; color: var(--text3); padding: 20px 0 8px;
@@ -363,13 +363,13 @@ body {
 <div class="context">
   <h1>You shipped. But did you check?</h1>
   <p>Built with Cursor, Replit, v0, or Bolt and deployed? Your emails might be going to spam, your .env could be publicly accessible, www might not work, and your links probably look ugly when shared.</p>
-  <p>This scans your live domain and shows you exactly what's broken – sorted by what to fix first, with copy-pasteable commands and DNS records.</p>
+  <p>This scans your live domain and shows you exactly what's broken - sorted by what to fix first, with copy-pasteable commands and DNS records.</p>
 
   <div class="what-we-check">
-    <div class="check-row"><span class="check-cat">Email</span><span class="check-desc">SPF, DKIM, DMARC, blacklists – why your emails land in spam</span></div>
-    <div class="check-row"><span class="check-cat">SSL</span><span class="check-desc">Certificate, HTTPS redirect – why Chrome says "Not Secure"</span></div>
+    <div class="check-row"><span class="check-cat">Email</span><span class="check-desc">SPF, DKIM, DMARC, blacklists - why your emails land in spam</span></div>
+    <div class="check-row"><span class="check-cat">SSL</span><span class="check-desc">Certificate, HTTPS redirect - why Chrome says "Not Secure"</span></div>
     <div class="check-row"><span class="check-cat">Secrets</span><span class="check-desc">.env files, .git exposure, API keys in page source</span></div>
-    <div class="check-row"><span class="check-cat">DNS</span><span class="check-desc">www subdomain, apex redirect – why some visitors get errors</span></div>
+    <div class="check-row"><span class="check-cat">DNS</span><span class="check-desc">www subdomain, apex redirect - why some visitors get errors</span></div>
     <div class="check-row"><span class="check-cat">SEO</span><span class="check-desc">Title, meta tags, OG, Twitter Cards, sitemap, viewport</span></div>
     <div class="check-row"><span class="check-cat">Speed</span><span class="check-desc">Response time, compression, cold starts, mixed content</span></div>
   </div>
@@ -557,7 +557,7 @@ function render(d) {
 
   // Issues sorted by severity
   if (sorted.length) {
-    h += '<div class="issues-header">' + sorted.length + ' issues found – sorted by priority</div>';
+    h += '<div class="issues-header">' + sorted.length + ' issues found - sorted by priority</div>';
     let lastSev = null;
     sorted.forEach((issue, idx) => {
       if (issue.severity !== lastSev) {
@@ -596,7 +596,7 @@ function render(d) {
     h += '<div class="all-clear">';
     h += '<div class="all-clear-score">' + d.score + '</div>';
     h += '<h2>Everything checks out</h2>';
-    h += '<p>All checks passed – your domain is production-ready.</p>';
+    h += '<p>All checks passed - your domain is production-ready.</p>';
     h += '</div>';
   }
 

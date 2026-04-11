@@ -16,7 +16,7 @@
 <meta name="twitter:title" content="Slow Response Time & Cold Starts: Fix Server Performance (2026) | didyouship.com">
 <meta name="twitter:description" content="Slow response times drive users away. Learn how to fix cold starts on Railway, Render, and Fly.io and how to diagnose a genuinely slow server.">
 <meta name="twitter:image" content="https://didyouship.com/static/og.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: Slow Response Time & Cold Starts: Fix Server Performance (2026)", "description": "Slow response times drive users away. Learn how to fix cold starts on Railway, Render, and Fly.io and how to diagnose a genuinely slow server.", "step": [{"@type": "HowToStep", "text": "Determine if it's a cold start: run two consecutive requests \u2013 if the first is slow but the second is fast, it's a cold start.", "position": 1}, {"@type": "HowToStep", "text": "For cold starts: upgrade to a paid plan on your hosting platform (Railway Hobby, Render Starter, Fly paid machines).", "position": 2}, {"@type": "HowToStep", "text": "Alternatively, use a keep-alive service to ping your health endpoint every 5 minutes (BetterStack, cron-job.org).", "position": 3}, {"@type": "HowToStep", "text": "For genuinely slow responses: check your server's region and deploy closer to your users.", "position": 4}, {"@type": "HowToStep", "text": "Profile slow database queries and add indexes for common query patterns.", "position": 5}, {"@type": "HowToStep", "text": "Move heavy computations out of the request path into background jobs or queues.", "position": 6}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: Slow Response Time & Cold Starts: Fix Server Performance (2026)", "description": "Slow response times drive users away. Learn how to fix cold starts on Railway, Render, and Fly.io and how to diagnose a genuinely slow server.", "step": [{"@type": "HowToStep", "text": "Determine if it's a cold start: run two consecutive requests - if the first is slow but the second is fast, it's a cold start.", "position": 1}, {"@type": "HowToStep", "text": "For cold starts: upgrade to a paid plan on your hosting platform (Railway Hobby, Render Starter, Fly paid machines).", "position": 2}, {"@type": "HowToStep", "text": "Alternatively, use a keep-alive service to ping your health endpoint every 5 minutes (BetterStack, cron-job.org).", "position": 3}, {"@type": "HowToStep", "text": "For genuinely slow responses: check your server's region and deploy closer to your users.", "position": 4}, {"@type": "HowToStep", "text": "Profile slow database queries and add indexes for common query patterns.", "position": 5}, {"@type": "HowToStep", "text": "Move heavy computations out of the request path into background jobs or queues.", "position": 6}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://didyouship.com"}, {"@type": "ListItem", "position": 2, "name": "Performance", "item": "https://didyouship.com/guides/response-time"}]}</script>
 <meta name="theme-color" content="#0c0c0e">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
@@ -290,7 +290,7 @@ a:hover { text-decoration: underline; }
     <div class="guide-header">
       <div class="guide-cat">Performance</div>
       <h1 class="guide-title">Response Time & Cold Starts</h1>
-      <p class="guide-summary">Slow response times drive users away – and free hosting tiers put your server to sleep, causing 10–30 second cold starts.</p>
+      <p class="guide-summary">Slow response times drive users away - and free hosting tiers put your server to sleep, causing 10-30 second cold starts.</p>
       <span class="sev-badge high">high severity</span>
     </div>
 
@@ -299,7 +299,7 @@ a:hover { text-decoration: underline; }
       <h2 class="section-label">What is this?</h2>
       <p>Response time is how long your server takes to send back the first byte of a response. Two different problems can cause slowness:</p>
 <ol>
-<li><strong>Cold starts:</strong> Free/hobby tiers of Railway, Render, and Fly.io spin down your app after 15-30 minutes of inactivity. The first request after idle wakes it up – typically taking 10-30 seconds. Subsequent requests are fast.</li>
+<li><strong>Cold starts:</strong> Free/hobby tiers of Railway, Render, and Fly.io spin down your app after 15-30 minutes of inactivity. The first request after idle wakes it up - typically taking 10-30 seconds. Subsequent requests are fast.</li>
 <li><strong>Genuinely slow server:</strong> Slow database queries, heavy computations on the request path, or servers deployed in the wrong region.</li>
 </ol>
     </div>
@@ -310,7 +310,7 @@ a:hover { text-decoration: underline; }
       <h2 class="section-label">Why it matters</h2>
       <ul>
 <li><strong>53% of mobile users abandon a site that takes more than 3 seconds to load</strong> (Google research)</li>
-<li><strong>Cold starts hit first-time visitors hardest</strong> – the worst possible impression for someone trying your app for the first time</li>
+<li><strong>Cold starts hit first-time visitors hardest</strong> - the worst possible impression for someone trying your app for the first time</li>
 <li><strong>Google uses Core Web Vitals (including Time to First Byte) as a ranking factor</strong></li>
 </ul>
     </div>
@@ -326,8 +326,8 @@ a:hover { text-decoration: underline; }
 </ol>
 <p><strong>For slow responses:</strong></p>
 <ol>
-<li>Check your server's region – deploy in the same region as most of your users</li>
-<li>Profile slow database queries – add indexes for common query patterns</li>
+<li>Check your server's region - deploy in the same region as most of your users</li>
+<li>Profile slow database queries - add indexes for common query patterns</li>
 <li>Move heavy computations out of the request path into background jobs</li>
 <li>Add a CDN (Cloudflare) in front of your origin server</li>
 </ol>
@@ -339,16 +339,16 @@ a:hover { text-decoration: underline; }
       <h2 class="section-label">Providers &amp; tools</h2>
       <table class="provider-table">
 <tr><th>Platform</th><th>Always-on option</th></tr>
-<tr><td>Railway</td><td>Hobby plan ($5/mo) – no sleep</td></tr>
-<tr><td>Render</td><td>Starter plan ($7/mo) – no sleep</td></tr>
-<tr><td>Fly.io</td><td>Paid machines – always running</td></tr>
-<tr><td>Vercel</td><td>Serverless – no cold starts on paid; edge functions always fast</td></tr>
+<tr><td>Railway</td><td>Hobby plan ($5/mo) - no sleep</td></tr>
+<tr><td>Render</td><td>Starter plan ($7/mo) - no sleep</td></tr>
+<tr><td>Fly.io</td><td>Paid machines - always running</td></tr>
+<tr><td>Vercel</td><td>Serverless - no cold starts on paid; edge functions always fast</td></tr>
 </table>
 <p><strong>Keep-alive ping services (free):</strong></p>
 <ul>
-<li><strong>BetterStack</strong> – uptimerobot.com – ping every 5 mins, free tier</li>
-<li><strong>cron-job.org</strong> – HTTP cron job, free</li>
-<li><strong>GitHub Actions</strong> – scheduled workflow that hits your health endpoint</li>
+<li><strong>BetterStack</strong> - uptimerobot.com - ping every 5 mins, free tier</li>
+<li><strong>cron-job.org</strong> - HTTP cron job, free</li>
+<li><strong>GitHub Actions</strong> - scheduled workflow that hits your health endpoint</li>
 </ul>
     </div>
     

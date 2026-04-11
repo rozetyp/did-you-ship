@@ -4,19 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mixed Content Errors: Fix HTTP Resources on HTTPS Pages (2026) | didyouship.com</title>
-<meta name="description" content="HTTP resources on an HTTPS page are silently blocked by browsers – images don't show, scripts don't run. Learn how to find and fix mixed content.">
+<meta name="description" content="HTTP resources on an HTTPS page are silently blocked by browsers - images don't show, scripts don't run. Learn how to find and fix mixed content.">
 <link rel="canonical" href="https://didyouship.com/guides/mixed-content">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://didyouship.com/guides/mixed-content">
 <meta property="og:title" content="Mixed Content Errors: Fix HTTP Resources on HTTPS Pages (2026) | didyouship.com">
-<meta property="og:description" content="HTTP resources on an HTTPS page are silently blocked by browsers – images don't show, scripts don't run. Learn how to find and fix mixed content.">
+<meta property="og:description" content="HTTP resources on an HTTPS page are silently blocked by browsers - images don't show, scripts don't run. Learn how to find and fix mixed content.">
 <meta property="og:site_name" content="didyouship.com">
 <meta property="og:image" content="https://didyouship.com/static/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Mixed Content Errors: Fix HTTP Resources on HTTPS Pages (2026) | didyouship.com">
-<meta name="twitter:description" content="HTTP resources on an HTTPS page are silently blocked by browsers – images don't show, scripts don't run. Learn how to find and fix mixed content.">
+<meta name="twitter:description" content="HTTP resources on an HTTPS page are silently blocked by browsers - images don't show, scripts don't run. Learn how to find and fix mixed content.">
 <meta name="twitter:image" content="https://didyouship.com/static/og.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: Mixed Content Errors: Fix HTTP Resources on HTTPS Pages (2026)", "description": "HTTP resources on an HTTPS page are silently blocked by browsers \u2013 images don't show, scripts don't run. Learn how to find and fix mixed content.", "step": [{"@type": "HowToStep", "text": "Open Chrome DevTools (F12) \u2192 Console tab and look for 'Mixed Content' warnings.", "position": 1}, {"@type": "HowToStep", "text": "Find all http:// resource URLs in your HTML, CSS, and JavaScript files.", "position": 2}, {"@type": "HowToStep", "text": "Change each http:// resource URL to https:// \u2013 most CDNs and services support HTTPS.", "position": 3}, {"@type": "HowToStep", "text": "For resources that don't support HTTPS, download and self-host them.", "position": 4}, {"@type": "HowToStep", "text": "Add a Content-Security-Policy header with upgrade-insecure-requests to auto-upgrade any remaining HTTP resources.", "position": 5}, {"@type": "HowToStep", "text": "Re-check the Console after deploying to confirm no mixed content warnings remain.", "position": 6}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: Mixed Content Errors: Fix HTTP Resources on HTTPS Pages (2026)", "description": "HTTP resources on an HTTPS page are silently blocked by browsers - images don't show, scripts don't run. Learn how to find and fix mixed content.", "step": [{"@type": "HowToStep", "text": "Open Chrome DevTools (F12) \u2192 Console tab and look for 'Mixed Content' warnings.", "position": 1}, {"@type": "HowToStep", "text": "Find all http:// resource URLs in your HTML, CSS, and JavaScript files.", "position": 2}, {"@type": "HowToStep", "text": "Change each http:// resource URL to https:// - most CDNs and services support HTTPS.", "position": 3}, {"@type": "HowToStep", "text": "For resources that don't support HTTPS, download and self-host them.", "position": 4}, {"@type": "HowToStep", "text": "Add a Content-Security-Policy header with upgrade-insecure-requests to auto-upgrade any remaining HTTP resources.", "position": 5}, {"@type": "HowToStep", "text": "Re-check the Console after deploying to confirm no mixed content warnings remain.", "position": 6}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://didyouship.com"}, {"@type": "ListItem", "position": 2, "name": "Breakage", "item": "https://didyouship.com/guides/mixed-content"}]}</script>
 <meta name="theme-color" content="#0c0c0e">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
@@ -290,14 +290,14 @@ a:hover { text-decoration: underline; }
     <div class="guide-header">
       <div class="guide-cat">Breakage</div>
       <h1 class="guide-title">Mixed Content</h1>
-      <p class="guide-summary">HTTP resources on an HTTPS page are silently blocked by browsers – images don't show, scripts don't run.</p>
+      <p class="guide-summary">HTTP resources on an HTTPS page are silently blocked by browsers - images don't show, scripts don't run.</p>
       <span class="sev-badge high">high severity</span>
     </div>
 
     
     <div class="section">
       <h2 class="section-label">What is this?</h2>
-      <p>Mixed content is when an HTTPS page loads resources (images, scripts, stylesheets, fonts) over plain HTTP. Browsers block these resources as a security measure – an HTTP resource on an HTTPS page could be intercepted and modified by an attacker.</p>
+      <p>Mixed content is when an HTTPS page loads resources (images, scripts, stylesheets, fonts) over plain HTTP. Browsers block these resources as a security measure - an HTTP resource on an HTTPS page could be intercepted and modified by an attacker.</p>
 <p>This commonly happens with hardcoded HTTP URLs in old code:</p>
 <pre>&lt;img src="http://cdn.example.com/logo.png"&gt;  &lt;!-- blocked --&gt;
 &lt;script src="http://cdn.example.com/app.js"&gt;&lt;/script&gt;  &lt;!-- blocked --&gt;</pre>
@@ -308,9 +308,9 @@ a:hover { text-decoration: underline; }
     <div class="section">
       <h2 class="section-label">Why it matters</h2>
       <ul>
-<li><strong>Resources are silently blocked</strong> – no visible error, images just don't appear, scripts don't run</li>
-<li><strong>You won't know unless you check the browser console</strong> – users don't see an error message, just broken functionality</li>
-<li><strong>Scripts that don't load can break your entire app</strong> – if a framework dependency loads over HTTP, nothing works</li>
+<li><strong>Resources are silently blocked</strong> - no visible error, images just don't appear, scripts don't run</li>
+<li><strong>You won't know unless you check the browser console</strong> - users don't see an error message, just broken functionality</li>
+<li><strong>Scripts that don't load can break your entire app</strong> - if a framework dependency loads over HTTP, nothing works</li>
 </ul>
     </div>
     
@@ -319,9 +319,9 @@ a:hover { text-decoration: underline; }
     <div class="section">
       <h2 class="section-label">How to fix it</h2>
       <ol>
-<li>Open Chrome DevTools → Console – look for "Mixed Content" warnings</li>
+<li>Open Chrome DevTools → Console - look for "Mixed Content" warnings</li>
 <li>Find all <code>http://</code> URLs in your HTML, CSS, and JavaScript</li>
-<li>Change them to <code>https://</code> – most CDNs and services support HTTPS</li>
+<li>Change them to <code>https://</code> - most CDNs and services support HTTPS</li>
 <li>For third-party resources that don't support HTTPS, host them yourself or find an alternative</li>
 </ol>
 <p>You can also add this to your HTML head to automatically upgrade HTTP resources to HTTPS:</p>
@@ -337,7 +337,7 @@ a:hover { text-decoration: underline; }
 <ul>
 <li>Chrome DevTools → Console → filter by "Mixed Content"</li>
 <li><code>grep -r "http://" src/</code> in your project (excluding http://localhost)</li>
-<li>whynopadlock.com – scan a URL for mixed content issues</li>
+<li>whynopadlock.com - scan a URL for mixed content issues</li>
 </ul>
     </div>
     
