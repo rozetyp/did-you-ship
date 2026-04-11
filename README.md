@@ -124,17 +124,6 @@ Score starts at 100. Each issue deducts points:
 
 ---
 
-## AI explanations
-
-When `XAI_API_KEY` is set, each scan result includes:
-
-- **One-line summary**: "Your emails are going to spam because you're missing two DNS records."
-- **Per-issue explanations**: 2-3 sentence plain-English explanation + the one action to fix it
-
-Powered by xAI Grok (`grok-3-mini-fast`). Both calls run in parallel to minimize latency. Gracefully degrades — scanner works fine without it.
-
----
-
 ## Guide pages (25 guides)
 
 Every issue the scanner can find has a dedicated educational guide at `/guides/{slug}`. Each guide includes:
@@ -238,11 +227,11 @@ Each page includes multiple causes with severity ratings, FAQ section with schem
                            │
               ┌────────────┼────────────┐
               │            │            │
-        ┌─────┴─────┐ ┌───┴────┐ ┌────┴─────┐
-        │  app.py   │ │scanner │ │ai_report │
-        │  FastAPI  │ │  .py   │ │   .py    │
-        │  routes   │ │26checks│ │ xAI Grok │
-        └───────────┘ └───┬────┘ └──────────┘
+        ┌─────┴─────┐ ┌───┴────┐
+        │  app.py   │ │scanner │
+        │  FastAPI  │ │  .py   │
+        │  routes   │ │26checks│
+        └───────────┘ └───┬────┘
                           │
               ┌───────────┼───────────┐
               │           │           │
@@ -263,7 +252,6 @@ Each page includes multiple causes with severity ratings, FAQ section with schem
 
 - **Backend**: Python, FastAPI, uvicorn
 - **Scanner**: `dnspython` (DNS), `ssl` (certificates), `urllib` (HTTP), `socket` (fallback resolution)
-- **AI**: xAI Grok `grok-3-mini-fast` via OpenAI-compatible API
 - **Frontend**: Vanilla HTML/CSS/JS — no framework, no build step, no node_modules
 - **Templates**: Jinja2 (guide and problem pages)
 - **Rate limiting**: slowapi (10 scans/min per IP)
@@ -281,7 +269,6 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
 # Optional
-export XAI_API_KEY="your-xai-key"                          # AI explanations
 export SCAN_PROXY="http://user:pass@host:port"              # residential proxy
 
 uvicorn app:app --port 8000
@@ -292,7 +279,6 @@ uvicorn app:app --port 8000
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `XAI_API_KEY` | No | xAI API key — enables AI summaries and per-issue explanations |
 | `SCAN_PROXY` | No | HTTP proxy URL for outbound scan requests |
 | `PORT` | No | Server port (default: 8000, Railway sets automatically) |
 
@@ -301,7 +287,7 @@ uvicorn app:app --port 8000
 | Endpoint | Description |
 |----------|-------------|
 | `GET /` | Landing page with scanner |
-| `GET /api/scan/{domain}` | Full scan (up to 26 checks), returns JSON with issues, fixes, score, grade, AI explanations |
+| `GET /api/scan/{domain}` | Full scan (up to 26 checks), returns JSON with issues, fixes, score, grade |
 | `GET /guides/{slug}` | Educational guide page (25 guides) |
 | `GET /why/{slug}` | Problem/symptom page (9 pages) |
 | `GET /sitemap.xml` | Auto-generated sitemap |
