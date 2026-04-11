@@ -144,6 +144,19 @@ def _build_sidebar_nav():
     ]
 
 
+def _build_related_guides_map():
+    from guides_meta import GUIDES_META, NAV
+    mapping = {}
+    for group in NAV:
+        cat_slugs = [s for s in group["guides"] if s in GUIDES_META]
+        for slug in cat_slugs:
+            mapping[slug] = [
+                {"slug": s, "title": GUIDES_META[s]["title"]}
+                for s in cat_slugs if s != slug
+            ]
+    return mapping
+
+
 def _render_guides_index(request):
     from guides_meta import GUIDES_META, NAV
     sidebar_nav = _build_sidebar_nav()
@@ -152,11 +165,12 @@ def _render_guides_index(request):
         for s in g["guides"] if s in GUIDES_META
     ]} for g in NAV]
     return _templates.TemplateResponse(request, "guide.html", {
-        "slug": "", "title": "Production Readiness Guides (2026) | didyouship.com",
+        "slug": "", "canonical_url": "https://didyouship.com/guides",
+        "title": "Production Readiness Guides (2026) | didyouship.com",
         "description": "Educational guides for SPF, DKIM, DMARC, SSL, security headers, SEO, and performance.",
         "schema": "", "guide_title": "", "guide_summary": "", "guide_severity": "",
         "guide_category": "", "guide_what": "", "guide_why": "", "guide_how": "",
-        "guide_providers": "", "related_problems": [],
+        "guide_providers": "", "related_problems": [], "related_guides": [],
         "sidebar_nav": sidebar_nav, "index_groups": groups,
     })
 
@@ -176,13 +190,15 @@ def _render_guide(slug, request):
             "step": [{"@type": "HowToStep", "text": s, "position": i+1} for i, s in enumerate(steps)],
         }) + '</script>'
     return _templates.TemplateResponse(request, "guide.html", {
-        "slug": slug, "title": meta["seo_title"], "description": meta["description"],
+        "slug": slug, "canonical_url": f"https://didyouship.com/guides/{slug}",
+        "title": meta["seo_title"], "description": meta["description"],
         "schema": schema, "guide_title": meta.get("title", ""),
         "guide_summary": meta.get("summary", ""), "guide_severity": meta.get("severity", ""),
         "guide_category": meta.get("category", ""), "guide_what": meta.get("what", ""),
         "guide_why": meta.get("why", ""), "guide_how": meta.get("how", ""),
         "guide_providers": meta.get("providers", ""),
         "related_problems": _build_guide_to_problems_map().get(slug, []),
+        "related_guides": _build_related_guides_map().get(slug, []),
         "sidebar_nav": _build_sidebar_nav(), "index_groups": [],
     })
 

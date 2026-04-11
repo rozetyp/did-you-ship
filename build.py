@@ -100,19 +100,38 @@ def problem_schema(slug, page):
             f'<script type="application/ld+json">{json.dumps(article)}</script>')
 
 
+def build_related_guides_map():
+    """For each guide slug, return other guides in the same NAV category."""
+    from guides_meta import GUIDES_META, NAV
+    mapping = {}
+    for group in NAV:
+        cat_slugs = [s for s in group["guides"] if s in GUIDES_META]
+        for slug in cat_slugs:
+            mapping[slug] = [
+                {"slug": s, "title": GUIDES_META[s]["title"]}
+                for s in cat_slugs if s != slug
+            ]
+    return mapping
+
+
 def build():
     from guides_meta import GUIDES_META, ALL_SLUGS, NAV
     from problems_meta import PROBLEMS, ALL_PROBLEM_SLUGS
 
     guide_to_problems = build_guide_to_problems_map()
     sidebar_nav = build_sidebar_nav()
+    related_guides_map = build_related_guides_map()
+
+    LASTMOD = "2026-04-11"
 
     # Guide pages
     print(f"Building {len(ALL_SLUGS)} guide pages...")
     for slug in ALL_SLUGS:
         meta = GUIDES_META[slug]
+        canonical = f"https://didyouship.com/guides/{slug}"
         html = render("guide.html", {
             "slug": slug,
+            "canonical_url": canonical,
             "title": meta["seo_title"],
             "description": meta["description"],
             "schema": guide_schema(slug, meta),
@@ -125,6 +144,7 @@ def build():
             "guide_how": meta.get("how", ""),
             "guide_providers": meta.get("providers", ""),
             "related_problems": guide_to_problems.get(slug, []),
+            "related_guides": related_guides_map.get(slug, []),
             "sidebar_nav": sidebar_nav,
             "index_groups": [],
         })
@@ -141,12 +161,13 @@ def build():
         for group in NAV
     ]
     html = render("guide.html", {
-        "slug": "", "title": "Production Readiness Guides (2026) | didyouship.com",
+        "slug": "", "canonical_url": "https://didyouship.com/guides",
+        "title": "Production Readiness Guides (2026) | didyouship.com",
         "description": "Educational guides for SPF, DKIM, DMARC, SSL, security headers, SEO, and performance.",
         "schema": "", "guide_title": "", "guide_summary": "", "guide_severity": "",
         "guide_category": "", "guide_what": "", "guide_why": "", "guide_how": "",
-        "guide_providers": "", "related_problems": [], "sidebar_nav": sidebar_nav,
-        "index_groups": groups,
+        "guide_providers": "", "related_problems": [], "related_guides": [],
+        "sidebar_nav": sidebar_nav, "index_groups": groups,
     })
     write(DIST / "guides" / "index.html", html)
 
@@ -171,7 +192,7 @@ def build():
     urls += [f"{base}/guides/{s}" for s in ALL_SLUGS]
     urls += [f"{base}/why/{s}" for s in ALL_PROBLEM_SLUGS]
     sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-    sitemap += "".join(f"  <url><loc>{u}</loc></url>\n" for u in urls)
+    sitemap += "".join(f"  <url><loc>{u}</loc><lastmod>{LASTMOD}</lastmod></url>\n" for u in urls)
     sitemap += "</urlset>"
     write(DIST / "sitemap.xml", sitemap)
 
