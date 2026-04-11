@@ -19,7 +19,7 @@ GUIDES_META = {
         "description": "No SPF record means Gmail can't verify your emails and routes them to spam. Step-by-step fix for Google Workspace, Resend, SendGrid, Postmark, and more.",
         "category": "Email Deliverability",
         "how_steps": [
-            "List every service that sends email from your domain — your email provider, transactional email service, CRM, and newsletter tool.",
+            "List every service that sends email from your domain – your email provider, transactional email service, CRM, and newsletter tool.",
             "Get the SPF include value from each service's documentation (usually under 'Authentication' or 'Domain setup').",
             "Create a single TXT record at your root domain combining all your senders. Example: v=spf1 include:_spf.google.com include:_spf.resend.com ~all",
             "Add the TXT record in your DNS registrar (Cloudflare, Namecheap, Route 53, etc.) for the @ or root domain.",
@@ -30,14 +30,14 @@ GUIDES_META = {
         "what": '''<p>SPF (Sender Policy Framework) is a DNS TXT record at your root domain. It lists the mail servers and services authorized to send email on your behalf. When someone receives an email from you@yourdomain.com, their email provider checks your SPF record to verify the sending server is on the allowed list.</p>
 <p>An SPF record looks like this:</p>
 <pre>v=spf1 include:_spf.google.com include:_spf.resend.com ~all</pre>
-<p>The <code>~all</code> at the end means "all other servers should softfail" — mark as suspicious but don't reject. Use <code>-all</code> for hard rejection once you're confident the record is complete.</p>''',
+<p>The <code>~all</code> at the end means "all other servers should softfail" – mark as suspicious but don't reject. Use <code>-all</code> for hard rejection once you're confident the record is complete.</p>''',
         "why": '''<p>Without SPF, email providers have no way to verify whether an email from your domain is genuine. The consequences:</p>
 <ul>
 <li><strong>Your emails land in spam.</strong> Gmail, Outlook, and Yahoo use SPF as a key deliverability signal.</li>
 <li><strong>Anyone can impersonate you.</strong> Without SPF, there's nothing stopping a spammer from sending email as you@yourdomain.com.</li>
 <li><strong>Domain reputation damage.</strong> Even if your emails get through today, repeated failures lower your domain's long-term reputation.</li>
 </ul>
-<p>Since 2024, Gmail and Yahoo formally require SPF for senders over 5,000 emails/day — and penalize domains without it at lower volumes too.</p>''',
+<p>Since 2024, Gmail and Yahoo formally require SPF for senders over 5,000 emails/day – and penalize domains without it at lower volumes too.</p>''',
         "how": '''<ol>
 <li>List every service that sends email from your domain: your email provider (Google Workspace, Microsoft 365), transactional email service (Resend, Postmark, SendGrid), CRM, newsletter tool, etc.</li>
 <li>Get the SPF include value from each service's documentation (usually in their "Authentication" or "Domain setup" section).</li>
@@ -57,7 +57,7 @@ GUIDES_META = {
 <tr><td>Amazon SES</td><td><code>include:amazonses.com</code></td></tr>
 <tr><td>Brevo (Sendinblue)</td><td><code>include:spf.sendinblue.com</code></td></tr>
 </table>
-<p>Note: you can only have one SPF TXT record. Combine all includes into a single record — multiple SPF records will break validation.</p>''',
+<p>Note: you can only have one SPF TXT record. Combine all includes into a single record – multiple SPF records will break validation.</p>''',
     },
     "dmarc": {
         "title": "DMARC Record",
@@ -67,7 +67,7 @@ GUIDES_META = {
         "description": "No DMARC record lets anyone send phishing emails pretending to be from your domain. Learn how to add DMARC and what policy to use.",
         "category": "Email Deliverability",
         "how_steps": [
-            "Confirm SPF and DKIM are already set up — DMARC enforces them.",
+            "Confirm SPF and DKIM are already set up – DMARC enforces them.",
             "Add a TXT record at _dmarc.yourdomain.com with value: v=DMARC1; p=quarantine; rua=mailto:dmarc@yourdomain.com",
             "Replace the rua address with your own, or use a free DMARC reporting service like Postmark's DMARC monitor.",
             "If unsure whether all your legitimate email passes, start with p=none to observe reports for a week.",
@@ -77,9 +77,9 @@ GUIDES_META = {
         "what": '''<p>DMARC (Domain-based Message Authentication, Reporting and Conformance) is a DNS TXT record at <code>_dmarc.yourdomain.com</code>. It builds on SPF and DKIM to give receiving email servers a clear instruction: <em>if an email claiming to be from us fails authentication, here's what to do with it.</em></p>
 <p>There are three policies:</p>
 <ul>
-<li><code>p=none</code> — do nothing, just send me reports (monitoring mode)</li>
-<li><code>p=quarantine</code> — move suspicious emails to spam</li>
-<li><code>p=reject</code> — drop suspicious emails entirely</li>
+<li><code>p=none</code> – do nothing, just send me reports (monitoring mode)</li>
+<li><code>p=quarantine</code> – move suspicious emails to spam</li>
+<li><code>p=reject</code> – drop suspicious emails entirely</li>
 </ul>
 <pre>v=DMARC1; p=quarantine; rua=mailto:dmarc@yourdomain.com</pre>''',
         "why": '''<p>Without DMARC:</p>
@@ -89,17 +89,17 @@ GUIDES_META = {
 <li><strong>You're flying blind.</strong> Without a DMARC record, you have no visibility into whether someone is impersonating your domain right now.</li>
 </ul>''',
         "how": '''<ol>
-<li>Make sure you have SPF and DKIM set up first — DMARC enforces them, so they need to work.</li>
+<li>Make sure you have SPF and DKIM set up first – DMARC enforces them, so they need to work.</li>
 <li>Add a TXT record at <code>_dmarc.yourdomain.com</code>:<pre>v=DMARC1; p=quarantine; rua=mailto:dmarc@yourdomain.com</pre></li>
 <li>Replace the <code>rua</code> address with your own, or use a free DMARC reporting service (see below).</li>
 <li>If unsure whether all your legitimate email will pass, start with <code>p=none</code> to observe for a week, then escalate to <code>p=quarantine</code>, then <code>p=reject</code>.</li>
 </ol>''',
         "providers": '''<p><strong>Free DMARC report monitoring:</strong></p>
 <ul>
-<li><strong>Postmark DMARC:</strong> dmarc.postmarkapp.com — free weekly digest</li>
-<li><strong>MXToolbox:</strong> mxtoolbox.com/dmarc.aspx — instant lookup and validation</li>
-<li><strong>Dmarcian:</strong> dmarcian.com — free tier for small senders</li>
-<li><strong>EasyDMARC:</strong> easydmarc.com — free monitoring dashboard</li>
+<li><strong>Postmark DMARC:</strong> dmarc.postmarkapp.com – free weekly digest</li>
+<li><strong>MXToolbox:</strong> mxtoolbox.com/dmarc.aspx – instant lookup and validation</li>
+<li><strong>Dmarcian:</strong> dmarcian.com – free tier for small senders</li>
+<li><strong>EasyDMARC:</strong> easydmarc.com – free monitoring dashboard</li>
 </ul>''',
     },
     "email-spoofing": {
@@ -110,30 +110,30 @@ GUIDES_META = {
         "description": "Without SPF, DKIM, and DMARC, anyone can send email pretending to be from your domain. Learn how all three work and how to set them up.",
         "category": "Email Deliverability",
         "how_steps": [
-            "Add an SPF record — TXT record at your root domain listing your authorised sending services.",
+            "Add an SPF record – TXT record at your root domain listing your authorised sending services.",
             "Enable DKIM signing in your email provider dashboard and add the DNS record they give you.",
             "Add a DMARC record at _dmarc.yourdomain.com with p=quarantine or p=reject.",
             "Monitor DMARC reports for a week to confirm no legitimate email is being rejected.",
         ],
     
-        "what": '''<p>Email spoofing is when someone sends an email that looks like it's from your domain — but isn't. It's trivially easy to do: email's core protocol (SMTP) doesn't verify the sender by default. Without additional protections, anyone can claim to be from you@yourdomain.com.</p>
+        "what": '''<p>Email spoofing is when someone sends an email that looks like it's from your domain – but isn't. It's trivially easy to do: email's core protocol (SMTP) doesn't verify the sender by default. Without additional protections, anyone can claim to be from you@yourdomain.com.</p>
 <p>The three defenses work together:</p>
 <ul>
-<li><strong>SPF</strong> — lists which servers are allowed to send as you</li>
-<li><strong>DKIM</strong> — adds a cryptographic signature to emails from your authorized servers</li>
-<li><strong>DMARC</strong> — tells receivers what to do when email fails SPF or DKIM, and sends you reports</li>
+<li><strong>SPF</strong> – lists which servers are allowed to send as you</li>
+<li><strong>DKIM</strong> – adds a cryptographic signature to emails from your authorized servers</li>
+<li><strong>DMARC</strong> – tells receivers what to do when email fails SPF or DKIM, and sends you reports</li>
 </ul>''',
         "why": '''<p>Spoofed emails from your domain can:</p>
 <ul>
 <li>Send phishing emails to your customers, tricking them into giving up passwords or payment details</li>
-<li>Damage your brand reputation — users get suspicious emails "from you" and lose trust</li>
+<li>Damage your brand reputation – users get suspicious emails "from you" and lose trust</li>
 <li>Get your domain blacklisted, affecting your own email deliverability</li>
 <li>Be used in business email compromise (BEC) attacks, one of the most costly types of cybercrime</li>
 </ul>''',
         "how": '''<ol>
-<li><strong>Add an SPF record</strong> — TXT record at your root domain listing your sending services</li>
-<li><strong>Enable DKIM</strong> — in your email provider dashboard; they'll give you a TXT record to add</li>
-<li><strong>Add a DMARC record</strong> — TXT record at <code>_dmarc.yourdomain.com</code> with <code>p=quarantine</code> or <code>p=reject</code></li>
+<li><strong>Add an SPF record</strong> – TXT record at your root domain listing your sending services</li>
+<li><strong>Enable DKIM</strong> – in your email provider dashboard; they'll give you a TXT record to add</li>
+<li><strong>Add a DMARC record</strong> – TXT record at <code>_dmarc.yourdomain.com</code> with <code>p=quarantine</code> or <code>p=reject</code></li>
 </ol>
 <p>In order of priority: DMARC first (biggest impact), then SPF, then DKIM. All three together give complete protection.</p>''',
         "providers": '''<p>Check each service's documentation for DKIM/SPF setup:</p>
@@ -154,15 +154,15 @@ GUIDES_META = {
         "how_steps": [
             "Log in to your email sending service (Resend, Postmark, Google Workspace, SendGrid, etc.).",
             "Navigate to domain authentication, sender verification, or DKIM settings.",
-            "The service will generate one or two DNS TXT records — copy them exactly.",
+            "The service will generate one or two DNS TXT records – copy them exactly.",
             "Add those TXT records to your DNS, named exactly as instructed (e.g. google._domainkey or s1._domainkey).",
-            "Click Verify in the service dashboard — DNS propagation may take a few minutes.",
+            "Click Verify in the service dashboard – DNS propagation may take a few minutes.",
         ],
     
         "what": '''<p>DKIM (DomainKeys Identified Mail) adds a digital signature to every email you send. Your mail server signs each email with a private key, and publishes the matching public key as a DNS TXT record. When receiving servers get your email, they look up your public key and verify the signature.</p>
-<p>The DNS record looks like this — at <code>selector._domainkey.yourdomain.com</code>:</p>
+<p>The DNS record looks like this – at <code>selector._domainkey.yourdomain.com</code>:</p>
 <pre>v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ...</pre>
-<p>You don't write this by hand — your email provider generates it and tells you exactly what to add.</p>''',
+<p>You don't write this by hand – your email provider generates it and tells you exactly what to add.</p>''',
         "why": '''<p>DKIM is a key trust signal for inbox placement:</p>
 <ul>
 <li><strong>Gmail uses DKIM to rank email trustworthiness.</strong> Emails without DKIM are more likely to be treated as spam, especially from newer domains.</li>
@@ -174,7 +174,7 @@ GUIDES_META = {
 <li>Find the DKIM/domain authentication setup page</li>
 <li>The service will give you one or two TXT records to add to your DNS</li>
 <li>Add those records exactly as instructed (name like <code>google._domainkey</code> or <code>s1._domainkey</code>)</li>
-<li>Click "Verify" in the service dashboard — it may take a few minutes for DNS to propagate</li>
+<li>Click "Verify" in the service dashboard – it may take a few minutes for DNS to propagate</li>
 </ol>''',
         "providers": '''<table class="provider-table">
 <tr><th>Service</th><th>Where to find DKIM setup</th></tr>
@@ -190,7 +190,7 @@ GUIDES_META = {
     "ip-blacklisted": {
         "title": "Mail Server IP Blacklisted",
         "severity": "critical",
-        "summary": "Your mail server's IP address appears on spam blacklists — email providers silently drop or spam-folder everything you send.",
+        "summary": "Your mail server's IP address appears on spam blacklists – email providers silently drop or spam-folder everything you send.",
         "seo_title": "Mail Server IP Blacklisted: How to Check and Get Delisted (2026) | didyouship.com",
         "description": "If your mail server IP is on Spamhaus or Barracuda, emails are silently dropped. Learn how to check your IP, request delisting, and prevent it recurring.",
         "category": "Email Deliverability",
@@ -202,43 +202,43 @@ GUIDES_META = {
             "If you're on shared hosting, consider switching to a managed sending service with clean IP pools (Resend, Postmark, SendGrid).",
         ],
     
-        "what": '''<p>Email providers (Gmail, Outlook, Yahoo) check multiple real-time blacklists before accepting email. If the IP address your mail server sends from is listed on a blacklist like Spamhaus, Barracuda, SpamCop, or SORBS, your emails are either silently dropped or sent directly to spam — including password resets, signups, and invoices.</p>
+        "what": '''<p>Email providers (Gmail, Outlook, Yahoo) check multiple real-time blacklists before accepting email. If the IP address your mail server sends from is listed on a blacklist like Spamhaus, Barracuda, SpamCop, or SORBS, your emails are either silently dropped or sent directly to spam – including password resets, signups, and invoices.</p>
 <p>This commonly happens on shared hosting where you share a server IP with other tenants, one of whom got their IP listed.</p>''',
         "why": '''<p>A blacklisted IP is one of the most damaging email problems because it silently breaks everything:</p>
 <ul>
 <li>Users sign up but never get verification emails</li>
 <li>Password reset emails never arrive</li>
 <li>Invoices and receipts disappear</li>
-<li>No errors — your app thinks emails sent successfully</li>
+<li>No errors – your app thinks emails sent successfully</li>
 </ul>
 <p>You can be blacklisted because of your own behavior, or because you're on shared infrastructure with bad neighbors.</p>''',
         "how": '''<ol>
-<li>Check your mail server IP at <strong>mxtoolbox.com/blacklists.aspx</strong> — enter the IP to see which lists it's on</li>
+<li>Check your mail server IP at <strong>mxtoolbox.com/blacklists.aspx</strong> – enter the IP to see which lists it's on</li>
 <li>For each blacklist, visit their website and follow the delisting process (usually a form requesting removal)</li>
 <li><strong>Spamhaus:</strong> spamhaus.org/lookup → follow removal instructions</li>
 <li><strong>Barracuda:</strong> barracudacentral.org/rbl/removal-request</li>
 <li><strong>SpamCop:</strong> listings expire automatically after 24 hours of no spam reports</li>
-<li>If you're on shared hosting, strongly consider switching to a managed transactional email service — they maintain clean IP pools</li>
+<li>If you're on shared hosting, strongly consider switching to a managed transactional email service – they maintain clean IP pools</li>
 </ol>''',
         "providers": '''<p><strong>Managed sending services with clean IP pools:</strong></p>
 <ul>
-<li><strong>Resend</strong> — resend.com — developer-friendly, free tier available</li>
-<li><strong>Postmark</strong> — postmarkapp.com — excellent deliverability track record</li>
-<li><strong>SendGrid</strong> — sendgrid.com — large scale, dedicated IPs available</li>
-<li><strong>Mailgun</strong> — mailgun.com — flexible, good for transactional email</li>
+<li><strong>Resend</strong> – resend.com – developer-friendly, free tier available</li>
+<li><strong>Postmark</strong> – postmarkapp.com – excellent deliverability track record</li>
+<li><strong>SendGrid</strong> – sendgrid.com – large scale, dedicated IPs available</li>
+<li><strong>Mailgun</strong> – mailgun.com – flexible, good for transactional email</li>
 </ul>
 <p>With these services, your email shares their reputation IP pools which are actively maintained and monitored.</p>''',
     },
     "email-deliverability": {
         "title": "Email Deliverability",
         "severity": "high",
-        "summary": "Why your emails land in spam — and the three DNS records every domain needs to reach the inbox reliably.",
+        "summary": "Why your emails land in spam – and the three DNS records every domain needs to reach the inbox reliably.",
         "seo_title": "Email Deliverability: Why Emails Land in Spam and How to Fix It (2026) | didyouship.com",
-        "description": "Emails landing in spam? Learn the three DNS records every domain needs — SPF, DKIM, and DMARC — to reliably reach the inbox.",
+        "description": "Emails landing in spam? Learn the three DNS records every domain needs – SPF, DKIM, and DMARC – to reliably reach the inbox.",
         "category": "Email Deliverability",
         "how_steps": [
             "Run an email health check at mxtoolbox.com/emailhealth.aspx to see what's missing.",
-            "Add an SPF record — TXT record at your root domain listing your email sending services.",
+            "Add an SPF record – TXT record at your root domain listing your email sending services.",
             "Enable DKIM in your email provider dashboard and add the DNS record provided.",
             "Add a DMARC record at _dmarc.yourdomain.com with p=quarantine.",
             "Use a reputable transactional email service for all automated email (password resets, receipts, notifications).",
@@ -246,11 +246,11 @@ GUIDES_META = {
     
         "what": '''<p>Email deliverability is whether your emails actually reach the inbox vs. going to spam or being silently dropped. It depends on three DNS records working together:</p>
 <ul>
-<li><strong>SPF</strong> — lists which servers are allowed to send as your domain</li>
-<li><strong>DKIM</strong> — cryptographically signs each email to prove it's genuine</li>
-<li><strong>DMARC</strong> — enforces what happens when email fails SPF/DKIM, and provides reporting</li>
+<li><strong>SPF</strong> – lists which servers are allowed to send as your domain</li>
+<li><strong>DKIM</strong> – cryptographically signs each email to prove it's genuine</li>
+<li><strong>DMARC</strong> – enforces what happens when email fails SPF/DKIM, and provides reporting</li>
 </ul>
-<p>All three are DNS TXT records — no code changes required, just DNS configuration.</p>''',
+<p>All three are DNS TXT records – no code changes required, just DNS configuration.</p>''',
         "why": '''<p>Missing email authentication affects every email you send: account verification, password resets, receipts, support replies. When these land in spam, users think your product is broken. Many churn silently without ever telling you.</p>
 <p>Since 2024, Gmail and Yahoo require all three for bulk senders and use them as signals even for low-volume domains.</p>''',
         "how": '''<ol>
@@ -262,10 +262,10 @@ GUIDES_META = {
 </ol>''',
         "providers": '''<p><strong>Recommended sending services:</strong></p>
 <ul>
-<li><strong>Resend</strong> — modern API, great DX, free tier includes 3,000 emails/month</li>
-<li><strong>Postmark</strong> — best-in-class deliverability, 100 free emails/month</li>
-<li><strong>SendGrid</strong> — 100 free/day, scales to millions</li>
-<li><strong>Brevo (formerly Sendinblue)</strong> — 300 free/day, good EU option</li>
+<li><strong>Resend</strong> – modern API, great DX, free tier includes 3,000 emails/month</li>
+<li><strong>Postmark</strong> – best-in-class deliverability, 100 free emails/month</li>
+<li><strong>SendGrid</strong> – 100 free/day, scales to millions</li>
+<li><strong>Brevo (formerly Sendinblue)</strong> – 300 free/day, good EU option</li>
 </ul>''',
     },
     "ssl-certificate": {
@@ -278,13 +278,13 @@ GUIDES_META = {
         "how_steps": [
             "Check your cert expiry: openssl s_client -connect yourdomain.com:443 | openssl x509 -noout -dates",
             "Log in to your hosting dashboard and look for SSL or Certificate settings.",
-            "Enable auto-renewal — Vercel, Netlify, Cloudflare, and Render do this automatically.",
+            "Enable auto-renewal – Vercel, Netlify, Cloudflare, and Render do this automatically.",
             "If renewal failed, verify your domain's DNS A/CNAME records still point to your host.",
             "For custom servers using certbot, run: certbot renew --dry-run to confirm the renewal process works.",
         ],
     
         "what": '''<p>An SSL/TLS certificate does two things: it encrypts traffic between your server and visitors (so no one can read it in transit), and it proves your server actually controls yourdomain.com (not an impersonator). Browsers show the padlock icon when the certificate is valid.</p>
-<p>Certificates expire — typically every 90 days for Let's Encrypt or 1-2 years for commercial CAs. When they expire, browsers show a full-page warning that blocks most users from accessing your site.</p>''',
+<p>Certificates expire – typically every 90 days for Let's Encrypt or 1-2 years for commercial CAs. When they expire, browsers show a full-page warning that blocks most users from accessing your site.</p>''',
         "why": '''<p>An expired or invalid SSL certificate:</p>
 <ul>
 <li><strong>Blocks your site entirely.</strong> Chrome, Firefox, and Safari show a full-page red warning. Most users click "Go back" rather than proceed.</li>
@@ -300,11 +300,11 @@ GUIDES_META = {
 </ol>''',
         "providers": '''<table class="provider-table">
 <tr><th>Host</th><th>Auto-renewal</th><th>Action</th></tr>
-<tr><td>Vercel</td><td>Automatic</td><td>Nothing needed — managed for you</td></tr>
-<tr><td>Netlify</td><td>Automatic</td><td>Nothing needed — managed for you</td></tr>
+<tr><td>Vercel</td><td>Automatic</td><td>Nothing needed – managed for you</td></tr>
+<tr><td>Netlify</td><td>Automatic</td><td>Nothing needed – managed for you</td></tr>
 <tr><td>Cloudflare</td><td>Automatic</td><td>SSL/TLS → Overview → enable "Full (strict)"</td></tr>
 <tr><td>Railway</td><td>Automatic</td><td>Check domain settings for cert status</td></tr>
-<tr><td>Render</td><td>Automatic</td><td>Managed — check Settings → Custom Domains</td></tr>
+<tr><td>Render</td><td>Automatic</td><td>Managed – check Settings → Custom Domains</td></tr>
 <tr><td>Custom VPS</td><td>Manual</td><td>Use certbot with cron: <code>0 0 * * * certbot renew</code></td></tr>
 </table>''',
     },
@@ -317,24 +317,24 @@ GUIDES_META = {
         "category": "SSL & HTTPS",
         "how_steps": [
             "Log in to your hosting dashboard and find HTTPS or redirect settings.",
-            "Enable 'Force HTTPS' or 'Always Use HTTPS' — Vercel does this by default; Netlify has it under Domain settings.",
+            "Enable 'Force HTTPS' or 'Always Use HTTPS' – Vercel does this by default; Netlify has it under Domain settings.",
             "For Cloudflare: SSL/TLS → Edge Certificates → Always Use HTTPS → On.",
             "For Nginx: add a server block on port 80 that returns a 301 redirect to https://.",
-            "Test by visiting http://yourdomain.com in a browser — it should redirect to https://.",
+            "Test by visiting http://yourdomain.com in a browser – it should redirect to https://.",
         ],
     
         "what": '''<p>Having HTTPS doesn't mean all traffic is secure by default. If someone types <code>yourdomain.com</code> in their browser (without the <code>https://</code>), their browser first tries plain HTTP. Without a redirect, they'll see your site over an insecure connection with "Not Secure" in the address bar.</p>
 <p>The fix is a 301 redirect: when anyone visits <code>http://yourdomain.com</code>, immediately redirect them to <code>https://yourdomain.com</code>.</p>''',
         "why": '''<ul>
 <li><strong>Users see "Not Secure" in Chrome.</strong> Any form submission or login over HTTP is unsafe.</li>
-<li><strong>Attackers can intercept requests on public WiFi</strong> — cafés, airports, hotels — before the redirect happens.</li>
+<li><strong>Attackers can intercept requests on public WiFi</strong> – cafés, airports, hotels – before the redirect happens.</li>
 <li><strong>Links shared without https:// land on the insecure version.</strong></li>
 <li><strong>Google prefers HTTPS</strong> and may index the HTTP version if there's no redirect.</li>
 </ul>''',
         "how": '''<p>How you fix this depends on your hosting platform:</p>''',
         "providers": '''<table class="provider-table">
 <tr><th>Platform</th><th>How to enable</th></tr>
-<tr><td>Vercel</td><td>Enabled by default — no action needed</td></tr>
+<tr><td>Vercel</td><td>Enabled by default – no action needed</td></tr>
 <tr><td>Netlify</td><td>Site settings → Domain management → HTTPS → Force HTTPS</td></tr>
 <tr><td>Cloudflare</td><td>SSL/TLS → Edge Certificates → Always Use HTTPS → On</td></tr>
 <tr><td>Railway</td><td>Add redirect rule or handle in app code</td></tr>
@@ -353,34 +353,34 @@ GUIDES_META = {
     "env-exposed": {
         "title": ".env File Exposed",
         "severity": "critical",
-        "summary": "Your .env file is publicly accessible — anyone can read your database passwords, API keys, and other secrets.",
+        "summary": "Your .env file is publicly accessible – anyone can read your database passwords, API keys, and other secrets.",
         "seo_title": ".env File Exposed: How to Secure Your Environment Variables (2026) | didyouship.com",
         "description": "A publicly accessible .env file exposes your database passwords and API keys to anyone. Learn how to fix it immediately and rotate compromised credentials.",
         "category": "Exposed Secrets",
         "how_steps": [
-            "Immediately rotate all credentials in your .env — assume they have been compromised.",
+            "Immediately rotate all credentials in your .env – assume they have been compromised.",
             "Revoke and reissue: database passwords, API keys, OAuth secrets, and any other secrets in the file.",
             "Fix your deployment configuration to serve only the build output folder (e.g. .next/, dist/, build/), not the project root.",
             "In Vercel or Netlify, check your project's Output Directory setting in the dashboard.",
-            "Verify the fix: visit yourdomain.com/.env in a browser — it should return a 404.",
+            "Verify the fix: visit yourdomain.com/.env in a browser – it should return a 404.",
         ],
     
-        "what": '''<p>A <code>.env</code> file is where most apps store sensitive configuration: database credentials, API keys, payment processor secrets, OAuth tokens. It's meant to live on your server only — never served to the web. When your deployment accidentally serves your project root directory (instead of just the build output), <code>/.env</code> becomes publicly accessible to anyone who asks for it.</p>
+        "what": '''<p>A <code>.env</code> file is where most apps store sensitive configuration: database credentials, API keys, payment processor secrets, OAuth tokens. It's meant to live on your server only – never served to the web. When your deployment accidentally serves your project root directory (instead of just the build output), <code>/.env</code> becomes publicly accessible to anyone who asks for it.</p>
 <p>Automated bots scan millions of domains daily looking for exposed .env files. Once found, credentials are extracted and exploited within minutes.</p>''',
         "why": '''<ul>
-<li><strong>Database breach</strong> — your full user database, including passwords, emails, and payment data, can be extracted</li>
-<li><strong>API key abuse</strong> — your OpenAI, Stripe, AWS, or other service keys are used to run up charges or steal data</li>
-<li><strong>Complete account takeover</strong> — any service credential in your .env can be used immediately</li>
-<li><strong>Automated exploitation</strong> — this happens within minutes of exposure, not hours</li>
+<li><strong>Database breach</strong> – your full user database, including passwords, emails, and payment data, can be extracted</li>
+<li><strong>API key abuse</strong> – your OpenAI, Stripe, AWS, or other service keys are used to run up charges or steal data</li>
+<li><strong>Complete account takeover</strong> – any service credential in your .env can be used immediately</li>
+<li><strong>Automated exploitation</strong> – this happens within minutes of exposure, not hours</li>
 </ul>''',
         "how": '''<ol>
-<li><strong>Immediately rotate all credentials</strong> in your .env — assume they've been compromised</li>
+<li><strong>Immediately rotate all credentials</strong> in your .env – assume they've been compromised</li>
 <li>Fix your deployment to serve only the build output folder:</li>
 </ol>''',
         "providers": '''<table class="provider-table">
 <tr><th>Framework</th><th>Build output directory</th></tr>
-<tr><td>Next.js</td><td><code>.next/</code> — Vercel/Netlify handle this automatically</td></tr>
-<tr><td>Vite / React</td><td><code>dist/</code> — set this as your publish directory</td></tr>
+<tr><td>Next.js</td><td><code>.next/</code> – Vercel/Netlify handle this automatically</td></tr>
+<tr><td>Vite / React</td><td><code>dist/</code> – set this as your publish directory</td></tr>
 <tr><td>Create React App</td><td><code>build/</code></td></tr>
 <tr><td>Astro</td><td><code>dist/</code></td></tr>
 <tr><td>Hugo</td><td><code>public/</code></td></tr>
@@ -391,7 +391,7 @@ GUIDES_META = {
     "git-exposed": {
         "title": ".git Directory Exposed",
         "severity": "critical",
-        "summary": "Your entire source code and git history are downloadable — including secrets you committed and later deleted.",
+        "summary": "Your entire source code and git history are downloadable – including secrets you committed and later deleted.",
         "seo_title": ".git Directory Exposed: Block Public Access to Your Source Code (2026) | didyouship.com",
         "description": "An exposed .git directory lets anyone download your full source code and commit history. Learn how to block it with Nginx, Apache, and Caddy.",
         "category": "Exposed Secrets",
@@ -399,16 +399,16 @@ GUIDES_META = {
             "Immediately rotate any credentials that have ever been committed to your git history.",
             "Use BFG Repo Cleaner or git filter-repo to permanently remove secrets from git history.",
             "Add a rule to your web server to block access to .git/: in Nginx, use 'location ~ /\\.git { deny all; return 404; }'",
-            "Fix your deployment to not serve the project root — only the build output directory.",
-            "Verify the fix: visit yourdomain.com/.git/config — it should return 404.",
+            "Fix your deployment to not serve the project root – only the build output directory.",
+            "Verify the fix: visit yourdomain.com/.git/config – it should return 404.",
         ],
     
-        "what": '''<p>The <code>.git/</code> directory is git's internal database — it contains your complete commit history, every version of every file, and all your branches. When it's accessible over the web, tools like <code>git-dumper</code> can reconstruct your entire repository from just the URL.</p>
+        "what": '''<p>The <code>.git/</code> directory is git's internal database – it contains your complete commit history, every version of every file, and all your branches. When it's accessible over the web, tools like <code>git-dumper</code> can reconstruct your entire repository from just the URL.</p>
 <p>This is especially dangerous because <strong>git history doesn't forget</strong>. Even if you deleted a secret key from a commit two years ago, it's still in the git history and fully recoverable.</p>''',
         "why": '''<ul>
-<li><strong>Complete source code exposure</strong> — your entire codebase, including private business logic</li>
-<li><strong>Historical secrets</strong> — API keys, passwords, tokens committed at any point are recoverable</li>
-<li><strong>Attack surface mapping</strong> — attackers can read your code to find vulnerabilities</li>
+<li><strong>Complete source code exposure</strong> – your entire codebase, including private business logic</li>
+<li><strong>Historical secrets</strong> – API keys, passwords, tokens committed at any point are recoverable</li>
+<li><strong>Attack surface mapping</strong> – attackers can read your code to find vulnerabilities</li>
 </ul>''',
         "how": '''<ol>
 <li><strong>Immediately rotate any credentials that have ever been in your git history</strong></li>
@@ -430,20 +430,20 @@ respond @dotfiles 404</pre>
     "leaked-secrets": {
         "title": "API Keys in Page Source",
         "severity": "critical",
-        "summary": "Secret keys found in your page's HTML source — visible to anyone who clicks \"View Source\".",
+        "summary": "Secret keys found in your page's HTML source – visible to anyone who clicks \"View Source\".",
         "seo_title": "API Keys in Page Source: How to Remove Exposed Secrets (2026) | didyouship.com",
         "description": "API keys in your HTML source are scraped and exploited within minutes. Learn how to move them server-side in Next.js, Vite, and React.",
         "category": "Exposed Secrets",
         "how_steps": [
             "Immediately revoke and rotate the exposed key from its provider's dashboard.",
-            "Audit recent usage of the key — check for unexpected API calls or charges.",
+            "Audit recent usage of the key – check for unexpected API calls or charges.",
             "Move the key to a server-side environment variable.",
             "Create an API proxy endpoint in your backend that calls the third-party API using the server-side key.",
             "Update your frontend to call your own backend endpoint instead of the third-party API directly.",
             "In Next.js, only use NEXT_PUBLIC_ prefix for truly browser-safe values (like a Stripe publishable key).",
         ],
     
-        "what": '''<p>When you embed an API key, database URL, or other secret directly in client-side code (JavaScript, HTML), it becomes part of your page's source — readable by any user who opens browser DevTools or views source. Automated scrapers continuously crawl the web extracting keys from page source.</p>
+        "what": '''<p>When you embed an API key, database URL, or other secret directly in client-side code (JavaScript, HTML), it becomes part of your page's source – readable by any user who opens browser DevTools or views source. Automated scrapers continuously crawl the web extracting keys from page source.</p>
 <p>Common ways this happens: pasting a key directly into a React component, accidentally using server-side env vars in a Vite build, or including a config object in a script tag.</p>''',
         "why": '''<ul>
 <li><strong>Keys are exploited within minutes</strong> of being indexed. GitHub and web scrapers actively monitor for leaked keys.</li>
@@ -453,7 +453,7 @@ respond @dotfiles 404</pre>
 <li><strong>OpenAI keys</strong> → run up API charges, access your conversation history</li>
 </ul>''',
         "how": '''<ol>
-<li><strong>Immediately revoke/rotate the exposed key</strong> — assume it's compromised</li>
+<li><strong>Immediately revoke/rotate the exposed key</strong> – assume it's compromised</li>
 <li>Move the key to a server-side environment variable</li>
 <li>Use an API proxy: your frontend calls your own backend, which calls the third-party API using the server-side key</li>
 </ol>''',
@@ -470,12 +470,12 @@ respond @dotfiles 404</pre>
     "www-redirect": {
         "title": "www Subdomain & Redirect",
         "severity": "high",
-        "summary": "www.yourdomain.com should either work (and redirect to the apex) or not exist — having both serve independent content splits your SEO.",
+        "summary": "www.yourdomain.com should either work (and redirect to the apex) or not exist – having both serve independent content splits your SEO.",
         "seo_title": "www Subdomain Not Working: Set Up www Redirect for SEO (2026) | didyouship.com",
         "description": "www.yourdomain.com not working or both serving content? You're splitting your SEO rankings. Learn how to set up a 301 redirect correctly.",
         "category": "DNS",
         "how_steps": [
-            "Decide on your canonical domain — either yourdomain.com (apex) or www.yourdomain.com.",
+            "Decide on your canonical domain – either yourdomain.com (apex) or www.yourdomain.com.",
             "In your DNS settings, add a CNAME record for www pointing to your apex domain or hosting provider.",
             "Configure a 301 redirect from the non-canonical version to the canonical one.",
             "In Cloudflare: Rules → Redirect Rules → match www.domain.com/* → 301 to https://domain.com/$1.",
@@ -484,17 +484,17 @@ respond @dotfiles 404</pre>
     
         "what": '''<p>There are two common problems with <code>www</code>:</p>
 <ol>
-<li><strong>www doesn't resolve at all</strong> — users who type <code>www.yourdomain.com</code> get a connection error</li>
-<li><strong>Both www and the apex domain serve content</strong> — Google treats them as two separate websites, splitting PageRank</li>
+<li><strong>www doesn't resolve at all</strong> – users who type <code>www.yourdomain.com</code> get a connection error</li>
+<li><strong>Both www and the apex domain serve content</strong> – Google treats them as two separate websites, splitting PageRank</li>
 </ol>
-<p>The right setup: pick one canonical domain (most apps use the apex — <code>yourdomain.com</code>), and have the other redirect to it with a 301.</p>''',
+<p>The right setup: pick one canonical domain (most apps use the apex – <code>yourdomain.com</code>), and have the other redirect to it with a 301.</p>''',
         "why": '''<ul>
 <li><strong>Broken user experience.</strong> Many users still type "www" by habit. If it errors out, they think your site is down.</li>
 <li><strong>SEO dilution.</strong> If both serve content, Google sees two sites competing for the same rankings. Your backlinks and PageRank get split 50/50.</li>
 <li><strong>Crawl confusion.</strong> Search engines may index the wrong version or both versions of your pages.</li>
 </ul>''',
         "how": '''<ol>
-<li>Decide which is canonical: <code>yourdomain.com</code> (apex) or <code>www.yourdomain.com</code> — most modern sites use the apex</li>
+<li>Decide which is canonical: <code>yourdomain.com</code> (apex) or <code>www.yourdomain.com</code> – most modern sites use the apex</li>
 <li>Add a CNAME record for <code>www</code> pointing to your apex (or your host's redirect service)</li>
 <li>Configure a 301 redirect from the non-canonical version to the canonical one</li>
 </ol>''',
@@ -512,7 +512,7 @@ respond @dotfiles 404</pre>
     "hsts-header": {
         "title": "HSTS Header",
         "severity": "medium",
-        "summary": "The Strict-Transport-Security header tells browsers to always use HTTPS — even on the very first visit.",
+        "summary": "The Strict-Transport-Security header tells browsers to always use HTTPS – even on the very first visit.",
         "seo_title": "HSTS Header Missing: Add Strict-Transport-Security to Your Site (2026) | didyouship.com",
         "description": "Without HSTS, the first visit to your site on public WiFi can be intercepted. Learn how to add the Strict-Transport-Security header.",
         "category": "Security Headers",
@@ -522,10 +522,10 @@ respond @dotfiles 404</pre>
             "For Cloudflare: SSL/TLS → Edge Certificates → HTTP Strict Transport Security → Enable.",
             "For Vercel: add a headers config in vercel.json with the Strict-Transport-Security key-value pair.",
             "For Nginx: add_header Strict-Transport-Security 'max-age=31536000; includeSubDomains' always;",
-            "For Express/Node: use the helmet package — app.use(helmet()) enables HSTS by default.",
+            "For Express/Node: use the helmet package – app.use(helmet()) enables HSTS by default.",
         ],
     
-        "what": '''<p>HSTS (HTTP Strict Transport Security) is a response header that tells browsers: "always use HTTPS for this domain — never HTTP, even if someone types http://."</p>
+        "what": '''<p>HSTS (HTTP Strict Transport Security) is a response header that tells browsers: "always use HTTPS for this domain – never HTTP, even if someone types http://."</p>
 <pre>Strict-Transport-Security: max-age=31536000; includeSubDomains</pre>
 <p>Once a browser receives this header, it'll enforce HTTPS for your domain for <code>max-age</code> seconds (31536000 = 1 year), even if the user or a link tries to use HTTP.</p>''',
         "why": '''<p>Even with HTTPS and a redirect, there's a window of vulnerability on the very first visit to your site:</p>
@@ -535,7 +535,7 @@ respond @dotfiles 404</pre>
 <li>Your server redirects to HTTPS</li>
 <li>Browser follows redirect</li>
 </ol>
-<p>Step 2-3 happens over plain HTTP. On public WiFi, an attacker (man-in-the-middle) can intercept that initial HTTP request, modify it, and keep the user on HTTP the whole time. This is called an SSL stripping attack. HSTS eliminates step 2 entirely — the browser goes straight to HTTPS.</p>''',
+<p>Step 2-3 happens over plain HTTP. On public WiFi, an attacker (man-in-the-middle) can intercept that initial HTTP request, modify it, and keep the user on HTTP the whole time. This is called an SSL stripping attack. HSTS eliminates step 2 entirely – the browser goes straight to HTTPS.</p>''',
         "how": '''<p>Add this header to all HTTPS responses:</p>
 <pre>Strict-Transport-Security: max-age=31536000; includeSubDomains</pre>''',
         "providers": '''<table class="provider-table">
@@ -549,7 +549,7 @@ respond @dotfiles 404</pre>
   }]
 }</pre></td></tr>
 <tr><td>Nginx</td><td><code>add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;</code></td></tr>
-<tr><td>Express</td><td>Use the <code>helmet</code> package: <code>app.use(helmet())</code> — includes HSTS by default</td></tr>
+<tr><td>Express</td><td>Use the <code>helmet</code> package: <code>app.use(helmet())</code> – includes HSTS by default</td></tr>
 <tr><td>FastAPI</td><td><code>from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware</code></td></tr>
 </table>''',
     },
@@ -562,7 +562,7 @@ respond @dotfiles 404</pre>
         "category": "SEO",
         "how_steps": [
             "Add a <title> tag inside your HTML <head> element.",
-            "Format: Your App Name — what it does in 5-7 words (50-60 characters total).",
+            "Format: Your App Name – what it does in 5-7 words (50-60 characters total).",
             "In Next.js App Router: export a metadata object with a title property from your page.js or layout.js.",
             "In Next.js Pages Router: use the <Head> component from next/head.",
             "In Astro: set a title variable in frontmatter and render it in your layout's <head>.",
@@ -574,20 +574,20 @@ respond @dotfiles 404</pre>
 <li>It's the text shown in the browser tab</li>
 <li>It's the clickable blue headline shown in Google search results</li>
 </ul>
-<pre>&lt;title&gt;didyouship.com — production readiness checker&lt;/title&gt;</pre>
+<pre>&lt;title&gt;didyouship.com – production readiness checker&lt;/title&gt;</pre>
 <p>A good title is 50-60 characters, includes your brand name, and describes what the page does.</p>''',
         "why": '''<ul>
 <li><strong>Google uses the title as the primary ranking signal</strong> for what your page is about</li>
-<li><strong>Without a title, your search result looks broken</strong> — Google either shows the URL or makes something up</li>
-<li><strong>Browser tabs are blank</strong> — users with multiple tabs can't find your site</li>
-<li><strong>Social shares look poor</strong> — Open Graph uses the title tag as a fallback</li>
+<li><strong>Without a title, your search result looks broken</strong> – Google either shows the URL or makes something up</li>
+<li><strong>Browser tabs are blank</strong> – users with multiple tabs can't find your site</li>
+<li><strong>Social shares look poor</strong> – Open Graph uses the title tag as a fallback</li>
 </ul>''',
         "how": '''<p>Add inside your <code>&lt;head&gt;</code>:</p>
-<pre>&lt;title&gt;Your App Name — what it does in 5-7 words&lt;/title&gt;</pre>''',
+<pre>&lt;title&gt;Your App Name – what it does in 5-7 words&lt;/title&gt;</pre>''',
         "providers": '''<table class="provider-table">
 <tr><th>Framework</th><th>How to set title</th></tr>
 <tr><td>Next.js (App Router)</td><td><pre>export const metadata = {
-  title: 'Your App — tagline',
+  title: 'Your App – tagline',
 };</pre></td></tr>
 <tr><td>Next.js (Pages Router)</td><td><pre>import Head from 'next/head';
 &lt;Head&gt;&lt;title&gt;Your App&lt;/title&gt;&lt;/Head&gt;</pre></td></tr>
@@ -599,7 +599,7 @@ respond @dotfiles 404</pre>
     "meta-description": {
         "title": "Meta Description",
         "severity": "high",
-        "summary": "The snippet shown under your title in Google results — without it, Google picks random text from your page.",
+        "summary": "The snippet shown under your title in Google results – without it, Google picks random text from your page.",
         "seo_title": "Meta Description Missing: Write and Add It for Better Click-Through (2026) | didyouship.com",
         "description": "Without a meta description, Google shows random text in search results. Learn how to write a good one and add it in Next.js, Astro, and plain HTML.",
         "category": "SEO",
@@ -614,9 +614,9 @@ respond @dotfiles 404</pre>
         "what": '''<p>The meta description is a short text summary of your page shown in search results under the title:</p>
 <pre>&lt;meta name="description" content="Free production readiness scanner.
 26 checks in 8 seconds. Find what you forgot before users do."&gt;</pre>
-<p>Aim for 150-160 characters. It doesn't directly affect rankings, but it heavily influences click-through rate — it's your ad copy in search results.</p>''',
+<p>Aim for 150-160 characters. It doesn't directly affect rankings, but it heavily influences click-through rate – it's your ad copy in search results.</p>''',
         "why": '''<ul>
-<li><strong>Without it, Google picks random text</strong> — usually something like your nav menu or a sidebar item</li>
+<li><strong>Without it, Google picks random text</strong> – usually something like your nav menu or a sidebar item</li>
 <li><strong>Poor click-through from search.</strong> A clear description of what your page does converts much better than random text</li>
 <li><strong>Used as fallback for social previews</strong> when Open Graph description isn't set</li>
 </ul>''',
@@ -643,7 +643,7 @@ respond @dotfiles 404</pre>
         "category": "SEO",
         "how_steps": [
             "Add four core OG meta tags inside your <head>: og:title, og:description, og:image, og:url.",
-            "Create an OG image at 1200x630px — this is the preview image shown when links are shared.",
+            "Create an OG image at 1200x630px – this is the preview image shown when links are shared.",
             "Set og:url to the canonical URL of the page (e.g. https://yourdomain.com).",
             "Test with opengraph.xyz or the Facebook Sharing Debugger (developers.facebook.com/tools/debug).",
             "For dynamic OG images, use Vercel OG (@vercel/og) to generate images from JSX at the edge.",
@@ -667,27 +667,27 @@ respond @dotfiles 404</pre>
 </ol>''',
         "providers": '''<p><strong>Dynamic OG image generation:</strong></p>
 <ul>
-<li><strong>Vercel OG</strong> (<code>@vercel/og</code>) — generate images from JSX at the edge, free</li>
-<li><strong>Satori</strong> — the underlying library, framework-agnostic</li>
-<li><strong>Cloudinary</strong> — text overlays on images, URL-based generation</li>
+<li><strong>Vercel OG</strong> (<code>@vercel/og</code>) – generate images from JSX at the edge, free</li>
+<li><strong>Satori</strong> – the underlying library, framework-agnostic</li>
+<li><strong>Cloudinary</strong> – text overlays on images, URL-based generation</li>
 </ul>
 <p><strong>Design tools for static OG images:</strong></p>
 <ul>
-<li>Figma — 1200×630 frame, export as PNG</li>
-<li>og-image.vercel.app — quick generator</li>
+<li>Figma – 1200×630 frame, export as PNG</li>
+<li>og-image.vercel.app – quick generator</li>
 </ul>''',
     },
     "twitter-cards": {
         "title": "Twitter Card Tags",
         "severity": "medium",
-        "summary": "X/Twitter uses its own meta tags for link previews — Open Graph tags aren't enough.",
+        "summary": "X/Twitter uses its own meta tags for link previews – Open Graph tags aren't enough.",
         "seo_title": "Twitter Card Tags Missing: Add Rich Previews for X/Twitter (2026) | didyouship.com",
-        "description": "Open Graph tags aren't enough for X/Twitter — you need Twitter Card tags too. Learn how to add them so your links show images on X.",
+        "description": "Open Graph tags aren't enough for X/Twitter – you need Twitter Card tags too. Learn how to add them so your links show images on X.",
         "category": "SEO",
         "how_steps": [
             "Add twitter:card meta tag with value 'summary_large_image' for a large image preview.",
             "Add twitter:title, twitter:description, and twitter:image inside your <head>.",
-            "You can reuse the same image as your og:image — point twitter:image to the same URL.",
+            "You can reuse the same image as your og:image – point twitter:image to the same URL.",
             "Test with the Twitter Card Validator at cards-dev.twitter.com/validator.",
         ],
     
@@ -698,9 +698,9 @@ respond @dotfiles 404</pre>
 &lt;meta name="twitter:image" content="https://yourdomain.com/og.png"&gt;</pre>
 <p><code>summary_large_image</code> shows a large image card. <code>summary</code> shows a smaller thumbnail.</p>''',
         "why": '''<ul>
-<li><strong>Links posted on X show no image preview</strong> without Twitter Card tags — just a plain URL or small link box</li>
+<li><strong>Links posted on X show no image preview</strong> without Twitter Card tags – just a plain URL or small link box</li>
 <li>If you or your users share links on X, this directly affects visibility and clicks</li>
-<li>You can reuse the same image as your OG image — no extra work</li>
+<li>You can reuse the same image as your OG image – no extra work</li>
 </ul>''',
         "how": '''<p>Add to your <code>&lt;head&gt;</code> alongside your OG tags:</p>
 <pre>&lt;meta name="twitter:card" content="summary_large_image"&gt;
@@ -710,23 +710,23 @@ respond @dotfiles 404</pre>
 <p>Test with: cards-dev.twitter.com/validator (Twitter Card Validator)</p>''',
         "providers": '''<p><strong>Same image for OG and Twitter Card:</strong></p>
 <ul>
-<li>Use 1200×630px PNG for both — works on all platforms</li>
+<li>Use 1200×630px PNG for both – works on all platforms</li>
 <li>If your og:image is already set, point twitter:image to the same URL</li>
 </ul>''',
     },
     "viewport-meta": {
         "title": "Viewport Meta Tag",
         "severity": "high",
-        "summary": "Without the viewport tag, your site renders at desktop width on phones — everything is tiny and users must pinch-zoom.",
+        "summary": "Without the viewport tag, your site renders at desktop width on phones – everything is tiny and users must pinch-zoom.",
         "seo_title": "Viewport Meta Tag Missing: Fix Broken Mobile Display (2026) | didyouship.com",
         "description": "Without the viewport meta tag, your site renders at desktop width on phones. Learn how to add it and fix mobile rendering in any framework.",
         "category": "SEO",
         "how_steps": [
             "Add this tag inside your HTML <head>: <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-            "In Next.js App Router: this is included automatically — check your root layout.js.",
+            "In Next.js App Router: this is included automatically – check your root layout.js.",
             "In Next.js Pages Router: check your _document.js or add it to _app.js Head.",
             "In Astro: add it to your base layout file's <head> section.",
-            "Test on a real device or using Chrome DevTools mobile emulation — site should fill screen width without zooming.",
+            "Test on a real device or using Chrome DevTools mobile emulation – site should fill screen width without zooming.",
         ],
     
         "what": '''<p>The viewport meta tag tells mobile browsers how to scale your page. Without it, mobile browsers render your page at a desktop viewport width (typically 980px) and then scale it down to fit the screen, making everything tiny.</p>
@@ -734,7 +734,7 @@ respond @dotfiles 404</pre>
 <p><code>width=device-width</code> tells the browser to match the screen width. <code>initial-scale=1</code> sets the default zoom to 100%.</p>''',
         "why": '''<ul>
 <li><strong>Site is broken on mobile.</strong> Text is tiny, buttons are impossible to tap, users must pinch-zoom to read anything</li>
-<li><strong>Google ranks mobile-friendly sites higher.</strong> Google uses mobile-first indexing — it primarily indexes and ranks the mobile version of your site</li>
+<li><strong>Google ranks mobile-friendly sites higher.</strong> Google uses mobile-first indexing – it primarily indexes and ranks the mobile version of your site</li>
 <li><strong>High bounce rate on mobile.</strong> Users leave immediately if they can't read the page</li>
 </ul>
 <p>Mobile devices account for over 60% of web traffic globally. A broken mobile experience means losing most of your users.</p>''',
@@ -753,7 +753,7 @@ respond @dotfiles 404</pre>
     "canonical-url": {
         "title": "Canonical URL",
         "severity": "medium",
-        "summary": "Tells Google which version of a URL is the \"real\" one — prevents duplicate content from splitting your search rankings.",
+        "summary": "Tells Google which version of a URL is the \"real\" one – prevents duplicate content from splitting your search rankings.",
         "seo_title": "Canonical URL Missing: Prevent Duplicate Content Splitting SEO (2026) | didyouship.com",
         "description": "Without a canonical URL tag, Google may index multiple versions of your page and split your rankings. Learn how to add it in any framework.",
         "category": "SEO",
@@ -775,7 +775,7 @@ respond @dotfiles 404</pre>
 </ul>''',
         "how": '''<p>Add to your <code>&lt;head&gt;</code> on every page:</p>
 <pre>&lt;link rel="canonical" href="https://yourdomain.com/current-page"&gt;</pre>
-<p>The URL should be the preferred, stable version — always use <code>https://</code>, without trailing slashes (or consistently with them), and without UTM parameters.</p>''',
+<p>The URL should be the preferred, stable version – always use <code>https://</code>, without trailing slashes (or consistently with them), and without UTM parameters.</p>''',
         "providers": '''<table class="provider-table">
 <tr><th>Framework</th><th>How to set canonical</th></tr>
 <tr><td>Next.js App Router</td><td><pre>export const metadata = {
@@ -790,7 +790,7 @@ respond @dotfiles 404</pre>
     "sitemap": {
         "title": "Sitemap.xml",
         "severity": "medium",
-        "summary": "A file that tells search engines what pages exist on your site — required for Google Search Console and full indexing.",
+        "summary": "A file that tells search engines what pages exist on your site – required for Google Search Console and full indexing.",
         "seo_title": "Sitemap.xml Missing: Create and Submit a Sitemap to Google (2026) | didyouship.com",
         "description": "Sitemap.xml helps Google find all your pages and is required for Google Search Console. Learn how to generate it for Next.js, Astro, Django, and more.",
         "category": "SEO",
@@ -810,10 +810,10 @@ respond @dotfiles 404</pre>
     &lt;lastmod&gt;2024-01-01&lt;/lastmod&gt;
   &lt;/url&gt;
 &lt;/urlset&gt;</pre>
-<p>You don't write this by hand — your framework generates it automatically.</p>''',
+<p>You don't write this by hand – your framework generates it automatically.</p>''',
         "why": '''<ul>
 <li><strong>Google Search Console requires a sitemap</strong> to show you which pages are indexed and flag indexing errors</li>
-<li><strong>Pages may be missed without it</strong> — especially deeper pages or recently added content</li>
+<li><strong>Pages may be missed without it</strong> – especially deeper pages or recently added content</li>
 <li><strong>Faster indexing of new content.</strong> Submitting an updated sitemap signals Google to crawl your changes</li>
 </ul>''',
         "how": '''<ol>
@@ -853,8 +853,8 @@ respond @dotfiles 404</pre>
 &lt;link rel="icon" href="/favicon.svg" type="image/svg+xml"&gt;</pre>''',
         "why": '''<ul>
 <li><strong>404 error on every page load</strong> pollutes your server logs and analytics</li>
-<li><strong>Blank tab looks unfinished</strong> — a small but visible signal of quality</li>
-<li><strong>Users with many tabs</strong> rely on favicons to identify tabs — blank icons are confusing</li>
+<li><strong>Blank tab looks unfinished</strong> – a small but visible signal of quality</li>
+<li><strong>Users with many tabs</strong> rely on favicons to identify tabs – blank icons are confusing</li>
 </ul>''',
         "how": '''<ol>
 <li>Create a 32×32 PNG (or SVG for best results)</li>
@@ -863,9 +863,9 @@ respond @dotfiles 404</pre>
 </ol>''',
         "providers": '''<p><strong>Quick favicon creation:</strong></p>
 <ul>
-<li><strong>favicon.io</strong> — generate from text, emoji, or image; free</li>
-<li><strong>realfavicongenerator.net</strong> — generates all sizes for all platforms</li>
-<li><strong>Figma</strong> — design a 32×32 icon, export as PNG</li>
+<li><strong>favicon.io</strong> – generate from text, emoji, or image; free</li>
+<li><strong>realfavicongenerator.net</strong> – generates all sizes for all platforms</li>
+<li><strong>Figma</strong> – design a 32×32 icon, export as PNG</li>
 </ul>
 <p>For best compatibility, use both an SVG (for modern browsers) and a PNG fallback:</p>
 <pre>&lt;link rel="icon" href="/favicon.svg" type="image/svg+xml"&gt;
@@ -874,12 +874,12 @@ respond @dotfiles 404</pre>
     "response-time": {
         "title": "Response Time & Cold Starts",
         "severity": "high",
-        "summary": "Slow response times drive users away — and free hosting tiers put your server to sleep, causing 10–30 second cold starts.",
+        "summary": "Slow response times drive users away – and free hosting tiers put your server to sleep, causing 10–30 second cold starts.",
         "seo_title": "Slow Response Time & Cold Starts: Fix Server Performance (2026) | didyouship.com",
         "description": "Slow response times drive users away. Learn how to fix cold starts on Railway, Render, and Fly.io and how to diagnose a genuinely slow server.",
         "category": "Performance",
         "how_steps": [
-            "Determine if it's a cold start: run two consecutive requests — if the first is slow but the second is fast, it's a cold start.",
+            "Determine if it's a cold start: run two consecutive requests – if the first is slow but the second is fast, it's a cold start.",
             "For cold starts: upgrade to a paid plan on your hosting platform (Railway Hobby, Render Starter, Fly paid machines).",
             "Alternatively, use a keep-alive service to ping your health endpoint every 5 minutes (BetterStack, cron-job.org).",
             "For genuinely slow responses: check your server's region and deploy closer to your users.",
@@ -889,12 +889,12 @@ respond @dotfiles 404</pre>
     
         "what": '''<p>Response time is how long your server takes to send back the first byte of a response. Two different problems can cause slowness:</p>
 <ol>
-<li><strong>Cold starts:</strong> Free/hobby tiers of Railway, Render, and Fly.io spin down your app after 15-30 minutes of inactivity. The first request after idle wakes it up — typically taking 10-30 seconds. Subsequent requests are fast.</li>
+<li><strong>Cold starts:</strong> Free/hobby tiers of Railway, Render, and Fly.io spin down your app after 15-30 minutes of inactivity. The first request after idle wakes it up – typically taking 10-30 seconds. Subsequent requests are fast.</li>
 <li><strong>Genuinely slow server:</strong> Slow database queries, heavy computations on the request path, or servers deployed in the wrong region.</li>
 </ol>''',
         "why": '''<ul>
 <li><strong>53% of mobile users abandon a site that takes more than 3 seconds to load</strong> (Google research)</li>
-<li><strong>Cold starts hit first-time visitors hardest</strong> — the worst possible impression for someone trying your app for the first time</li>
+<li><strong>Cold starts hit first-time visitors hardest</strong> – the worst possible impression for someone trying your app for the first time</li>
 <li><strong>Google uses Core Web Vitals (including Time to First Byte) as a ranking factor</strong></li>
 </ul>''',
         "how": '''<p><strong>For cold starts:</strong></p>
@@ -904,23 +904,23 @@ respond @dotfiles 404</pre>
 </ol>
 <p><strong>For slow responses:</strong></p>
 <ol>
-<li>Check your server's region — deploy in the same region as most of your users</li>
-<li>Profile slow database queries — add indexes for common query patterns</li>
+<li>Check your server's region – deploy in the same region as most of your users</li>
+<li>Profile slow database queries – add indexes for common query patterns</li>
 <li>Move heavy computations out of the request path into background jobs</li>
 <li>Add a CDN (Cloudflare) in front of your origin server</li>
 </ol>''',
         "providers": '''<table class="provider-table">
 <tr><th>Platform</th><th>Always-on option</th></tr>
-<tr><td>Railway</td><td>Hobby plan ($5/mo) — no sleep</td></tr>
-<tr><td>Render</td><td>Starter plan ($7/mo) — no sleep</td></tr>
-<tr><td>Fly.io</td><td>Paid machines — always running</td></tr>
-<tr><td>Vercel</td><td>Serverless — no cold starts on paid; edge functions always fast</td></tr>
+<tr><td>Railway</td><td>Hobby plan ($5/mo) – no sleep</td></tr>
+<tr><td>Render</td><td>Starter plan ($7/mo) – no sleep</td></tr>
+<tr><td>Fly.io</td><td>Paid machines – always running</td></tr>
+<tr><td>Vercel</td><td>Serverless – no cold starts on paid; edge functions always fast</td></tr>
 </table>
 <p><strong>Keep-alive ping services (free):</strong></p>
 <ul>
-<li><strong>BetterStack</strong> — uptimerobot.com — ping every 5 mins, free tier</li>
-<li><strong>cron-job.org</strong> — HTTP cron job, free</li>
-<li><strong>GitHub Actions</strong> — scheduled workflow that hits your health endpoint</li>
+<li><strong>BetterStack</strong> – uptimerobot.com – ping every 5 mins, free tier</li>
+<li><strong>cron-job.org</strong> – HTTP cron job, free</li>
+<li><strong>GitHub Actions</strong> – scheduled workflow that hits your health endpoint</li>
 </ul>''',
     },
     "compression": {
@@ -931,28 +931,28 @@ respond @dotfiles 404</pre>
         "description": "Enabling gzip or Brotli compression reduces page size by 60-80% at zero cost. Learn how to enable it in Nginx, Express, FastAPI, and on Cloudflare.",
         "category": "Performance",
         "how_steps": [
-            "Check if compression is already enabled: curl -H 'Accept-Encoding: gzip' -I https://yourdomain.com — look for Content-Encoding: gzip in the response.",
-            "If using Cloudflare, Vercel, or Netlify — compression is enabled automatically, no action needed.",
+            "Check if compression is already enabled: curl -H 'Accept-Encoding: gzip' -I https://yourdomain.com – look for Content-Encoding: gzip in the response.",
+            "If using Cloudflare, Vercel, or Netlify – compression is enabled automatically, no action needed.",
             "For Nginx: add gzip on; and gzip_types for html/css/js/json to your server config.",
             "For Express/Node: install the compression package and add app.use(require('compression')()) before your routes.",
             "For FastAPI/uvicorn: add GZipMiddleware from starlette.middleware.gzip.",
             "Redeploy and verify: the Content-Encoding: gzip header should appear on responses.",
         ],
     
-        "what": '''<p>HTTP compression compresses your server's responses before sending them over the wire. The browser decompresses them automatically. A 200KB HTML file compresses to ~40KB with gzip, and ~30KB with Brotli — making your pages 5-6x faster to transfer.</p>
+        "what": '''<p>HTTP compression compresses your server's responses before sending them over the wire. The browser decompresses them automatically. A 200KB HTML file compresses to ~40KB with gzip, and ~30KB with Brotli – making your pages 5-6x faster to transfer.</p>
 <p>Your server indicates compression with the <code>Content-Encoding</code> header:</p>
 <pre>Content-Encoding: gzip
 Content-Encoding: br</pre>''',
         "why": '''<ul>
-<li><strong>60-80% reduction in transfer size</strong> — free performance improvement with no code changes</li>
-<li><strong>Faster page loads on all connections</strong> — especially important for mobile users on slower connections</li>
+<li><strong>60-80% reduction in transfer size</strong> – free performance improvement with no code changes</li>
+<li><strong>Faster page loads on all connections</strong> – especially important for mobile users on slower connections</li>
 <li><strong>Lower bandwidth costs</strong> if you're paying for egress</li>
 <li><strong>Better Core Web Vitals scores</strong> → better SEO rankings</li>
 </ul>''',
         "how": '''<p>How to enable depends on your server:</p>''',
         "providers": '''<table class="provider-table">
 <tr><th>Platform/Server</th><th>How to enable compression</th></tr>
-<tr><td>Cloudflare</td><td>Enabled automatically for HTML, CSS, JS — no action needed</td></tr>
+<tr><td>Cloudflare</td><td>Enabled automatically for HTML, CSS, JS – no action needed</td></tr>
 <tr><td>Vercel</td><td>Enabled automatically</td></tr>
 <tr><td>Netlify</td><td>Enabled automatically</td></tr>
 <tr><td>Nginx</td><td><pre>gzip on;
@@ -968,32 +968,32 @@ app.add_middleware(GZipMiddleware, minimum_size=1000)</pre></td></tr>
     "mixed-content": {
         "title": "Mixed Content",
         "severity": "high",
-        "summary": "HTTP resources on an HTTPS page are silently blocked by browsers — images don't show, scripts don't run.",
+        "summary": "HTTP resources on an HTTPS page are silently blocked by browsers – images don't show, scripts don't run.",
         "seo_title": "Mixed Content Errors: Fix HTTP Resources on HTTPS Pages (2026) | didyouship.com",
-        "description": "HTTP resources on an HTTPS page are silently blocked by browsers — images don't show, scripts don't run. Learn how to find and fix mixed content.",
+        "description": "HTTP resources on an HTTPS page are silently blocked by browsers – images don't show, scripts don't run. Learn how to find and fix mixed content.",
         "category": "Breakage",
         "how_steps": [
             "Open Chrome DevTools (F12) → Console tab and look for 'Mixed Content' warnings.",
             "Find all http:// resource URLs in your HTML, CSS, and JavaScript files.",
-            "Change each http:// resource URL to https:// — most CDNs and services support HTTPS.",
+            "Change each http:// resource URL to https:// – most CDNs and services support HTTPS.",
             "For resources that don't support HTTPS, download and self-host them.",
             "Add a Content-Security-Policy header with upgrade-insecure-requests to auto-upgrade any remaining HTTP resources.",
             "Re-check the Console after deploying to confirm no mixed content warnings remain.",
         ],
     
-        "what": '''<p>Mixed content is when an HTTPS page loads resources (images, scripts, stylesheets, fonts) over plain HTTP. Browsers block these resources as a security measure — an HTTP resource on an HTTPS page could be intercepted and modified by an attacker.</p>
+        "what": '''<p>Mixed content is when an HTTPS page loads resources (images, scripts, stylesheets, fonts) over plain HTTP. Browsers block these resources as a security measure – an HTTP resource on an HTTPS page could be intercepted and modified by an attacker.</p>
 <p>This commonly happens with hardcoded HTTP URLs in old code:</p>
 <pre>&lt;img src="http://cdn.example.com/logo.png"&gt;  &lt;!-- blocked --&gt;
 &lt;script src="http://cdn.example.com/app.js"&gt;&lt;/script&gt;  &lt;!-- blocked --&gt;</pre>''',
         "why": '''<ul>
-<li><strong>Resources are silently blocked</strong> — no visible error, images just don't appear, scripts don't run</li>
-<li><strong>You won't know unless you check the browser console</strong> — users don't see an error message, just broken functionality</li>
-<li><strong>Scripts that don't load can break your entire app</strong> — if a framework dependency loads over HTTP, nothing works</li>
+<li><strong>Resources are silently blocked</strong> – no visible error, images just don't appear, scripts don't run</li>
+<li><strong>You won't know unless you check the browser console</strong> – users don't see an error message, just broken functionality</li>
+<li><strong>Scripts that don't load can break your entire app</strong> – if a framework dependency loads over HTTP, nothing works</li>
 </ul>''',
         "how": '''<ol>
-<li>Open Chrome DevTools → Console — look for "Mixed Content" warnings</li>
+<li>Open Chrome DevTools → Console – look for "Mixed Content" warnings</li>
 <li>Find all <code>http://</code> URLs in your HTML, CSS, and JavaScript</li>
-<li>Change them to <code>https://</code> — most CDNs and services support HTTPS</li>
+<li>Change them to <code>https://</code> – most CDNs and services support HTTPS</li>
 <li>For third-party resources that don't support HTTPS, host them yourself or find an alternative</li>
 </ol>
 <p>You can also add this to your HTML head to automatically upgrade HTTP resources to HTTPS:</p>
@@ -1003,7 +1003,7 @@ app.add_middleware(GZipMiddleware, minimum_size=1000)</pre></td></tr>
 <ul>
 <li>Chrome DevTools → Console → filter by "Mixed Content"</li>
 <li><code>grep -r "http://" src/</code> in your project (excluding http://localhost)</li>
-<li>whynopadlock.com — scan a URL for mixed content issues</li>
+<li>whynopadlock.com – scan a URL for mixed content issues</li>
 </ul>''',
     },
     "custom-404": {
@@ -1018,7 +1018,7 @@ app.add_middleware(GZipMiddleware, minimum_size=1000)</pre></td></tr>
             "Include your site's header and navigation so users can easily find their way back.",
             "Add a clear heading ('Page not found'), a short explanation, and a link back to the homepage.",
             "Optionally add links to your most popular pages or a search box.",
-            "Test by visiting a URL that doesn't exist on your site — the custom 404 page should appear.",
+            "Test by visiting a URL that doesn't exist on your site – the custom 404 page should appear.",
         ],
     
         "what": '''<p>A 404 page is shown when someone visits a URL that doesn't exist on your site. By default, most frameworks and servers show a minimal error message like "Cannot GET /path" or a blank page. A custom 404 page:</p>
@@ -1029,11 +1029,11 @@ app.add_middleware(GZipMiddleware, minimum_size=1000)</pre></td></tr>
 <li>Optionally offers a search box or popular links</li>
 </ul>''',
         "why": '''<ul>
-<li><strong>Users who hit broken links give up without a custom 404</strong> — they see an error and close the tab</li>
-<li><strong>A good 404 page recovers the visit</strong> — a link back home or a search box keeps users engaged</li>
+<li><strong>Users who hit broken links give up without a custom 404</strong> – they see an error and close the tab</li>
+<li><strong>A good 404 page recovers the visit</strong> – a link back home or a search box keeps users engaged</li>
 <li><strong>Looks unprofessional without one.</strong> A bare "Not Found" error signals an unfinished product</li>
 </ul>''',
-        "how": '''<p>Create a 404 page in your framework — it's usually just a file in the right location:</p>''',
+        "how": '''<p>Create a 404 page in your framework – it's usually just a file in the right location:</p>''',
         "providers": '''<table class="provider-table">
 <tr><th>Framework</th><th>Where to create 404 page</th></tr>
 <tr><td>Next.js App Router</td><td><code>app/not-found.js</code></td></tr>

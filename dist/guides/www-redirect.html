@@ -16,7 +16,7 @@
 <meta name="twitter:title" content="www Subdomain Not Working: Set Up www Redirect for SEO (2026) | didyouship.com">
 <meta name="twitter:description" content="www.yourdomain.com not working or both serving content? You're splitting your SEO rankings. Learn how to set up a 301 redirect correctly.">
 <meta name="twitter:image" content="https://didyouship.com/static/og.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: www Subdomain Not Working: Set Up www Redirect for SEO (2026)", "description": "www.yourdomain.com not working or both serving content? You're splitting your SEO rankings. Learn how to set up a 301 redirect correctly.", "step": [{"@type": "HowToStep", "text": "Decide on your canonical domain \u2014 either yourdomain.com (apex) or www.yourdomain.com.", "position": 1}, {"@type": "HowToStep", "text": "In your DNS settings, add a CNAME record for www pointing to your apex domain or hosting provider.", "position": 2}, {"@type": "HowToStep", "text": "Configure a 301 redirect from the non-canonical version to the canonical one.", "position": 3}, {"@type": "HowToStep", "text": "In Cloudflare: Rules \u2192 Redirect Rules \u2192 match www.domain.com/* \u2192 301 to https://domain.com/$1.", "position": 4}, {"@type": "HowToStep", "text": "Verify both versions work: one should redirect to the other with a 301 status code.", "position": 5}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: www Subdomain Not Working: Set Up www Redirect for SEO (2026)", "description": "www.yourdomain.com not working or both serving content? You're splitting your SEO rankings. Learn how to set up a 301 redirect correctly.", "step": [{"@type": "HowToStep", "text": "Decide on your canonical domain \u2013 either yourdomain.com (apex) or www.yourdomain.com.", "position": 1}, {"@type": "HowToStep", "text": "In your DNS settings, add a CNAME record for www pointing to your apex domain or hosting provider.", "position": 2}, {"@type": "HowToStep", "text": "Configure a 301 redirect from the non-canonical version to the canonical one.", "position": 3}, {"@type": "HowToStep", "text": "In Cloudflare: Rules \u2192 Redirect Rules \u2192 match www.domain.com/* \u2192 301 to https://domain.com/$1.", "position": 4}, {"@type": "HowToStep", "text": "Verify both versions work: one should redirect to the other with a 301 status code.", "position": 5}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://didyouship.com"}, {"@type": "ListItem", "position": 2, "name": "DNS", "item": "https://didyouship.com/guides/www-redirect"}]}</script>
 <meta name="theme-color" content="#0c0c0e">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
@@ -290,7 +290,7 @@ a:hover { text-decoration: underline; }
     <div class="guide-header">
       <div class="guide-cat">DNS</div>
       <h1 class="guide-title">www Subdomain & Redirect</h1>
-      <p class="guide-summary">www.yourdomain.com should either work (and redirect to the apex) or not exist — having both serve independent content splits your SEO.</p>
+      <p class="guide-summary">www.yourdomain.com should either work (and redirect to the apex) or not exist – having both serve independent content splits your SEO.</p>
       <span class="sev-badge high">high severity</span>
     </div>
 
@@ -299,10 +299,10 @@ a:hover { text-decoration: underline; }
       <h2 class="section-label">What is this?</h2>
       <p>There are two common problems with <code>www</code>:</p>
 <ol>
-<li><strong>www doesn't resolve at all</strong> — users who type <code>www.yourdomain.com</code> get a connection error</li>
-<li><strong>Both www and the apex domain serve content</strong> — Google treats them as two separate websites, splitting PageRank</li>
+<li><strong>www doesn't resolve at all</strong> – users who type <code>www.yourdomain.com</code> get a connection error</li>
+<li><strong>Both www and the apex domain serve content</strong> – Google treats them as two separate websites, splitting PageRank</li>
 </ol>
-<p>The right setup: pick one canonical domain (most apps use the apex — <code>yourdomain.com</code>), and have the other redirect to it with a 301.</p>
+<p>The right setup: pick one canonical domain (most apps use the apex – <code>yourdomain.com</code>), and have the other redirect to it with a 301.</p>
     </div>
     
 
@@ -321,7 +321,7 @@ a:hover { text-decoration: underline; }
     <div class="section">
       <h2 class="section-label">How to fix it</h2>
       <ol>
-<li>Decide which is canonical: <code>yourdomain.com</code> (apex) or <code>www.yourdomain.com</code> — most modern sites use the apex</li>
+<li>Decide which is canonical: <code>yourdomain.com</code> (apex) or <code>www.yourdomain.com</code> – most modern sites use the apex</li>
 <li>Add a CNAME record for <code>www</code> pointing to your apex (or your host's redirect service)</li>
 <li>Configure a 301 redirect from the non-canonical version to the canonical one</li>
 </ol>

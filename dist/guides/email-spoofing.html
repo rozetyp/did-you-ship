@@ -16,7 +16,7 @@
 <meta name="twitter:title" content="Email Spoofing Protection: SPF, DKIM and DMARC Explained (2026) | didyouship.com">
 <meta name="twitter:description" content="Without SPF, DKIM, and DMARC, anyone can send email pretending to be from your domain. Learn how all three work and how to set them up.">
 <meta name="twitter:image" content="https://didyouship.com/static/og.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: Email Spoofing Protection: SPF, DKIM and DMARC Explained (2026)", "description": "Without SPF, DKIM, and DMARC, anyone can send email pretending to be from your domain. Learn how all three work and how to set them up.", "step": [{"@type": "HowToStep", "text": "Add an SPF record \u2014 TXT record at your root domain listing your authorised sending services.", "position": 1}, {"@type": "HowToStep", "text": "Enable DKIM signing in your email provider dashboard and add the DNS record they give you.", "position": 2}, {"@type": "HowToStep", "text": "Add a DMARC record at _dmarc.yourdomain.com with p=quarantine or p=reject.", "position": 3}, {"@type": "HowToStep", "text": "Monitor DMARC reports for a week to confirm no legitimate email is being rejected.", "position": 4}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: Email Spoofing Protection: SPF, DKIM and DMARC Explained (2026)", "description": "Without SPF, DKIM, and DMARC, anyone can send email pretending to be from your domain. Learn how all three work and how to set them up.", "step": [{"@type": "HowToStep", "text": "Add an SPF record \u2013 TXT record at your root domain listing your authorised sending services.", "position": 1}, {"@type": "HowToStep", "text": "Enable DKIM signing in your email provider dashboard and add the DNS record they give you.", "position": 2}, {"@type": "HowToStep", "text": "Add a DMARC record at _dmarc.yourdomain.com with p=quarantine or p=reject.", "position": 3}, {"@type": "HowToStep", "text": "Monitor DMARC reports for a week to confirm no legitimate email is being rejected.", "position": 4}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://didyouship.com"}, {"@type": "ListItem", "position": 2, "name": "Email Deliverability", "item": "https://didyouship.com/guides/email-spoofing"}]}</script>
 <meta name="theme-color" content="#0c0c0e">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
@@ -297,12 +297,12 @@ a:hover { text-decoration: underline; }
     
     <div class="section">
       <h2 class="section-label">What is this?</h2>
-      <p>Email spoofing is when someone sends an email that looks like it's from your domain — but isn't. It's trivially easy to do: email's core protocol (SMTP) doesn't verify the sender by default. Without additional protections, anyone can claim to be from you@yourdomain.com.</p>
+      <p>Email spoofing is when someone sends an email that looks like it's from your domain – but isn't. It's trivially easy to do: email's core protocol (SMTP) doesn't verify the sender by default. Without additional protections, anyone can claim to be from you@yourdomain.com.</p>
 <p>The three defenses work together:</p>
 <ul>
-<li><strong>SPF</strong> — lists which servers are allowed to send as you</li>
-<li><strong>DKIM</strong> — adds a cryptographic signature to emails from your authorized servers</li>
-<li><strong>DMARC</strong> — tells receivers what to do when email fails SPF or DKIM, and sends you reports</li>
+<li><strong>SPF</strong> – lists which servers are allowed to send as you</li>
+<li><strong>DKIM</strong> – adds a cryptographic signature to emails from your authorized servers</li>
+<li><strong>DMARC</strong> – tells receivers what to do when email fails SPF or DKIM, and sends you reports</li>
 </ul>
     </div>
     
@@ -313,7 +313,7 @@ a:hover { text-decoration: underline; }
       <p>Spoofed emails from your domain can:</p>
 <ul>
 <li>Send phishing emails to your customers, tricking them into giving up passwords or payment details</li>
-<li>Damage your brand reputation — users get suspicious emails "from you" and lose trust</li>
+<li>Damage your brand reputation – users get suspicious emails "from you" and lose trust</li>
 <li>Get your domain blacklisted, affecting your own email deliverability</li>
 <li>Be used in business email compromise (BEC) attacks, one of the most costly types of cybercrime</li>
 </ul>
@@ -324,9 +324,9 @@ a:hover { text-decoration: underline; }
     <div class="section">
       <h2 class="section-label">How to fix it</h2>
       <ol>
-<li><strong>Add an SPF record</strong> — TXT record at your root domain listing your sending services</li>
-<li><strong>Enable DKIM</strong> — in your email provider dashboard; they'll give you a TXT record to add</li>
-<li><strong>Add a DMARC record</strong> — TXT record at <code>_dmarc.yourdomain.com</code> with <code>p=quarantine</code> or <code>p=reject</code></li>
+<li><strong>Add an SPF record</strong> – TXT record at your root domain listing your sending services</li>
+<li><strong>Enable DKIM</strong> – in your email provider dashboard; they'll give you a TXT record to add</li>
+<li><strong>Add a DMARC record</strong> – TXT record at <code>_dmarc.yourdomain.com</code> with <code>p=quarantine</code> or <code>p=reject</code></li>
 </ol>
 <p>In order of priority: DMARC first (biggest impact), then SPF, then DKIM. All three together give complete protection.</p>
     </div>

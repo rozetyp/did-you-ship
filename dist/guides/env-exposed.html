@@ -16,7 +16,7 @@
 <meta name="twitter:title" content=".env File Exposed: How to Secure Your Environment Variables (2026) | didyouship.com">
 <meta name="twitter:description" content="A publicly accessible .env file exposes your database passwords and API keys to anyone. Learn how to fix it immediately and rotate compromised credentials.">
 <meta name="twitter:image" content="https://didyouship.com/static/og.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: .env File Exposed: How to Secure Your Environment Variables (2026)", "description": "A publicly accessible .env file exposes your database passwords and API keys to anyone. Learn how to fix it immediately and rotate compromised credentials.", "step": [{"@type": "HowToStep", "text": "Immediately rotate all credentials in your .env \u2014 assume they have been compromised.", "position": 1}, {"@type": "HowToStep", "text": "Revoke and reissue: database passwords, API keys, OAuth secrets, and any other secrets in the file.", "position": 2}, {"@type": "HowToStep", "text": "Fix your deployment configuration to serve only the build output folder (e.g. .next/, dist/, build/), not the project root.", "position": 3}, {"@type": "HowToStep", "text": "In Vercel or Netlify, check your project's Output Directory setting in the dashboard.", "position": 4}, {"@type": "HowToStep", "text": "Verify the fix: visit yourdomain.com/.env in a browser \u2014 it should return a 404.", "position": 5}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HowTo", "name": "How to fix: .env File Exposed: How to Secure Your Environment Variables (2026)", "description": "A publicly accessible .env file exposes your database passwords and API keys to anyone. Learn how to fix it immediately and rotate compromised credentials.", "step": [{"@type": "HowToStep", "text": "Immediately rotate all credentials in your .env \u2013 assume they have been compromised.", "position": 1}, {"@type": "HowToStep", "text": "Revoke and reissue: database passwords, API keys, OAuth secrets, and any other secrets in the file.", "position": 2}, {"@type": "HowToStep", "text": "Fix your deployment configuration to serve only the build output folder (e.g. .next/, dist/, build/), not the project root.", "position": 3}, {"@type": "HowToStep", "text": "In Vercel or Netlify, check your project's Output Directory setting in the dashboard.", "position": 4}, {"@type": "HowToStep", "text": "Verify the fix: visit yourdomain.com/.env in a browser \u2013 it should return a 404.", "position": 5}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://didyouship.com"}, {"@type": "ListItem", "position": 2, "name": "Exposed Secrets", "item": "https://didyouship.com/guides/env-exposed"}]}</script>
 <meta name="theme-color" content="#0c0c0e">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
@@ -290,14 +290,14 @@ a:hover { text-decoration: underline; }
     <div class="guide-header">
       <div class="guide-cat">Exposed Secrets</div>
       <h1 class="guide-title">.env File Exposed</h1>
-      <p class="guide-summary">Your .env file is publicly accessible — anyone can read your database passwords, API keys, and other secrets.</p>
+      <p class="guide-summary">Your .env file is publicly accessible – anyone can read your database passwords, API keys, and other secrets.</p>
       <span class="sev-badge critical">critical severity</span>
     </div>
 
     
     <div class="section">
       <h2 class="section-label">What is this?</h2>
-      <p>A <code>.env</code> file is where most apps store sensitive configuration: database credentials, API keys, payment processor secrets, OAuth tokens. It's meant to live on your server only — never served to the web. When your deployment accidentally serves your project root directory (instead of just the build output), <code>/.env</code> becomes publicly accessible to anyone who asks for it.</p>
+      <p>A <code>.env</code> file is where most apps store sensitive configuration: database credentials, API keys, payment processor secrets, OAuth tokens. It's meant to live on your server only – never served to the web. When your deployment accidentally serves your project root directory (instead of just the build output), <code>/.env</code> becomes publicly accessible to anyone who asks for it.</p>
 <p>Automated bots scan millions of domains daily looking for exposed .env files. Once found, credentials are extracted and exploited within minutes.</p>
     </div>
     
@@ -306,10 +306,10 @@ a:hover { text-decoration: underline; }
     <div class="section">
       <h2 class="section-label">Why it matters</h2>
       <ul>
-<li><strong>Database breach</strong> — your full user database, including passwords, emails, and payment data, can be extracted</li>
-<li><strong>API key abuse</strong> — your OpenAI, Stripe, AWS, or other service keys are used to run up charges or steal data</li>
-<li><strong>Complete account takeover</strong> — any service credential in your .env can be used immediately</li>
-<li><strong>Automated exploitation</strong> — this happens within minutes of exposure, not hours</li>
+<li><strong>Database breach</strong> – your full user database, including passwords, emails, and payment data, can be extracted</li>
+<li><strong>API key abuse</strong> – your OpenAI, Stripe, AWS, or other service keys are used to run up charges or steal data</li>
+<li><strong>Complete account takeover</strong> – any service credential in your .env can be used immediately</li>
+<li><strong>Automated exploitation</strong> – this happens within minutes of exposure, not hours</li>
 </ul>
     </div>
     
@@ -318,7 +318,7 @@ a:hover { text-decoration: underline; }
     <div class="section">
       <h2 class="section-label">How to fix it</h2>
       <ol>
-<li><strong>Immediately rotate all credentials</strong> in your .env — assume they've been compromised</li>
+<li><strong>Immediately rotate all credentials</strong> in your .env – assume they've been compromised</li>
 <li>Fix your deployment to serve only the build output folder:</li>
 </ol>
     </div>
@@ -329,8 +329,8 @@ a:hover { text-decoration: underline; }
       <h2 class="section-label">Providers &amp; tools</h2>
       <table class="provider-table">
 <tr><th>Framework</th><th>Build output directory</th></tr>
-<tr><td>Next.js</td><td><code>.next/</code> — Vercel/Netlify handle this automatically</td></tr>
-<tr><td>Vite / React</td><td><code>dist/</code> — set this as your publish directory</td></tr>
+<tr><td>Next.js</td><td><code>.next/</code> – Vercel/Netlify handle this automatically</td></tr>
+<tr><td>Vite / React</td><td><code>dist/</code> – set this as your publish directory</td></tr>
 <tr><td>Create React App</td><td><code>build/</code></td></tr>
 <tr><td>Astro</td><td><code>dist/</code></td></tr>
 <tr><td>Hugo</td><td><code>public/</code></td></tr>

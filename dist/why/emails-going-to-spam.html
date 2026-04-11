@@ -16,7 +16,7 @@
 <meta name="twitter:title" content="Why Are My Emails Going to Spam? 5 Causes & Fixes (2026) | didyouship.com">
 <meta name="twitter:description" content="Emails landing in spam? Missing SPF, DKIM, or DMARC records are the most common causes. Learn why each one matters and how to fix your email deliverability.">
 <meta name="twitter:image" content="https://didyouship.com/static/og.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why do my emails work fine from Gmail but not from my app?", "acceptedAnswer": {"@type": "Answer", "text": "When you send from Gmail, Google handles all email authentication for you automatically. When your app sends email (password resets, notifications, invoices), it sends directly from your domain and needs SPF, DKIM, and DMARC configured for your specific sending service (Resend, Postmark, SendGrid, etc.). These are separate configurations."}}, {"@type": "Question", "name": "Why are my password reset emails going to spam?", "acceptedAnswer": {"@type": "Answer", "text": "Transactional emails like password resets are automated bulk sends, which email providers scrutinise more heavily. Missing DKIM alone can push all transactional email to spam. Missing SPF or a blacklisted IP makes it worse. Use a dedicated transactional email service (Resend, Postmark) and set up SPF + DKIM + DMARC for guaranteed delivery."}}, {"@type": "Question", "name": "How do I test if my emails will be delivered?", "acceptedAnswer": {"@type": "Answer", "text": "Send a test email to mail-tester.com \u2014 it gives your email a score out of 10 and shows exactly what's failing. GlockApps and Mailtrap also offer inbox testing across major providers. For DNS records specifically, use mxtoolbox.com/emailhealth.aspx."}}, {"@type": "Question", "name": "How long does it take to fix email deliverability?", "acceptedAnswer": {"@type": "Answer", "text": "DNS changes (SPF, DKIM, DMARC) propagate within 0\u201348 hours. Once propagated, Gmail and Outlook apply them immediately. You should see improvement within 24\u201348 hours. Domain reputation recovery after a blacklisting can take 1\u20134 weeks. Getting delisted from Spamhaus usually takes 24\u201372 hours after submitting a removal request."}}, {"@type": "Question", "name": "Do I need all three \u2014 SPF, DKIM, and DMARC?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. SPF proves which server sent the email. DKIM proves the email content is authentic. DMARC ties them together and tells providers what to do when they fail. All three together are what Gmail and Yahoo now require for reliable delivery. Each one alone provides only partial protection."}}, {"@type": "Question", "name": "My emails were landing in inboxes before \u2014 why did they suddenly start going to spam?", "acceptedAnswer": {"@type": "Answer", "text": "Common causes: your sending IP got blacklisted (especially on shared hosting), a spike in complaint rates flagged your domain, your DNS records were accidentally changed or expired, or your email provider changed something in their infrastructure. Check your DMARC reports for authentication failures and mxtoolbox.com for blacklist status."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why do my emails work fine from Gmail but not from my app?", "acceptedAnswer": {"@type": "Answer", "text": "When you send from Gmail, Google handles all email authentication for you automatically. When your app sends email (password resets, notifications, invoices), it sends directly from your domain and needs SPF, DKIM, and DMARC configured for your specific sending service (Resend, Postmark, SendGrid, etc.). These are separate configurations."}}, {"@type": "Question", "name": "Why are my password reset emails going to spam?", "acceptedAnswer": {"@type": "Answer", "text": "Transactional emails like password resets are automated bulk sends, which email providers scrutinise more heavily. Missing DKIM alone can push all transactional email to spam. Missing SPF or a blacklisted IP makes it worse. Use a dedicated transactional email service (Resend, Postmark) and set up SPF + DKIM + DMARC for guaranteed delivery."}}, {"@type": "Question", "name": "How do I test if my emails will be delivered?", "acceptedAnswer": {"@type": "Answer", "text": "Send a test email to mail-tester.com \u2013 it gives your email a score out of 10 and shows exactly what's failing. GlockApps and Mailtrap also offer inbox testing across major providers. For DNS records specifically, use mxtoolbox.com/emailhealth.aspx."}}, {"@type": "Question", "name": "How long does it take to fix email deliverability?", "acceptedAnswer": {"@type": "Answer", "text": "DNS changes (SPF, DKIM, DMARC) propagate within 0\u201348 hours. Once propagated, Gmail and Outlook apply them immediately. You should see improvement within 24\u201348 hours. Domain reputation recovery after a blacklisting can take 1\u20134 weeks. Getting delisted from Spamhaus usually takes 24\u201372 hours after submitting a removal request."}}, {"@type": "Question", "name": "Do I need all three \u2013 SPF, DKIM, and DMARC?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. SPF proves which server sent the email. DKIM proves the email content is authentic. DMARC ties them together and tells providers what to do when they fail. All three together are what Gmail and Yahoo now require for reliable delivery. Each one alone provides only partial protection."}}, {"@type": "Question", "name": "My emails were landing in inboxes before \u2013 why did they suddenly start going to spam?", "acceptedAnswer": {"@type": "Answer", "text": "Common causes: your sending IP got blacklisted (especially on shared hosting), a spike in complaint rates flagged your domain, your DNS records were accidentally changed or expired, or your email provider changed something in their infrastructure. Check your DMARC reports for authentication failures and mxtoolbox.com for blacklist status."}}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Why Are Your Emails Going to Spam?", "description": "Emails landing in spam? Missing SPF, DKIM, or DMARC records are the most common causes. Learn why each one matters and how to fix your email deliverability.", "url": "https://didyouship.com/why/emails-going-to-spam", "publisher": {"@type": "Organization", "name": "didyouship.com", "url": "https://didyouship.com"}}</script>
 <meta name="theme-color" content="#0c0c0e">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
@@ -203,7 +203,7 @@ details[open] summary::after { content: '−'; }
   </nav>
 
   <h1>Why Are Your Emails Going to Spam?</h1>
-  <p class="intro">If your signup confirmations, password resets, or invoices are landing in spam — or worse, never arriving at all — it's almost always a DNS configuration problem, not a code problem. Here are the most common causes, in order of impact.</p>
+  <p class="intro">If your signup confirmations, password resets, or invoices are landing in spam – or worse, never arriving at all – it's almost always a DNS configuration problem, not a code problem. Here are the most common causes, in order of impact.</p>
 
   <!-- Causes -->
   <h2 class="section-heading">Why this happens</h2>
@@ -212,7 +212,7 @@ details[open] summary::after { content: '−'; }
     <div class="cause">
       <div class="cause-top">
         <span class="sev critical">critical</span>
-        <h3>No SPF record — email providers can't verify you're the sender</h3>
+        <h3>No SPF record – email providers can't verify you're the sender</h3>
       </div>
       <p>SPF is a DNS record listing which servers are authorised to send email from your domain. Without it, Gmail and Outlook see email from your domain as unverified and apply aggressive spam filtering. Setting it up is a single DNS record change.</p>
       <a class="cause-link" href="/guides/spf-record">How to Add an SPF Record →</a>
@@ -221,7 +221,7 @@ details[open] summary::after { content: '−'; }
     <div class="cause">
       <div class="cause-top">
         <span class="sev critical">critical</span>
-        <h3>No DMARC record — your domain has no email policy</h3>
+        <h3>No DMARC record – your domain has no email policy</h3>
       </div>
       <p>DMARC tells email providers what to do when they receive email from your domain that fails SPF or DKIM checks. Without DMARC, providers give your domain lower trust scores. Gmail and Yahoo have required DMARC since 2024 for reliable inbox delivery.</p>
       <a class="cause-link" href="/guides/dmarc">How to Add a DMARC Record →</a>
@@ -230,9 +230,9 @@ details[open] summary::after { content: '−'; }
     <div class="cause">
       <div class="cause-top">
         <span class="sev high">high</span>
-        <h3>DKIM not configured — emails have no cryptographic signature</h3>
+        <h3>DKIM not configured – emails have no cryptographic signature</h3>
       </div>
-      <p>DKIM adds a digital signature to every email you send, proving it came from your authorised server and wasn't tampered with in transit. Without DKIM, Gmail can't cryptographically verify your email is genuine — even if SPF passes.</p>
+      <p>DKIM adds a digital signature to every email you send, proving it came from your authorised server and wasn't tampered with in transit. Without DKIM, Gmail can't cryptographically verify your email is genuine – even if SPF passes.</p>
       <a class="cause-link" href="/guides/dkim-setup">How to Set Up DKIM →</a>
     </div>
     
@@ -241,7 +241,7 @@ details[open] summary::after { content: '−'; }
         <span class="sev critical">critical</span>
         <h3>Mail server IP is blacklisted</h3>
       </div>
-      <p>Email providers check real-time blacklists (Spamhaus, Barracuda, SpamCop) before accepting mail. If your server's IP is listed — which often happens on shared hosting — every email you send is silently dropped or spam-foldered. No error, no bounce, just silence.</p>
+      <p>Email providers check real-time blacklists (Spamhaus, Barracuda, SpamCop) before accepting mail. If your server's IP is listed – which often happens on shared hosting – every email you send is silently dropped or spam-foldered. No error, no bounce, just silence.</p>
       <a class="cause-link" href="/guides/ip-blacklisted">How to Check and Fix a Blacklisted IP →</a>
     </div>
     
@@ -257,7 +257,7 @@ details[open] summary::after { content: '−'; }
     <div class="cause">
       <div class="cause-top">
         <span class="sev critical">critical</span>
-        <h3>No spoofing protection — anyone can send email as your domain</h3>
+        <h3>No spoofing protection – anyone can send email as your domain</h3>
       </div>
       <p>Without SPF, DKIM, and DMARC working together, phishing emails can be sent from your domain and delivered to your customers' inboxes. This damages your brand and gets your domain permanently blacklisted by major providers.</p>
       <a class="cause-link" href="/guides/email-spoofing">How to Prevent Email Spoofing →</a>
@@ -266,7 +266,7 @@ details[open] summary::after { content: '−'; }
     <div class="cause">
       <div class="cause-top">
         <span class="sev high">high</span>
-        <h3>General email deliverability issues — multiple factors affecting inbox placement</h3>
+        <h3>General email deliverability issues – multiple factors affecting inbox placement</h3>
       </div>
       <p>Email deliverability depends on more than just SPF and DKIM. Sender reputation, IP warming, list hygiene, complaint rates, and sending infrastructure all contribute to inbox placement. If you're passing authentication checks but still landing in spam, dig deeper.</p>
       <a class="cause-link" href="/guides/email-deliverability">Full Email Deliverability Guide →</a>
@@ -277,7 +277,7 @@ details[open] summary::after { content: '−'; }
   <!-- Scan CTA -->
   <div class="cta-block">
     <p><strong>Not sure which of these apply to your domain?</strong><br>
-    Run a free scan — 26 checks in under 10 seconds.</p>
+    Run a free scan – 26 checks in under 10 seconds.</p>
     <form class="cta-input-row" onsubmit="window.location.href='/?'+encodeURIComponent(this.querySelector('input').value.trim());return false;">
       <input type="text" placeholder="yourdomain.com" autocapitalize="none" autocorrect="off" spellcheck="false">
       <button type="submit">Scan</button>
@@ -301,7 +301,7 @@ details[open] summary::after { content: '−'; }
     
     <details>
       <summary>How do I test if my emails will be delivered?</summary>
-      <div class="faq-answer">Send a test email to mail-tester.com — it gives your email a score out of 10 and shows exactly what's failing. GlockApps and Mailtrap also offer inbox testing across major providers. For DNS records specifically, use mxtoolbox.com/emailhealth.aspx.</div>
+      <div class="faq-answer">Send a test email to mail-tester.com – it gives your email a score out of 10 and shows exactly what's failing. GlockApps and Mailtrap also offer inbox testing across major providers. For DNS records specifically, use mxtoolbox.com/emailhealth.aspx.</div>
     </details>
     
     <details>
@@ -310,12 +310,12 @@ details[open] summary::after { content: '−'; }
     </details>
     
     <details>
-      <summary>Do I need all three — SPF, DKIM, and DMARC?</summary>
+      <summary>Do I need all three – SPF, DKIM, and DMARC?</summary>
       <div class="faq-answer">Yes. SPF proves which server sent the email. DKIM proves the email content is authentic. DMARC ties them together and tells providers what to do when they fail. All three together are what Gmail and Yahoo now require for reliable delivery. Each one alone provides only partial protection.</div>
     </details>
     
     <details>
-      <summary>My emails were landing in inboxes before — why did they suddenly start going to spam?</summary>
+      <summary>My emails were landing in inboxes before – why did they suddenly start going to spam?</summary>
       <div class="faq-answer">Common causes: your sending IP got blacklisted (especially on shared hosting), a spike in complaint rates flagged your domain, your DNS records were accidentally changed or expired, or your email provider changed something in their infrastructure. Check your DMARC reports for authentication failures and mxtoolbox.com for blacklist status.</div>
     </details>
     

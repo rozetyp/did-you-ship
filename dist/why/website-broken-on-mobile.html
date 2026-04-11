@@ -16,7 +16,7 @@
 <meta name="twitter:title" content="Why Is My Website Broken on Mobile? How to Fix Mobile Display (2026) | didyouship.com">
 <meta name="twitter:description" content="Website looking tiny on phones or requiring pinch-zoom to read? A missing viewport meta tag is the most common cause. Learn how to fix mobile display in under 5 minutes.">
 <meta name="twitter:image" content="https://didyouship.com/static/og.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why does my site look fine on desktop but tiny and broken on mobile?", "acceptedAnswer": {"@type": "Answer", "text": "Mobile browsers default to a 980px viewport when there's no viewport meta tag, then scale the whole page down to fit the device screen \u2014 making everything tiny. Adding the viewport meta tag tells the browser to match the actual screen width. You also need responsive CSS (media queries or a framework like Tailwind) to adapt your layout for small screens."}}, {"@type": "Question", "name": "Does a broken mobile site affect Google rankings?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, significantly. Google uses mobile-first indexing \u2014 it crawls and ranks the mobile version of your site, not the desktop version. A broken mobile experience (missing viewport, tiny text, content wider than screen) is flagged in Google Search Console under Core Web Vitals and directly leads to lower rankings. Over 60% of global web traffic is from mobile."}}, {"@type": "Question", "name": "I added the viewport tag but the site still looks wrong on mobile \u2014 why?", "acceptedAnswer": {"@type": "Answer", "text": "The viewport tag is a prerequisite, but you also need responsive CSS. The tag alone tells the browser what width to use, but your CSS needs to handle different screen widths with media queries or a responsive framework. If everything is still side-scrolling, check for fixed-width elements (like width: 1200px) that are wider than the screen."}}, {"@type": "Question", "name": "How do I test my site on mobile without a real device?", "acceptedAnswer": {"@type": "Answer", "text": "Chrome DevTools has a device emulator \u2014 press F12 \u2192 click the mobile icon in the toolbar. It emulates phone screen sizes and touch events. For real-device testing at scale, BrowserStack and LambdaTest let you test on actual iOS and Android devices. Google's Mobile-Friendly Test (search.google.com/test/mobile-friendly) checks from Google's perspective."}}, {"@type": "Question", "name": "What percentage of my users are on mobile?", "acceptedAnswer": {"@type": "Answer", "text": "Globally, about 60\u201365% of web traffic is from mobile. For consumer apps, landing pages, and marketing sites, it's often higher. For developer tools and B2B SaaS, it can be lower. Check your own Google Analytics or Plausible to see your actual split \u2014 it's usually surprising how high mobile is even for 'developer' audiences."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why does my site look fine on desktop but tiny and broken on mobile?", "acceptedAnswer": {"@type": "Answer", "text": "Mobile browsers default to a 980px viewport when there's no viewport meta tag, then scale the whole page down to fit the device screen \u2013 making everything tiny. Adding the viewport meta tag tells the browser to match the actual screen width. You also need responsive CSS (media queries or a framework like Tailwind) to adapt your layout for small screens."}}, {"@type": "Question", "name": "Does a broken mobile site affect Google rankings?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, significantly. Google uses mobile-first indexing \u2013 it crawls and ranks the mobile version of your site, not the desktop version. A broken mobile experience (missing viewport, tiny text, content wider than screen) is flagged in Google Search Console under Core Web Vitals and directly leads to lower rankings. Over 60% of global web traffic is from mobile."}}, {"@type": "Question", "name": "I added the viewport tag but the site still looks wrong on mobile \u2013 why?", "acceptedAnswer": {"@type": "Answer", "text": "The viewport tag is a prerequisite, but you also need responsive CSS. The tag alone tells the browser what width to use, but your CSS needs to handle different screen widths with media queries or a responsive framework. If everything is still side-scrolling, check for fixed-width elements (like width: 1200px) that are wider than the screen."}}, {"@type": "Question", "name": "How do I test my site on mobile without a real device?", "acceptedAnswer": {"@type": "Answer", "text": "Chrome DevTools has a device emulator \u2013 press F12 \u2192 click the mobile icon in the toolbar. It emulates phone screen sizes and touch events. For real-device testing at scale, BrowserStack and LambdaTest let you test on actual iOS and Android devices. Google's Mobile-Friendly Test (search.google.com/test/mobile-friendly) checks from Google's perspective."}}, {"@type": "Question", "name": "What percentage of my users are on mobile?", "acceptedAnswer": {"@type": "Answer", "text": "Globally, about 60\u201365% of web traffic is from mobile. For consumer apps, landing pages, and marketing sites, it's often higher. For developer tools and B2B SaaS, it can be lower. Check your own Google Analytics or Plausible to see your actual split \u2013 it's usually surprising how high mobile is even for 'developer' audiences."}}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Why Is Your Website Broken on Mobile?", "description": "Website looking tiny on phones or requiring pinch-zoom to read? A missing viewport meta tag is the most common cause. Learn how to fix mobile display in under 5 minutes.", "url": "https://didyouship.com/why/website-broken-on-mobile", "publisher": {"@type": "Organization", "name": "didyouship.com", "url": "https://didyouship.com"}}</script>
 <meta name="theme-color" content="#0c0c0e">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
@@ -203,7 +203,7 @@ details[open] summary::after { content: '−'; }
   </nav>
 
   <h1>Why Is Your Website Broken on Mobile?</h1>
-  <p class="intro">If your site looks tiny on phones, renders at desktop width, or requires users to pinch-zoom to read anything — it's most likely a single missing HTML tag. Mobile devices account for over 60% of web traffic, and Google ranks the mobile version of your site first.</p>
+  <p class="intro">If your site looks tiny on phones, renders at desktop width, or requires users to pinch-zoom to read anything – it's most likely a single missing HTML tag. Mobile devices account for over 60% of web traffic, and Google ranks the mobile version of your site first.</p>
 
   <!-- Causes -->
   <h2 class="section-heading">Why this happens</h2>
@@ -212,7 +212,7 @@ details[open] summary::after { content: '−'; }
     <div class="cause">
       <div class="cause-top">
         <span class="sev high">high</span>
-        <h3>Missing viewport meta tag — site renders at desktop width on phones</h3>
+        <h3>Missing viewport meta tag – site renders at desktop width on phones</h3>
       </div>
       <p>Without the viewport meta tag, mobile browsers default to rendering your page at 980px (desktop width) and then shrink the whole page to fit the screen. Everything looks microscopic. This is the most common mobile display problem and takes 30 seconds to fix.</p>
       <a class="cause-link" href="/guides/viewport-meta">How to Add the Viewport Meta Tag →</a>
@@ -223,7 +223,7 @@ details[open] summary::after { content: '−'; }
   <!-- Scan CTA -->
   <div class="cta-block">
     <p><strong>Not sure which of these apply to your domain?</strong><br>
-    Run a free scan — 26 checks in under 10 seconds.</p>
+    Run a free scan – 26 checks in under 10 seconds.</p>
     <form class="cta-input-row" onsubmit="window.location.href='/?'+encodeURIComponent(this.querySelector('input').value.trim());return false;">
       <input type="text" placeholder="yourdomain.com" autocapitalize="none" autocorrect="off" spellcheck="false">
       <button type="submit">Scan</button>
@@ -237,27 +237,27 @@ details[open] summary::after { content: '−'; }
     
     <details>
       <summary>Why does my site look fine on desktop but tiny and broken on mobile?</summary>
-      <div class="faq-answer">Mobile browsers default to a 980px viewport when there's no viewport meta tag, then scale the whole page down to fit the device screen — making everything tiny. Adding the viewport meta tag tells the browser to match the actual screen width. You also need responsive CSS (media queries or a framework like Tailwind) to adapt your layout for small screens.</div>
+      <div class="faq-answer">Mobile browsers default to a 980px viewport when there's no viewport meta tag, then scale the whole page down to fit the device screen – making everything tiny. Adding the viewport meta tag tells the browser to match the actual screen width. You also need responsive CSS (media queries or a framework like Tailwind) to adapt your layout for small screens.</div>
     </details>
     
     <details>
       <summary>Does a broken mobile site affect Google rankings?</summary>
-      <div class="faq-answer">Yes, significantly. Google uses mobile-first indexing — it crawls and ranks the mobile version of your site, not the desktop version. A broken mobile experience (missing viewport, tiny text, content wider than screen) is flagged in Google Search Console under Core Web Vitals and directly leads to lower rankings. Over 60% of global web traffic is from mobile.</div>
+      <div class="faq-answer">Yes, significantly. Google uses mobile-first indexing – it crawls and ranks the mobile version of your site, not the desktop version. A broken mobile experience (missing viewport, tiny text, content wider than screen) is flagged in Google Search Console under Core Web Vitals and directly leads to lower rankings. Over 60% of global web traffic is from mobile.</div>
     </details>
     
     <details>
-      <summary>I added the viewport tag but the site still looks wrong on mobile — why?</summary>
+      <summary>I added the viewport tag but the site still looks wrong on mobile – why?</summary>
       <div class="faq-answer">The viewport tag is a prerequisite, but you also need responsive CSS. The tag alone tells the browser what width to use, but your CSS needs to handle different screen widths with media queries or a responsive framework. If everything is still side-scrolling, check for fixed-width elements (like width: 1200px) that are wider than the screen.</div>
     </details>
     
     <details>
       <summary>How do I test my site on mobile without a real device?</summary>
-      <div class="faq-answer">Chrome DevTools has a device emulator — press F12 → click the mobile icon in the toolbar. It emulates phone screen sizes and touch events. For real-device testing at scale, BrowserStack and LambdaTest let you test on actual iOS and Android devices. Google's Mobile-Friendly Test (search.google.com/test/mobile-friendly) checks from Google's perspective.</div>
+      <div class="faq-answer">Chrome DevTools has a device emulator – press F12 → click the mobile icon in the toolbar. It emulates phone screen sizes and touch events. For real-device testing at scale, BrowserStack and LambdaTest let you test on actual iOS and Android devices. Google's Mobile-Friendly Test (search.google.com/test/mobile-friendly) checks from Google's perspective.</div>
     </details>
     
     <details>
       <summary>What percentage of my users are on mobile?</summary>
-      <div class="faq-answer">Globally, about 60–65% of web traffic is from mobile. For consumer apps, landing pages, and marketing sites, it's often higher. For developer tools and B2B SaaS, it can be lower. Check your own Google Analytics or Plausible to see your actual split — it's usually surprising how high mobile is even for 'developer' audiences.</div>
+      <div class="faq-answer">Globally, about 60–65% of web traffic is from mobile. For consumer apps, landing pages, and marketing sites, it's often higher. For developer tools and B2B SaaS, it can be lower. Check your own Google Analytics or Plausible to see your actual split – it's usually surprising how high mobile is even for 'developer' audiences.</div>
     </details>
     
   </div>

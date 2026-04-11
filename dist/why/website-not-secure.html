@@ -16,7 +16,7 @@
 <meta name="twitter:title" content="Why Does My Website Say 'Not Secure'? 4 Causes & Fixes (2026) | didyouship.com">
 <meta name="twitter:description" content="'Not Secure' in the browser address bar? An expired SSL certificate, no HTTPS, broken redirect, or mixed content could be the cause. Here's how to diagnose and fix each.">
 <meta name="twitter:image" content="https://didyouship.com/static/og.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is my site actually dangerous, or is it just a warning?", "acceptedAnswer": {"@type": "Answer", "text": "It depends. No HTTPS means all data in transit (form inputs, logins, cookies) is readable by anyone on the same network. An expired certificate means the security is broken. Mixed content means specific resources are blocked. In all cases, it's worth fixing \u2014 the warning actively drives users away and hurts SEO."}}, {"@type": "Question", "name": "I added SSL but the browser still shows Not Secure \u2014 why?", "acceptedAnswer": {"@type": "Answer", "text": "Most likely cause: you have HTTPS but some pages still load resources over HTTP (mixed content). Open Chrome DevTools \u2192 Console and look for 'Mixed Content' warnings \u2014 they'll name the exact HTTP URLs causing the issue. Second cause: your HTTP doesn't redirect to HTTPS, so users landing on http:// still see the warning."}}, {"@type": "Question", "name": "Does 'Not Secure' affect Google rankings?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Google has used HTTPS as a ranking signal since 2014. Sites without HTTPS rank lower than equivalent HTTPS sites. An expired certificate that fully blocks the site causes rankings to drop quickly as Google can no longer crawl it. Fixing HTTPS won't instantly boost rankings, but it removes an active penalty."}}, {"@type": "Question", "name": "My SSL certificate auto-renews \u2014 why did it expire?", "acceptedAnswer": {"@type": "Answer", "text": "Common reasons: your domain's DNS A record was changed so Let's Encrypt can no longer verify domain ownership, your server's certbot cron job stopped running, or a billing issue paused your hosting. Check your hosting dashboard for certificate status and renewal logs."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is my site actually dangerous, or is it just a warning?", "acceptedAnswer": {"@type": "Answer", "text": "It depends. No HTTPS means all data in transit (form inputs, logins, cookies) is readable by anyone on the same network. An expired certificate means the security is broken. Mixed content means specific resources are blocked. In all cases, it's worth fixing \u2013 the warning actively drives users away and hurts SEO."}}, {"@type": "Question", "name": "I added SSL but the browser still shows Not Secure \u2013 why?", "acceptedAnswer": {"@type": "Answer", "text": "Most likely cause: you have HTTPS but some pages still load resources over HTTP (mixed content). Open Chrome DevTools \u2192 Console and look for 'Mixed Content' warnings \u2013 they'll name the exact HTTP URLs causing the issue. Second cause: your HTTP doesn't redirect to HTTPS, so users landing on http:// still see the warning."}}, {"@type": "Question", "name": "Does 'Not Secure' affect Google rankings?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Google has used HTTPS as a ranking signal since 2014. Sites without HTTPS rank lower than equivalent HTTPS sites. An expired certificate that fully blocks the site causes rankings to drop quickly as Google can no longer crawl it. Fixing HTTPS won't instantly boost rankings, but it removes an active penalty."}}, {"@type": "Question", "name": "My SSL certificate auto-renews \u2013 why did it expire?", "acceptedAnswer": {"@type": "Answer", "text": "Common reasons: your domain's DNS A record was changed so Let's Encrypt can no longer verify domain ownership, your server's certbot cron job stopped running, or a billing issue paused your hosting. Check your hosting dashboard for certificate status and renewal logs."}}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Why Does Your Website Say \"Not Secure\"?", "description": "'Not Secure' in the browser address bar? An expired SSL certificate, no HTTPS, broken redirect, or mixed content could be the cause. Here's how to diagnose and fix each.", "url": "https://didyouship.com/why/website-not-secure", "publisher": {"@type": "Organization", "name": "didyouship.com", "url": "https://didyouship.com"}}</script>
 <meta name="theme-color" content="#0c0c0e">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
@@ -203,7 +203,7 @@ details[open] summary::after { content: '−'; }
   </nav>
 
   <h1>Why Does Your Website Say "Not Secure"?</h1>
-  <p class="intro">Chrome, Firefox, and Safari show "Not Secure" or "Your connection is not private" when something is wrong with your HTTPS configuration. There are several distinct causes — here's how to identify which one applies to you.</p>
+  <p class="intro">Chrome, Firefox, and Safari show "Not Secure" or "Your connection is not private" when something is wrong with your HTTPS configuration. There are several distinct causes – here's how to identify which one applies to you.</p>
 
   <!-- Causes -->
   <h2 class="section-heading">Why this happens</h2>
@@ -214,7 +214,7 @@ details[open] summary::after { content: '−'; }
         <span class="sev critical">critical</span>
         <h3>SSL certificate expired or invalid</h3>
       </div>
-      <p>When an SSL certificate expires, browsers show a full-page red warning that blocks most visitors from reaching your site. An invalid certificate (issued for the wrong domain, self-signed, or with a verification error) has the same effect. Certificates need to be renewed — usually every 90 days for Let's Encrypt.</p>
+      <p>When an SSL certificate expires, browsers show a full-page red warning that blocks most visitors from reaching your site. An invalid certificate (issued for the wrong domain, self-signed, or with a verification error) has the same effect. Certificates need to be renewed – usually every 90 days for Let's Encrypt.</p>
       <a class="cause-link" href="/guides/ssl-certificate">How to Fix an SSL Certificate →</a>
     </div>
     
@@ -239,16 +239,16 @@ details[open] summary::after { content: '−'; }
     <div class="cause">
       <div class="cause-top">
         <span class="sev high">high</span>
-        <h3>Mixed content — HTTP resources on an HTTPS page</h3>
+        <h3>Mixed content – HTTP resources on an HTTPS page</h3>
       </div>
-      <p>Your HTTPS page loads images, scripts, or stylesheets over HTTP. Browsers silently block these resources — images don't appear, scripts don't run — and some browsers show a Not Secure warning even though the page itself is HTTPS. This happens when old HTTP URLs are hardcoded in your code.</p>
+      <p>Your HTTPS page loads images, scripts, or stylesheets over HTTP. Browsers silently block these resources – images don't appear, scripts don't run – and some browsers show a Not Secure warning even though the page itself is HTTPS. This happens when old HTTP URLs are hardcoded in your code.</p>
       <a class="cause-link" href="/guides/mixed-content">How to Fix Mixed Content →</a>
     </div>
     
     <div class="cause">
       <div class="cause-top">
         <span class="sev medium">medium</span>
-        <h3>HSTS header missing — first visit can be downgraded</h3>
+        <h3>HSTS header missing – first visit can be downgraded</h3>
       </div>
       <p>Even with HTTPS and a redirect, the very first visit to your site on public WiFi can be intercepted before the redirect happens. The HSTS header tells browsers to always use HTTPS for your domain, eliminating this vulnerability.</p>
       <a class="cause-link" href="/guides/hsts-header">How to Add the HSTS Header →</a>
@@ -259,7 +259,7 @@ details[open] summary::after { content: '−'; }
   <!-- Scan CTA -->
   <div class="cta-block">
     <p><strong>Not sure which of these apply to your domain?</strong><br>
-    Run a free scan — 26 checks in under 10 seconds.</p>
+    Run a free scan – 26 checks in under 10 seconds.</p>
     <form class="cta-input-row" onsubmit="window.location.href='/?'+encodeURIComponent(this.querySelector('input').value.trim());return false;">
       <input type="text" placeholder="yourdomain.com" autocapitalize="none" autocorrect="off" spellcheck="false">
       <button type="submit">Scan</button>
@@ -273,12 +273,12 @@ details[open] summary::after { content: '−'; }
     
     <details>
       <summary>Is my site actually dangerous, or is it just a warning?</summary>
-      <div class="faq-answer">It depends. No HTTPS means all data in transit (form inputs, logins, cookies) is readable by anyone on the same network. An expired certificate means the security is broken. Mixed content means specific resources are blocked. In all cases, it's worth fixing — the warning actively drives users away and hurts SEO.</div>
+      <div class="faq-answer">It depends. No HTTPS means all data in transit (form inputs, logins, cookies) is readable by anyone on the same network. An expired certificate means the security is broken. Mixed content means specific resources are blocked. In all cases, it's worth fixing – the warning actively drives users away and hurts SEO.</div>
     </details>
     
     <details>
-      <summary>I added SSL but the browser still shows Not Secure — why?</summary>
-      <div class="faq-answer">Most likely cause: you have HTTPS but some pages still load resources over HTTP (mixed content). Open Chrome DevTools → Console and look for 'Mixed Content' warnings — they'll name the exact HTTP URLs causing the issue. Second cause: your HTTP doesn't redirect to HTTPS, so users landing on http:// still see the warning.</div>
+      <summary>I added SSL but the browser still shows Not Secure – why?</summary>
+      <div class="faq-answer">Most likely cause: you have HTTPS but some pages still load resources over HTTP (mixed content). Open Chrome DevTools → Console and look for 'Mixed Content' warnings – they'll name the exact HTTP URLs causing the issue. Second cause: your HTTP doesn't redirect to HTTPS, so users landing on http:// still see the warning.</div>
     </details>
     
     <details>
@@ -287,7 +287,7 @@ details[open] summary::after { content: '−'; }
     </details>
     
     <details>
-      <summary>My SSL certificate auto-renews — why did it expire?</summary>
+      <summary>My SSL certificate auto-renews – why did it expire?</summary>
       <div class="faq-answer">Common reasons: your domain's DNS A record was changed so Let's Encrypt can no longer verify domain ownership, your server's certbot cron job stopped running, or a billing issue paused your hosting. Check your hosting dashboard for certificate status and renewal logs.</div>
     </details>
     
