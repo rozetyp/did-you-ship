@@ -12,14 +12,3 @@ venv/
 # Editor
 *.swp
 *.swo
-
-# Backup files
-static/index copy.html
-
-# Local-only files
-chat.md
-logs.*.csv
-bulk_results.db
-bulk_scan.py
-domains_10k.txt
-SCANNER_BLUEPRINT.md
