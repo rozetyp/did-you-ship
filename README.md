@@ -29,7 +29,7 @@ pip install "git+https://github.com/rozetyp/did-you-ship"
 didyouship yourdomain.com
 ```
 
-The scanner itself depends only on `dnspython`. Python 3.9+.
+The scanner itself depends only on `dnspython`. Python 3.10+.
 
 ```bash
 didyouship yourdomain.com --json                # full result, including raw data per check
@@ -154,7 +154,7 @@ pytest tests/test_bundles.py -k map # one area
 pyflakes didyouship app.py pages.py tests
 ```
 
-Tests never touch the network: `tests/conftest.py` stubs DNS, HTTP and TLS. CI runs on Python 3.9, 3.12 and 3.13.
+Tests never touch the network: `tests/conftest.py` stubs DNS, HTTP and TLS. CI runs on Python 3.10, 3.12 and 3.13.
 
 To add a check:
 1. Add it to `CHECKS` in `didyouship/scanner.py`.
