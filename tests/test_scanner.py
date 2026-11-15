@@ -219,3 +219,49 @@ def test_public_source_map_is_medium(result, offline):
     scanner._check_bundles(result, '<script src="/a.js"></script>')
     assert [(i.severity, i.title) for i in result.issues] == [
         ("medium", "Your original source code is downloadable via source maps")]
+
+
+# ── proxy fallback ──
+
+class FakeOpener:
+    def __init__(self, exc=None):
+        self.exc, self.calls = exc, 0
+
+    def open(self, req, timeout=None):
+        self.calls += 1
+        if self.exc:
+            raise self.exc
+        return "ok"
+
+
+@pytest.fixture
+def proxy(monkeypatch):
+    def install(proxy_exc=None, direct_exc=None):
+        p, d = FakeOpener(proxy_exc), FakeOpener(direct_exc)
+        monkeypatch.setattr(scanner, "_proxy_opener", p)
+        monkeypatch.setattr(scanner, "_direct_opener", d)
+        monkeypatch.setattr(scanner, "_proxy_down_until", 0.0)
+        return p, d
+    return install
+
+
+def test_healthy_proxy_is_used(proxy):
+    p, d = proxy()
+    assert scanner._urlopen("https://example.com") == "ok"
+    assert (p.calls, d.calls) == (1, 0)
+
+
+def test_proxy_auth_failure_falls_back_to_direct_and_cools_down(proxy):
+    import urllib.error
+    p, d = proxy(proxy_exc=urllib.error.URLError("Tunnel connection failed: 407 Proxy Authentication Required"))
+    assert scanner._urlopen("https://example.com") == "ok"
+    assert scanner._urlopen("https://example.com") == "ok"
+    assert (p.calls, d.calls) == (1, 2)  # proxy skipped during cooldown
+
+
+def test_site_errors_through_proxy_are_not_retried_direct(proxy):
+    from .conftest import http_error
+    p, d = proxy(proxy_exc=http_error("https://example.com", 403))
+    with pytest.raises(Exception) as e:
+        scanner._urlopen("https://example.com")
+    assert getattr(e.value, "code", None) == 403 and d.calls == 0

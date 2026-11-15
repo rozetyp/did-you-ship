@@ -8,6 +8,7 @@ The full list lives in CHECKS below.
 
 from __future__ import annotations
 
+import logging
 import os
 import ssl
 import socket
@@ -130,25 +131,45 @@ DNS_TIMEOUT = 5
 HTTP_TIMEOUT = 10
 
 # ── Proxy support ────────────────────────────────────────────────────────────
-# Set SCAN_PROXY env var to route HTTP requests through a residential proxy.
-# Format: http://user:pass@host:port
+# Set SCAN_PROXY to route HTTP requests through a proxy (http://user:pass@host:port).
+# If the proxy itself fails (bad credentials, down), requests fall back to a
+# direct connection and the proxy is skipped for PROXY_COOLDOWN seconds, so a
+# broken proxy never shows up as a problem with the scanned site.
 _PROXY_URL = os.environ.get("SCAN_PROXY", "")
+PROXY_COOLDOWN = 600
 
-def _build_opener():
-    """Build a urllib opener, optionally with proxy."""
-    if _PROXY_URL:
-        proxy_handler = urllib.request.ProxyHandler({
-            "http": _PROXY_URL,
-            "https": _PROXY_URL,
-        })
-        return urllib.request.build_opener(proxy_handler)
-    return urllib.request.build_opener()
+_direct_opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+_proxy_opener = (
+    urllib.request.build_opener(urllib.request.ProxyHandler({"http": _PROXY_URL, "https": _PROXY_URL}))
+    if _PROXY_URL else None
+)
+_proxy_down_until = 0.0
+_log = logging.getLogger("didyouship.scanner")
 
-_opener = _build_opener()
+
+def _is_proxy_failure(exc: Exception) -> bool:
+    """True when the error came from the proxy, not from the scanned site."""
+    if isinstance(exc, urllib.error.HTTPError):
+        return exc.code == 407  # plain-http requests: the proxy answers directly
+    if isinstance(exc, urllib.error.URLError):
+        reason = str(exc.reason).lower()
+        return "tunnel connection failed" in reason or "proxy" in reason or isinstance(
+            exc.reason, ConnectionRefusedError)
+    return False
+
 
 def _urlopen(req, timeout=HTTP_TIMEOUT):
-    """urlopen via proxy-aware opener."""
-    return _opener.open(req, timeout=timeout)
+    """urlopen through SCAN_PROXY when configured and healthy, otherwise direct."""
+    global _proxy_down_until
+    if _proxy_opener is not None and time.time() >= _proxy_down_until:
+        try:
+            return _proxy_opener.open(req, timeout=timeout)
+        except Exception as exc:
+            if not _is_proxy_failure(exc):
+                raise
+            _proxy_down_until = time.time() + PROXY_COOLDOWN
+            _log.warning("SCAN_PROXY failed (%s); going direct for %ds", exc, PROXY_COOLDOWN)
+    return _direct_opener.open(req, timeout=timeout)
 
 
 def dns_query(qname, qtype, lifetime=None):
