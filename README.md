@@ -127,7 +127,7 @@ uvicorn app:app --port 8000      # http://localhost:8000
 | `SCAN_PROXY` | Optional `http://user:pass@host:port` proxy for the scanner's outbound HTTP. DNS always goes direct. |
 | `PORT` | Server port (Railway sets it) |
 
-The hosted version runs on Railway (`railway.toml`) behind Cloudflare.
+The hosted version runs on Railway (`railway.toml`) behind Cloudflare. `www.` is redirected to the apex by a tiny Cloudflare Worker (`deploy/www-redirect/`); the app also redirects `www.` hosts itself, for self-hosters.
 
 ## Project layout
 
