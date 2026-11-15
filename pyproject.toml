@@ -27,7 +27,6 @@ dev = ["pytest>=7", "httpx>=0.25", "pyflakes>=3"]
 didyouship = "didyouship.cli:main"
 
 [project.urls]
-Homepage = "https://didyouship.com"
 Source = "https://github.com/rozetyp/did-you-ship"
 
 [tool.setuptools]

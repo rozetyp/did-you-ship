@@ -1,6 +1,0 @@
-# Deploy: cd deploy/www-redirect && wrangler deploy
-name = "didyouship-www-redirect"
-main = "worker.js"
-compatibility_date = "2026-11-01"
-workers_dev = false
-routes = [{ pattern = "www.didyouship.com/*", zone_name = "didyouship.com" }]

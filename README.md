@@ -32,7 +32,7 @@ HIGH     [email] Emails have no cryptographic signature (DKIM missing)
 19 passed · 5 issues · 28 checks
 ```
 
-Try it on [didyouship.com](https://didyouship.com) (free, no signup, nothing stored), or install the CLI below and run it before every launch.
+Install the CLI below and run it before every launch, or self-host the web version. It's free, needs no signup and stores nothing.
 
 ## Who it's for
 
@@ -49,7 +49,7 @@ Most free checkers do one thing: an SEO audit, a DMARC lookup, a header grader. 
 - It only reads what's already public, and it never uses a key it finds.
 - It's open source, so you can read exactly what each check does, run it in CI or host your own.
 
-Cleaning up this repo turned up two problems on didyouship.com itself. The scanner flagged `www.didyouship.com` returning a 404. And the hosted scanner had been quietly failing every page fetch for weeks, because its proxy login had expired. Both are fixed now.
+Cleaning up this repo turned up two problems on the project's own hosted site. The scanner flagged its `www.` address returning a 404. And the hosted scanner had been quietly failing every page fetch for weeks, because its proxy login had expired. Both are fixed now.
 
 ## Install
 
@@ -156,7 +156,7 @@ uvicorn app:app --port 8000      # http://localhost:8000
 | `SCAN_PROXY` | Optional `http://user:pass@host:port` proxy for the scanner's outbound HTTP. DNS always goes direct. |
 | `PORT` | Server port (Railway sets it) |
 
-The hosted version runs on Railway (`railway.toml`) behind Cloudflare. `www.` is redirected to the apex by a tiny Cloudflare Worker (`deploy/www-redirect/`); the app also redirects `www.` hosts itself, for self-hosters.
+`railway.toml` deploys it to Railway as is. Requests to a `www.` host are redirected to the bare domain. The guide pages, sitemap and social preview tags carry the original site's address: change `BASE_URL` in `pages.py` and the URLs in `static/*.html` to serve them under your own domain.
 
 ## Project layout
 

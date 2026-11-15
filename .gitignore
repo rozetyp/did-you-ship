@@ -17,3 +17,6 @@ venv/
 *.egg-info/
 build/
 .pytest_cache/
+
+# Tool caches
+.wrangler/
