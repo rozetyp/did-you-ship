@@ -1,6 +1,6 @@
 """
-SEO metadata for each guide page.
-Content lives in static/guide.html (JS). This module provides:
+Content for each guide page (/guides/{slug}), rendered by pages.py into
+static/guide.html. Each entry provides:
   - title        → short guide name (used for SSR h1 and schema)
   - severity     → critical / high / medium / low
   - summary      → one-line description (SSR intro paragraph)
@@ -8,6 +8,7 @@ Content lives in static/guide.html (JS). This module provides:
   - description  → <meta name="description">
   - how_steps    → plain-text steps for HowTo JSON-LD schema (rich snippets)
   - category     → for breadcrumb schema
+  - what / why / how / providers → HTML body sections
 """
 
 GUIDES_META = {
@@ -416,12 +417,12 @@ GUIDES_META = {
 <li>Fix your deployment to not serve the project root (same fix as .env exposure)</li>
 </ol>''',
         "providers": '''<p><strong>Block .git in Nginx:</strong></p>
-<pre>location ~ /\.git {
+<pre>location ~ /\\.git {
     deny all;
     return 404;
 }</pre>
 <p><strong>Block .git in Apache (.htaccess):</strong></p>
-<pre>RedirectMatch 404 /\.git</pre>
+<pre>RedirectMatch 404 /\\.git</pre>
 <p><strong>Block .git in Caddy:</strong></p>
 <pre>@dotfiles path */.*
 respond @dotfiles 404</pre>
@@ -613,7 +614,7 @@ respond @dotfiles 404</pre>
     
         "what": '''<p>The meta description is a short text summary of your page shown in search results under the title:</p>
 <pre>&lt;meta name="description" content="Free production readiness scanner.
-26 checks in 8 seconds. Find what you forgot before users do."&gt;</pre>
+Email, SSL, secrets and SEO checked in seconds. Find what you forgot before users do."&gt;</pre>
 <p>Aim for 150-160 characters. It doesn't directly affect rankings, but it heavily influences click-through rate - it's your ad copy in search results.</p>''',
         "why": '''<ul>
 <li><strong>Without it, Google picks random text</strong> - usually something like your nav menu or a sidebar item</li>

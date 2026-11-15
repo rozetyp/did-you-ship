@@ -1,289 +1,167 @@
-# didyouship.com
+# didyouship
 
 **You shipped your app. But did you check?**
 
-Free production readiness scanner that finds everything you forgot before launch — email going to spam, secrets exposed, SSL broken, SEO missing, slow cold starts. 26 checks in under 10 seconds. One domain. Zero signup.
+A production readiness scanner for the stuff nobody teaches: email that lands in spam, keys shipped to the browser, a `.env` file anyone can download, broken link previews, a `www.` that shows an error page. It runs 28 checks against a domain in about 5-15 seconds, using only public data (DNS, TLS, HTTP), and tells you what breaks and how to fix it.
 
-**Live at [didyouship.com](https://didyouship.com)**
+- **Web:** [didyouship.com](https://didyouship.com), free, no signup, nothing stored
+- **CLI:** `didyouship example.com`, with JSON output and a CI exit code
+- **Self-host:** a small FastAPI app, MIT licensed
 
----
+```
+$ didyouship example.com
+example.com  56/100  grade C
 
-## The problem
+CRITICAL [email] Anyone can send emails pretending to be @example.com
+         Your domain has no DMARC record. This means: (1) anyone can spoof your email, ...
+         fix: Add a TXT record at _dmarc.example.com:
+              v=DMARC1; p=quarantine; rua=mailto:dmarc@example.com
 
-You build an app with Cursor, Replit, v0, or Bolt. You deploy it. It works. You share the link.
-
-Then:
-- Your signup emails land in spam (no SPF/DMARC)
-- Someone finds your `.env` file on Google (exposed secrets)
-- Your link on Slack shows a blank preview (no OG tags)
-- Chrome says "Not Secure" on first visit (no HSTS)
-- Google indexes `www.` and non-`www.` as two separate sites
-- Your site takes 8 seconds to load on first visit (cold start)
-
-These aren't bugs. They're the boring infrastructure stuff that nobody teaches and every vibe coder forgets. didyouship.com checks all of it in one scan.
-
-## Who it's for
-
-Indie hackers, solo founders, and developers who ship fast and want a single check to catch what they missed. If you've ever launched something and then discovered a week later that all your transactional emails were going to spam — this is for you.
-
----
-
-## All 26 checks in detail
-
-### Category 1: Email Deliverability (6 checks)
-
-Email is the most common thing that breaks silently after launch. Your app sends signup confirmations, password resets, invoices — and they all land in spam because you never set up 3 DNS records.
-
-| # | Check | What we do | What breaks |
-|---|-------|-----------|-------------|
-| 1 | **SPF record** | Query TXT records for `v=spf1`. Verify the mechanism (`-all`, `~all`, `+all`). Flag `+all` and `?all` as critical (anyone can send as you). Accept `~all` as valid. | Gmail marks your emails as unverified. They go to spam or get rejected. |
-| 2 | **DMARC record** | Query `_dmarc.{domain}` TXT. Parse policy (`p=none/quarantine/reject`) and reporting address (`rua=`). | Anyone can send phishing emails from your domain. Gmail penalizes your real emails. |
-| 3 | **DMARC reporting** | Check if DMARC record includes `rua=` (reporting address). | You'll never know when someone is spoofing your domain. |
-| 4 | **MX records** | Query MX records. Identify email provider (Google Workspace, Microsoft 365, Zoho, etc). | Informational — displayed in results. |
-| 5 | **DKIM** | Probe 16 common selectors (`default`, `google`, `selector1`, `k1`, `s1`, `resend`, `postmark`, `sendgrid`, `mailgun`, etc.) at `{selector}._domainkey.{domain}`. Skip if SPF is `-all` (non-sending domain). | Gmail can't cryptographically verify your emails are genuine — even with SPF and DMARC, emails may land in spam. |
-| 6 | **IP blacklist** | Resolve MX to IP, check against 4 public DNSBLs: Spamhaus, Barracuda, SpamCop, SORBS. | Every email you send gets silently dropped or spam-foldered. Signups, resets, invoices — all of it. |
-
-**Vendor detection**: We identify 20 email providers from SPF includes (SendGrid, Resend, Postmark, Amazon SES, Mailchimp, HubSpot, Braze, Customer.io, etc.) and 8 from MX records (Google Workspace, Microsoft 365, Proofpoint, Mimecast, Zoho, Cloudflare).
-
-### Category 2: SSL & HTTPS (2 checks)
-
-| # | Check | What we do | What breaks |
-|---|-------|-----------|-------------|
-| 7 | **SSL certificate** | TLS handshake on port 443. Check validity, issuer, expiry date. Warn at <30 days, critical at <7 days. Retry once on timeout. | Browsers show a full-page "Not Secure" warning. Most visitors won't proceed. |
-| 8 | **HTTP→HTTPS redirect** | Raw HTTP GET to port 80 (without following redirects). Check for 301/302/307/308 with `https://` location. | Visitors who type your URL without `https://` see an insecure version with a Chrome warning. |
-
-### Category 3: Exposed Secrets (3 checks)
-
-| # | Check | What we do | What breaks |
-|---|-------|-----------|-------------|
-| 9 | **`.env` file exposed** | GET `/.env`. Reject HTML responses (catches SPAs that return 200 for everything). Verify body contains `KEY=VALUE` patterns. | Your database passwords, API keys, and secrets are publicly readable. Bots actively scan for this. |
-| 10 | **`.git` directory exposed** | GET `/.git/config`. Reject HTML. Verify body contains `[core]` or `[remote`. | Your entire source code and commit history — including any secrets you ever committed — is downloadable. |
-| 11 | **Secret keys in HTML** | Regex scan the page source for 14 secret patterns: Stripe keys (`sk_live_`, `sk_test_`), AWS keys (`AKIA`), OpenAI/Anthropic/xAI API keys, GitHub/GitLab tokens, private keys, database connection strings (postgres/mongo/mysql/redis). | Anyone viewing page source can extract your API keys. Bots scrape for these. |
-
-**SPA handling**: Single-page apps return HTTP 200 for all routes (including `/.env`). We detect this by checking Content-Type and body content — only flag as exposed if the response actually looks like a real `.env` or `.git/config` file.
-
-### Category 4: DNS (2 checks)
-
-| # | Check | What we do | What breaks |
-|---|-------|-----------|-------------|
-| 12 | **www subdomain** | DNS A/CNAME lookup for `www.{domain}`. Falls back to `socket.getaddrinfo` for Cloudflare-proxied CNAMEs that flatten to A records. | People who type `www.yourdomain.com` get an error page. |
-| 13 | **www↔apex redirect** | HTTPS GET to both `www.` and apex. If both return 200, check if `www.` has a `<link rel="canonical">` — if so, Google handles deduplication correctly. Only flag if both serve 200 with no canonical. | Google treats www and non-www as two separate sites, splitting your search rankings. |
-
-### Category 5: Security Headers (1 check)
-
-| # | Check | What we do | What breaks |
-|---|-------|-----------|-------------|
-| 14 | **HSTS** | Check response headers for `Strict-Transport-Security`. | Even with HTTPS, the first visit might use HTTP. An attacker on public WiFi can intercept that first request. |
-
-### Category 6: SEO & Shareability (8 checks)
-
-| # | Check | What we do | What breaks |
-|---|-------|-----------|-------------|
-| 15 | **Title tag** | Parse `<title>` from HTML. | Browser tab is blank. Google can't rank you — no headline in search results. |
-| 16 | **Meta description** | Check for `<meta name="description">`. | Google picks random text from your page as the search snippet. |
-| 17 | **Open Graph tags** | Check for `og:title`, `og:description`, `og:image`. | Links shared on Slack, Discord, LinkedIn, iMessage show as plain URLs with no preview. |
-| 18 | **Twitter Cards** | Check for `twitter:card` meta tag. | Links on X/Twitter show no image preview (separate from OG tags). |
-| 19 | **Viewport** | Check for `<meta name="viewport">`. | Site renders at desktop width on phones — tiny and unusable. |
-| 20 | **Canonical URL** | Check for `<link rel="canonical">`. | Google indexes `/page`, `/page/`, and `www.../page` as three separate pages. |
-| 21 | **Sitemap** | Check `/sitemap.xml`. Falls back to parsing `robots.txt` for `Sitemap:` directive (catches sites like Stripe with `/sitemap/sitemap.xml`). | Google Search Console can't track which pages are indexed. |
-| 22 | **Favicon** | Check for `<link rel="icon">` or favicon reference in HTML. | Blank icon in browser tab. 404 errors in server logs on every page load. |
-
-### Category 7: Performance (2 checks)
-
-| # | Check | What we do | What breaks |
-|---|-------|-----------|-------------|
-| 23 | **Response time** | Two requests: first = warmup, second = real measurement. If warmup >10s but second <3s, we detect a **cold start** (free tier sleeping). Flag if response >3s. | Users leave. Bounce rate spikes. Free tier cold starts can hit 10-15 seconds. |
-| 24 | **Compression** | Check `Content-Encoding` header for gzip/deflate/brotli. | Pages are 3-4x bigger than they need to be. Slow on mobile. |
-
-### Category 8: Breakage (1 check)
-
-| # | Check | What we do | What breaks |
-|---|-------|-----------|-------------|
-| 25 | **Mixed content** | Regex scan HTML for `src=` and `action=` attributes loading `http://` resources on an HTTPS page. Also checks `<link>` stylesheets. Excludes localhost. | Images don't show, scripts don't run, styles break — all silently. No visible error unless you check browser console. |
-
-### Category 9: Polish (1 check)
-
-| # | Check | What we do | What breaks |
-|---|-------|-----------|-------------|
-| 26 | **Custom 404** | GET a random path. If 200 → SPA (client-side routing handles it, pass). If 404 → check body length and links. | Broken links show a bare "Cannot GET /path" error instead of a helpful page. |
-
----
-
-## Scoring
-
-Score starts at 100. Each issue deducts points:
-
-| Severity | Deduction | Example |
-|----------|-----------|---------|
-| Critical | -20 | No SPF, .env exposed, SSL expired |
-| High | -12 | No meta description, DKIM missing, slow response |
-| Medium | -5 | No HSTS, no canonical, no sitemap |
-| Low | -2 | No custom 404, no favicon |
-
-**Grades**: A (80+), B (60+), C (40+), D (20+), F (<20)
-
----
-
-## Guide pages (25 guides)
-
-Every issue the scanner can find has a dedicated educational guide at `/guides/{slug}`. Each guide includes:
-
-- What the issue is and why it matters
-- Step-by-step fix instructions
-- Provider-specific setup (Vercel, Netlify, Cloudflare, Railway, etc.)
-- HowTo and BreadcrumbList schema for Google rich results
-- Inline scanner CTA — type your domain and scan without leaving the page
-
-### Email Deliverability
-| Guide | URL |
-|-------|-----|
-| SPF Record Missing | `/guides/spf-record` |
-| DMARC Record Missing | `/guides/dmarc` |
-| Email Spoofing Protection | `/guides/email-spoofing` |
-| DKIM Not Configured | `/guides/dkim-setup` |
-| Mail Server IP Blacklisted | `/guides/ip-blacklisted` |
-| Email Deliverability Overview | `/guides/email-deliverability` |
-
-### SSL & HTTPS
-| Guide | URL |
-|-------|-----|
-| SSL Certificate Expired or Invalid | `/guides/ssl-certificate` |
-| HTTP to HTTPS Redirect | `/guides/https-redirect` |
-
-### Exposed Secrets
-| Guide | URL |
-|-------|-----|
-| .env File Exposed | `/guides/env-exposed` |
-| .git Directory Exposed | `/guides/git-exposed` |
-| API Keys in Page Source | `/guides/leaked-secrets` |
-
-### DNS
-| Guide | URL |
-|-------|-----|
-| www Subdomain Not Working | `/guides/www-redirect` |
-
-### Security Headers
-| Guide | URL |
-|-------|-----|
-| HSTS Header Missing | `/guides/hsts-header` |
-
-### SEO
-| Guide | URL |
-|-------|-----|
-| Page Title Tag Missing | `/guides/page-title` |
-| Meta Description Missing | `/guides/meta-description` |
-| Open Graph Tags Missing | `/guides/open-graph` |
-| Twitter Card Tags Missing | `/guides/twitter-cards` |
-| Viewport Meta Tag Missing | `/guides/viewport-meta` |
-| Canonical URL Missing | `/guides/canonical-url` |
-| Sitemap.xml Missing | `/guides/sitemap` |
-| Favicon Missing | `/guides/favicon` |
-
-### Performance
-| Guide | URL |
-|-------|-----|
-| Slow Response Time & Cold Starts | `/guides/response-time` |
-| Gzip Compression Not Enabled | `/guides/compression` |
-
-### Breakage & Polish
-| Guide | URL |
-|-------|-----|
-| Mixed Content Errors | `/guides/mixed-content` |
-| No Custom 404 Page | `/guides/custom-404` |
-
----
-
-## Problem pages (9 symptom-driven pages)
-
-Users don't search for "SPF record missing" — they search for "why are my emails going to spam." These pages target symptom-driven queries and link to the relevant guides.
-
-Each page includes multiple causes with severity ratings, FAQ section with schema markup, and an inline scanner.
-
-| Page | URL | Causes | FAQs |
-|------|-----|--------|------|
-| Why Are Your Emails Going to Spam? | `/why/emails-going-to-spam` | 5 | 6 |
-| Why Isn't Your Website Showing in Google? | `/why/not-in-google` | 5 | 5 |
-| Why Do Your Links Look Bad When Shared? | `/why/link-preview-not-working` | 3 | 5 |
-| Why Does Your Website Say "Not Secure"? | `/why/website-not-secure` | 5 | 4 |
-| Why Is Your Website Loading Slowly? | `/why/website-loading-slow` | 3 | 5 |
-| Why Is Your Website Broken on Mobile? | `/why/website-broken-on-mobile` | 1 | 5 |
-| Why Are Secrets or API Keys Exposed? | `/why/secrets-exposed` | 3 | 4 |
-| Why Doesn't www Work? | `/why/www-not-working` | 2 | 4 |
-| Why Are There Broken Page Errors? | `/why/broken-page-errors` | 2 | 4 |
-
----
-
-## Architecture
-
-```mermaid
-flowchart TD
-    CF["Cloudflare\nDNS + CDN + SSL"]
-    RW["Railway · uvicorn\nAuto-deploy from GitHub"]
-    AP["app.py\nFastAPI routes"]
-    SC["scanner.py\n26 checks"]
-    DNS["DNS queries\ndnspython"]
-    HTTP["HTTP requests\nurllib · proxy"]
-    SSL["SSL handshake\nssl module"]
-
-    CF --> RW --> AP --> SC
-    SC --> DNS & HTTP & SSL
+HIGH     [email] Emails have no cryptographic signature (DKIM missing)
+         ...
+19 passed · 5 issues · 28 checks
 ```
 
-**Scanner internals**: The `scan()` function runs checks in parallel using a ThreadPool with 8 workers. DNS-only checks (email, DKIM, blacklist, DNS) start immediately. The main thread fetches the page HTML, then submits HTML-dependent checks (SEO, secrets, performance, headers). DKIM waits for the email check to complete first (needs SPF data to handle non-sending domains). Total scan time: 3-8 seconds.
-
-**Proxy**: All outbound HTTP requests are routed through a configurable residential proxy (`SCAN_PROXY` env var) to avoid blocks and rate limits from target sites. DNS queries go direct.
-
-**DNS reliability**: All DNS queries use a retry wrapper — 3 attempts with exponential backoff (0.2s, 0.4s). Only `NXDOMAIN` is treated as permanent. This eliminates false positives from transient resolver failures.
-
----
-
-## Stack
-
-- **Backend**: Python, FastAPI, uvicorn
-- **Scanner**: `dnspython` (DNS), `ssl` (certificates), `urllib` (HTTP), `socket` (fallback resolution)
-- **Frontend**: Vanilla HTML/CSS/JS — no framework, no build step, no node_modules
-- **Templates**: Jinja2 (guide and problem pages)
-- **Rate limiting**: slowapi (10 scans/min per IP)
-- **Hosting**: Railway (auto-deploy) + Cloudflare (DNS, CDN, SSL)
-- **Schema**: HowTo, FAQPage, BreadcrumbList, Article (for Google rich results)
-
----
-
-## Run locally
+## Install
 
 ```bash
-git clone https://github.com/rozetyp/did-you-ship.git
-cd did-you-ship
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-
-# Optional
-export SCAN_PROXY="http://user:pass@host:port"              # residential proxy
-
-uvicorn app:app --port 8000
-# Open http://localhost:8000
+pip install "git+https://github.com/rozetyp/did-you-ship"
+didyouship yourdomain.com
 ```
 
-## Environment variables
+The scanner itself depends only on `dnspython`. Python 3.9+.
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `SCAN_PROXY` | No | HTTP proxy URL for outbound scan requests |
-| `PORT` | No | Server port (default: 8000, Railway sets automatically) |
+```bash
+didyouship yourdomain.com --json                # full result, including raw data per check
+didyouship https://www.yourdomain.com/pricing   # URLs and emails are normalized to the domain
+didyouship yourdomain.com --fail-on critical    # exit 2 if anything critical is found
+```
 
-## API
+### In CI
 
-| Endpoint | Description |
-|----------|-------------|
-| `GET /` | Landing page with scanner |
-| `GET /api/scan/{domain}` | Full scan (up to 26 checks), returns JSON with issues, fixes, score, grade |
-| `GET /guides/{slug}` | Educational guide page (25 guides) |
-| `GET /why/{slug}` | Problem/symptom page (9 pages) |
-| `GET /sitemap.xml` | Auto-generated sitemap |
-| `GET /health` | Health check |
+Fail a deploy pipeline when something critical shows up on production:
 
-Rate limit: 10 requests/minute per IP on `/api/scan/`.
+```yaml
+- run: pip install "git+https://github.com/rozetyp/did-you-ship"
+- run: didyouship yourdomain.com --fail-on critical
+```
+
+Exit codes: `0` ok, `1` invalid domain, `2` an issue at or above `--fail-on`.
+
+### As a library
+
+```python
+from didyouship import scan
+
+r = scan("example.com")
+print(r.score, r.grade)
+for issue in r.issues:
+    print(issue.severity, issue.title, issue.fix)
+```
+
+## What it checks
+
+| Category | Checks |
+|---|---|
+| **Email** | SPF (and dangerous `+all`/`?all`), DMARC policy, DMARC reporting (`rua=`), MX and provider detection, DKIM on 16 common selectors, mail server IP on Spamhaus / Barracuda / SpamCop |
+| **SSL** | Certificate validity, issuer, expiry (warns under 30 days), HTTP → HTTPS redirect |
+| **Secrets** | Public `/.env`, public `/.git/config`, secret keys in the page HTML, secret keys in the site's own JS bundles, public source maps |
+| **DNS** | `www.` resolves, `www.` doesn't show an error page, www and apex don't serve duplicate sites |
+| **Security** | HSTS header |
+| **SEO & sharing** | Title, meta description, Open Graph, Twitter/X card, viewport, canonical URL, `sitemap.xml` (falls back to `robots.txt`), favicon |
+| **Performance** | Response time with cold-start detection (two requests), gzip/brotli compression |
+| **Breakage** | Mixed content (`http://` scripts, images, styles on an HTTPS page) |
+| **Polish** | Custom 404 page |
+
+### Secret detection
+
+The HTML and the site's own JS bundles (same host or subdomains, up to 15, third-party CDNs skipped) are matched against keys that are secret by design:
+
+- **Payments and cloud:** Stripe secret and restricted keys, AWS access keys.
+- **AI APIs:** OpenAI, Anthropic, xAI.
+- **Code hosting:** GitHub and GitLab tokens.
+- **Messaging and email:** SendGrid, Slack tokens.
+- **Supabase:** `sb_secret_` keys, and JWTs whose `role` claim is `service_role`.
+- **Other:** private keys, and database URLs with real credentials.
+
+Keys that are meant to be public are not flagged:
+- Stripe `pk_`
+- Firebase `AIza…`
+- the Supabase anon key
+
+Placeholder connection strings like `postgres://user:password@localhost` aren't flagged either. Found keys are never printed, only what kind of key and which file.
+
+A source map is reported only when it's public **and** reveals your own code. Maps with no sources, or only `node_modules` and bundler runtime, are ignored.
+
+### Scoring
+
+Starts at 100. Each issue deducts by severity: critical −20, high −12, medium −5, low −2. Grades: A ≥ 80, B ≥ 60, C ≥ 40, D ≥ 20, F below.
+
+## Limitations
+
+- **Outside view only.** It sees what any visitor sees. It doesn't read your repo, test authentication, or probe your database. A leaked Supabase key is reported, but it isn't used to check your Row Level Security.
+- **Bot protection.** Sites behind a Cloudflare challenge or a WAF often block automated requests. When that happens, page-level checks are skipped with a note instead of being counted against you. DNS, email and TLS checks still run.
+- **DKIM** is found by probing 16 common selectors. A custom selector shows as missing.
+- **JS bundles** are the scripts referenced by the homepage. Code loaded only on other routes isn't scanned.
+- **Point-in-time.** It's a scan, not monitoring.
+
+## Self-hosting the web app
+
+```bash
+git clone https://github.com/rozetyp/did-you-ship.git && cd did-you-ship
+python3 -m venv .venv && source .venv/bin/activate
+pip install -e ".[web]"
+uvicorn app:app --port 8000      # http://localhost:8000
+```
+
+| Endpoint | |
+|---|---|
+| `GET /` | Scanner UI |
+| `GET /api/scan/{domain}` | Scan result as JSON. Rate limited to 10/min per client IP (`CF-Connecting-IP`, then `X-Forwarded-For`) |
+| `GET /guides`, `/guides/{slug}` | 25 fix guides: what it is, why it matters, how to fix it per provider |
+| `GET /why/{slug}` | 9 symptom pages ("why are my emails going to spam?") linking to the guides |
+| `GET /sitemap.xml`, `/robots.txt`, `/health` | |
+
+| Env var | |
+|---|---|
+| `SCAN_PROXY` | Optional `http://user:pass@host:port` proxy for the scanner's outbound HTTP. DNS always goes direct. |
+| `PORT` | Server port (Railway sets it) |
+
+The hosted version runs on Railway (`railway.toml`) behind Cloudflare.
+
+## Project layout
+
+```
+didyouship/        the scanner package (no web dependencies)
+  scanner.py       scan(), every check, scoring, CHECKS registry
+  bundles.py       JS bundle discovery, secret scan, source maps
+  secrets.py       secret patterns and Supabase JWT role decoding
+  cli.py           the `didyouship` command
+app.py             FastAPI app
+pages.py           renders guides, symptom pages and sitemap in memory at startup
+guides_meta.py     guide content
+problems_meta.py   symptom page content
+static/            index.html (vanilla JS UI), page templates, assets
+tests/             offline test suite (no network)
+```
+
+## Development
+
+```bash
+pip install -e ".[web,dev]"
+pytest                              # offline, about 2s
+pytest tests/test_bundles.py -k map # one area
+pyflakes didyouship app.py pages.py tests
+```
+
+Tests never touch the network: `tests/conftest.py` stubs DNS, HTTP and TLS. CI runs on Python 3.9, 3.12 and 3.13.
+
+To add a check:
+1. Add it to `CHECKS` in `didyouship/scanner.py`.
+2. Write it as a `_check_*` function that writes only its own `r.raw[...]` key.
+3. Submit it in `scan()`.
+4. Update the count in this README; a test fails if it's stale.
 
 ## License
 
-MIT
+[MIT](LICENSE)

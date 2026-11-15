@@ -1,11 +1,12 @@
 """
-didyouship.com — production readiness scanner.
+didyouship — production readiness scanner.
 
-26 checks across 9 categories. Every check answers:
-"What breaks if I don't fix this?"
-
-All from public data. Zero server access needed.
+Every check answers "what breaks if I don't fix this?", using only public
+data (DNS, TLS, HTTP). No access to the scanned server is needed.
+The full list lives in CHECKS below.
 """
+
+from __future__ import annotations
 
 import os
 import ssl
@@ -17,9 +18,68 @@ import zlib
 import urllib.request
 import urllib.error
 import dns.resolver
-from concurrent.futures import ThreadPoolExecutor, wait
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from dataclasses import dataclass, field
+
+from .bundles import scan_bundles
+from .secrets import find_secrets
+
+# One entry per check: (id, category, what it looks at). Used for the check
+# count shown on the site, in the API description and in the README.
+CHECKS = [
+    ("spf", "email", "SPF record"),
+    ("dmarc", "email", "DMARC record and policy"),
+    ("dmarc-reporting", "email", "DMARC reporting address"),
+    ("mx", "email", "MX records and email provider"),
+    ("dkim", "email", "DKIM on common selectors"),
+    ("blacklist", "email", "Mail server IP on spam blacklists"),
+    ("ssl", "ssl", "TLS certificate validity and expiry"),
+    ("https-redirect", "ssl", "HTTP to HTTPS redirect"),
+    ("env-file", "secrets", "Public /.env file"),
+    ("git-dir", "secrets", "Public /.git directory"),
+    ("html-secrets", "secrets", "Secret keys in page HTML"),
+    ("bundle-secrets", "secrets", "Secret keys in the site's JS bundles"),
+    ("source-maps", "secrets", "Public JS source maps"),
+    ("www", "dns", "www subdomain resolves"),
+    ("www-redirect", "dns", "www and apex don't serve duplicate sites"),
+    ("hsts", "security", "HSTS header"),
+    ("title", "seo", "Title tag"),
+    ("meta-description", "seo", "Meta description"),
+    ("open-graph", "seo", "Open Graph tags"),
+    ("twitter-card", "seo", "Twitter/X card"),
+    ("viewport", "seo", "Viewport meta tag"),
+    ("canonical", "seo", "Canonical URL"),
+    ("sitemap", "seo", "sitemap.xml"),
+    ("favicon", "seo", "Favicon"),
+    ("response-time", "performance", "Response time and cold starts"),
+    ("compression", "performance", "gzip/brotli compression"),
+    ("mixed-content", "breakage", "HTTP resources on an HTTPS page"),
+    ("custom-404", "polish", "Custom 404 page"),
+]
+CHECK_COUNT = len(CHECKS)
+
+_DOMAIN_RE = re.compile(
+    r"^(?=.{4,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+(?:[a-z]{2,63}|xn--[a-z0-9-]{1,59})$")
+
+
+def normalize_domain(value: str) -> str:
+    """Reduce a URL, email address or hostname to a bare apex-style domain."""
+    d = value.strip().lower()
+    if "@" in d:
+        d = d.rsplit("@", 1)[-1]
+    for prefix in ("https://", "http://"):
+        if d.startswith(prefix):
+            d = d[len(prefix):]
+    d = d.split("/", 1)[0].split("?", 1)[0].split("#", 1)[0].split(":", 1)[0].rstrip(".")
+    if d.startswith("www."):
+        d = d[4:]
+    return d
+
+
+def is_valid_domain(domain: str) -> bool:
+    """A public hostname with a letter TLD. IPs, localhost, ports are rejected."""
+    return bool(_DOMAIN_RE.match(domain))
 
 
 @dataclass
@@ -40,8 +100,30 @@ class ScanResult:
     issues: list[Issue] = field(default_factory=list)
     passed: list[str] = field(default_factory=list)
     raw: dict = field(default_factory=dict)
+    notes: list[str] = field(default_factory=list)  # informational; never affects the score
     email_vendors: list[str] = field(default_factory=list)
     mx_vendors: list[str] = field(default_factory=list)
+
+    def to_dict(self) -> dict:
+        """JSON shape shared by the web API and the CLI's --json output."""
+        return {
+            "domain": self.domain,
+            "score": self.score,
+            "grade": self.grade,
+            "issues": [
+                {"category": i.category, "severity": i.severity, "title": i.title, "detail": i.detail, "fix": i.fix}
+                for i in self.issues
+            ],
+            "passed": self.passed,
+            "notes": self.notes,
+            "issue_count": len(self.issues),
+            "critical_count": sum(1 for i in self.issues if i.severity == "critical"),
+            "high_count": sum(1 for i in self.issues if i.severity == "high"),
+            "email_vendors": self.email_vendors,
+            "mx_vendors": self.mx_vendors,
+            "ssl": self.raw.get("ssl", {}),
+            "raw": self.raw,
+        }
 
 
 DNS_TIMEOUT = 5
@@ -118,38 +200,15 @@ DNSBL_SERVERS = [
     ("zen.spamhaus.org",        "Spamhaus"),
     ("b.barracudacentral.org",  "Barracuda"),
     ("bl.spamcop.net",          "SpamCop"),
-    ("dnsbl.sorbs.net",         "SORBS"),
 ]
-
-# ── Secret patterns (ONLY provably secret — zero false positives) ────────────
-
-SECRET_PATTERNS = [
-    (r"sk_live_[a-zA-Z0-9]{20,}", "Stripe secret key"),
-    (r"sk_test_[a-zA-Z0-9]{20,}", "Stripe test secret key"),
-    (r"AKIA[A-Z0-9]{16}", "AWS access key"),
-    (r"sk-ant-[a-zA-Z0-9\-]{20,}", "Anthropic API key"),
-    (r"xai-[a-zA-Z0-9]{20,}", "xAI API key"),
-    (r"ghp_[a-zA-Z0-9]{36,}", "GitHub personal access token"),
-    (r"gho_[a-zA-Z0-9]{36,}", "GitHub OAuth token"),
-    (r"glpat-[a-zA-Z0-9\-]{20,}", "GitLab personal access token"),
-    (r"sk-[a-zA-Z0-9]{40,}", "OpenAI API key"),
-    (r"-----BEGIN[A-Z ]*PRIVATE KEY", "Private key"),
-    (r"postgres(?:ql)?://[^\s\"'<>]+", "Database connection string"),
-    (r"mongodb(?:\+srv)?://[^\s\"'<>]+", "Database connection string"),
-    (r"mysql://[^\s\"'<>]+", "Database connection string"),
-    (r"redis://[^\s\"'<>]+", "Redis connection string"),
-]
-
 
 # ── Main entry ───────────────────────────────────────────────────────────────
 
 def scan(domain: str) -> ScanResult:
-    """Run all 26 checks against a domain."""
-    domain = (domain.strip().lower()
-              .replace("https://", "").replace("http://", "")
-              .replace("www.", "").rstrip("/").split("/")[0])
-    if "@" in domain:
-        domain = domain.split("@")[-1]
+    """Run every check in CHECKS against a domain (URLs and emails are normalized)."""
+    domain = normalize_domain(domain)
+    if not is_valid_domain(domain):
+        raise ValueError(f"Not a public domain name: {domain!r}")
 
     r = ScanResult(domain=domain, url=f"https://{domain}")
     r.raw = {
@@ -157,16 +216,17 @@ def scan(domain: str) -> ScanResult:
         "seo": {}, "performance": {}, "secrets": {}, "breakage": {},
     }
 
-    with ThreadPoolExecutor(max_workers=8) as pool:
-        # Start slow I/O checks immediately — no page HTML needed
-        # ssl + redirect are grouped to avoid a write race on r.raw["ssl"]
-        email_future = pool.submit(_check_email, r)          # checks 1-4  (email)
+    with ThreadPoolExecutor(max_workers=10) as pool:
+        # Start slow I/O checks immediately — no page HTML needed.
+        # Each check writes only its own r.raw[...] key; ssl + redirect share
+        # r.raw["ssl"], so they run sequentially in one task.
+        email_future = pool.submit(_check_email, r)
         futures = [
             email_future,
-            pool.submit(_check_blacklist, r),                # check 6     (email)
-            pool.submit(_check_ssl_and_redirect, r),         # checks 7-8  (SSL)
-            pool.submit(_check_dns, r),                      # checks 12-13 (DNS)
-            pool.submit(_check_404, r),                      # check 26    (polish)
+            pool.submit(_check_blacklist, r),
+            pool.submit(_check_ssl_and_redirect, r),
+            pool.submit(_check_dns, r),
+            pool.submit(_check_404, r),
         ]
 
         # Fetch page in main thread — provides html/headers for remaining checks
@@ -174,15 +234,16 @@ def scan(domain: str) -> ScanResult:
 
         # DKIM must run after email check (reads r.raw["email"]["spf"])
         email_future.result()
-        futures.append(pool.submit(_check_dkim, r))          # check 5     (email)
+        futures.append(pool.submit(_check_dkim, r))
 
         # Submit html-dependent checks now that fetch is done
         futures += [
-            pool.submit(_check_secrets, r, html),            # checks 9-11  (secrets)
-            pool.submit(_check_security_headers, r, headers),# check 14    (security)
-            pool.submit(_check_seo, r, html, fetch_ok),      # checks 15-22 (SEO)
-            pool.submit(_check_performance, r, html, headers),# checks 23-24 (performance)
-            pool.submit(_check_mixed_content, r, html),      # check 25    (breakage)
+            pool.submit(_check_secrets, r, html),
+            pool.submit(_check_bundles, r, html),
+            pool.submit(_check_security_headers, r, headers),
+            pool.submit(_check_seo, r, html, fetch_ok),
+            pool.submit(_check_performance, r, html, headers),
+            pool.submit(_check_mixed_content, r, html),
         ]
 
         # Wait for all; each check handles its own exceptions internally
@@ -249,6 +310,20 @@ def _fetch_page(r: ScanResult) -> tuple[str, dict, bool]:
 
             return html, headers, True
 
+        except urllib.error.HTTPError as e:
+            if _looks_blocked(e):
+                # Bot protection (Cloudflare challenge, WAF, rate limit): the site
+                # works for people, we just can't see it. Not the site's fault.
+                r.raw["performance"]["blocked"] = e.code
+                r.notes.append(
+                    f"{r.url} blocks automated requests (HTTP {e.code}), so page-level "
+                    "checks (SEO, headers, secrets in HTML/JS, speed) were skipped. "
+                    "DNS, email and TLS checks still ran.")
+                return "", {}, False
+            if attempt == 0:
+                continue
+            r.raw["performance"]["error"] = f"HTTP {e.code}"
+            return "", {}, False
         except Exception as e:
             if attempt == 0:
                 continue  # retry once
@@ -256,12 +331,28 @@ def _fetch_page(r: ScanResult) -> tuple[str, dict, bool]:
             return "", {}, False
 
 
+_CHALLENGE_MARKERS = ("cf-chl", "just a moment", "attention required", "captcha", "challenge-platform")
+
+
+def _looks_blocked(e: urllib.error.HTTPError) -> bool:
+    """True when an HTTP error is bot protection rather than a broken site."""
+    if e.code in (401, 403, 429):
+        return True
+    if e.code == 503:
+        try:
+            body = e.read(4096).decode("utf-8", errors="ignore").lower()
+        except Exception:
+            body = ""
+        return any(m in body for m in _CHALLENGE_MARKERS)
+    return False
+
+
 # ── CATEGORY 1: Email ────────────────────────────────────────────────────────
 
 def _check_email(r: ScanResult):
-    """Checks 1-4: SPF, DMARC, DMARC reporting, MX records."""
+    """SPF, DMARC, DMARC reporting, MX records."""
 
-    # ── Check 1: SPF record ──
+    # ── SPF record ──
     spf_record = None
     vendors = []
     try:
@@ -284,8 +375,8 @@ def _check_email(r: ScanResult):
             "Gmail can't verify your emails are real",
             f"Your domain has no SPF record. Email providers like Gmail see emails "
             f"from @{r.domain} as unverified and send them to spam.",
-            f"Add a TXT record to your DNS:\nv=spf1 include:_spf.google.com ~all\n"
-            f"(Replace the include with your email provider.)"))
+            "Add a TXT record to your DNS:\nv=spf1 include:_spf.google.com ~all\n"
+            "(Replace the include with your email provider.)"))
     elif "+all" in spf_record or "?all" in spf_record:
         mech = spf_record.split()[-1]
         r.issues.append(Issue("email", "critical",
@@ -298,7 +389,7 @@ def _check_email(r: ScanResult):
     else:
         r.passed.append("SPF record configured correctly")
 
-    # ── Check 2: DMARC record ──
+    # ── DMARC record ──
     dmarc_record = None
     dmarc_policy = None
     dmarc_rua = None
@@ -340,7 +431,7 @@ def _check_email(r: ScanResult):
     elif dmarc_policy == "reject":
         r.passed.append("DMARC fully enforced (reject)")
 
-    # ── Check 3: DMARC reporting ──
+    # ── DMARC reporting ──
     if dmarc_record and not dmarc_rua:
         r.issues.append(Issue("email", "medium",
             "You won't know when someone spoofs your email",
@@ -351,7 +442,7 @@ def _check_email(r: ScanResult):
     elif dmarc_record and dmarc_rua:
         r.passed.append("DMARC reporting configured")
 
-    # ── Check 4: MX records (informational) ──
+    # ── MX records (informational) ──
     mx_hosts = []
     mx_vendors_found = []
     try:
@@ -407,6 +498,12 @@ def _check_dkim(r: ScanResult):
             "Note: if you use a custom DKIM selector, this check may be a false negative."))
 
 
+def _is_listing(answer: str) -> bool:
+    """A DNSBL hit is 127.0.0.2-127.0.0.255. Spamhaus answers 127.255.255.x when it
+    refuses the query (e.g. sent via a public resolver); that is not a listing."""
+    return answer.startswith("127.0.0.") and answer != "127.0.0.1"
+
+
 def _check_blacklist(r: ScanResult):
     """Check if the domain's mail server IP appears on major spam blacklists."""
     # Resolve the lowest-priority MX host to an IP
@@ -427,8 +524,9 @@ def _check_blacklist(r: ScanResult):
     reversed_ip = ".".join(reversed(mx_ip.split(".")))
     for dnsbl, name in DNSBL_SERVERS:
         try:
-            dns.resolver.resolve(f"{reversed_ip}.{dnsbl}", "A", lifetime=2)
-            listed_on.append(name)
+            answers = dns.resolver.resolve(f"{reversed_ip}.{dnsbl}", "A", lifetime=2)
+            if any(_is_listing(str(a)) for a in answers):
+                listed_on.append(name)
         except dns.resolver.NXDOMAIN:
             pass  # not listed — expected
         except Exception:
@@ -463,7 +561,7 @@ def _ssl_connect(domain: str, timeout: int = 5):
 
 
 def _check_ssl(r: ScanResult):
-    """Check 5: SSL certificate validity and expiry. Retries once on timeout."""
+    """SSL certificate validity and expiry. Retries once on timeout."""
     cert = None
     for attempt in range(2):
         try:
@@ -532,12 +630,8 @@ def _check_ssl(r: ScanResult):
 
 
 def _check_https_redirect(r: ScanResult):
-    """Check 6: Does HTTP redirect to HTTPS?"""
+    """Does HTTP redirect to HTTPS?"""
     try:
-        req = urllib.request.Request(
-            f"http://{r.domain}",
-            headers={"User-Agent": "Mozilla/5.0 (compatible; didyouship/1.0)"},
-        )
         # Don't follow redirects — we want to see the redirect itself
         import http.client
         conn = http.client.HTTPConnection(r.domain, timeout=5)
@@ -573,9 +667,9 @@ def _check_https_redirect(r: ScanResult):
 # ── CATEGORY 3: Exposed Secrets ──────────────────────────────────────────────
 
 def _check_secrets(r: ScanResult, html: str):
-    """Checks 7-9: .env exposed, .git exposed, secret keys in HTML."""
+    """.env exposed, .git exposed, secret keys in HTML."""
 
-    # ── Check 7: .env file ──
+    # ── .env file ──
     env_exposed = _check_path_exposed(r.url, "/.env")
     r.raw["secrets"]["env_exposed"] = env_exposed
     if env_exposed:
@@ -590,7 +684,7 @@ def _check_secrets(r: ScanResult, html: str):
     else:
         r.passed.append(".env file not exposed")
 
-    # ── Check 8: .git directory ──
+    # ── .git directory ──
     git_exposed = _check_path_exposed(r.url, "/.git/config")
     r.raw["secrets"]["git_exposed"] = git_exposed
     if git_exposed:
@@ -604,19 +698,14 @@ def _check_secrets(r: ScanResult, html: str):
     else:
         r.passed.append(".git directory not exposed")
 
-    # ── Check 9: Secret keys in HTML ──
+    # ── Secret keys in HTML ──
     if html:
-        found_secrets = []
-        for pattern, label in SECRET_PATTERNS:
-            if re.search(pattern, html):
-                found_secrets.append(label)
-
+        found_secrets = find_secrets(html)
         r.raw["secrets"]["found_in_html"] = found_secrets
         if found_secrets:
-            unique = list(dict.fromkeys(found_secrets))  # dedupe preserving order
-            labels = ", ".join(unique)
+            labels = ", ".join(found_secrets)
             r.issues.append(Issue("secrets", "critical",
-                f"Secret keys found in your page source",
+                "Secret keys found in your page source",
                 f"We found what looks like: {labels}. "
                 "Anyone can view your page source and extract these. "
                 "Bots actively scrape for secret keys in HTML.",
@@ -657,12 +746,63 @@ def _check_path_exposed(base_url: str, path: str) -> bool:
         return False
 
 
+def _fetch_text(url: str, max_bytes: int) -> tuple[int, str]:
+    """GET a URL and return (status, body text truncated to max_bytes)."""
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; didyouship/1.0)"})
+    try:
+        resp = _urlopen(req, timeout=8)
+    except urllib.error.HTTPError as e:
+        return e.code, ""
+    return resp.status, resp.read(max_bytes).decode("utf-8", errors="ignore")
+
+
+def _check_bundles(r: ScanResult, html: str):
+    """Secret keys in the site's own JS bundles, and public source maps."""
+    if not html:
+        return
+    report = scan_bundles(html, r.url, r.domain, _fetch_text)
+    r.raw["secrets"]["bundles"] = report
+    if not report["bundles"]:
+        return  # no external scripts of our own to inspect
+
+    if report["secrets"]:
+        lines = []
+        for label, urls in report["secrets"].items():
+            names = ", ".join(u.rsplit("/", 1)[-1] or u for u in urls[:3])
+            lines.append(f"{label} (in {names})")
+        r.issues.append(Issue("secrets", "critical",
+            "Secret keys found in your JavaScript bundles",
+            "Your site ships these to every visitor's browser: " + "; ".join(lines) + ". "
+            "Anyone can open DevTools and copy them. Treat them as leaked.",
+            "1. Rotate every key listed above now (revoke the old one at the provider).\n"
+            "2. Move the call that needs it to a server route or edge function.\n"
+            "3. Only expose publishable keys: NEXT_PUBLIC_ / VITE_ variables are sent "
+            "to the browser, so never put a secret in one. A Supabase service_role key "
+            "bypasses Row Level Security and must never reach the frontend."))
+    else:
+        r.passed.append(f"No secret keys in your JS bundles ({len(report['bundles'])} scanned)")
+
+    if report["source_maps"]:
+        maps = "\n".join(report["source_maps"][:5])
+        r.issues.append(Issue("secrets", "medium",
+            "Your original source code is downloadable via source maps",
+            f"{len(report['source_maps'])} source map(s) are public. They rebuild your "
+            "original, unminified source (comments, file names, internal routes) for "
+            "anyone who asks.",
+            "Stop publishing .map files in production:\n"
+            "Vite: build.sourcemap = false (or 'hidden' and don't deploy the .map files)\n"
+            "Next.js: productionBrowserSourceMaps: false (the default)\n"
+            "Exposed:\n" + maps))
+    else:
+        r.passed.append("No public source maps")
+
+
 # ── CATEGORY 4: DNS ──────────────────────────────────────────────────────────
 
 def _check_dns(r: ScanResult):
-    """Checks 10-11: www resolves, www ↔ apex redirect."""
+    """www resolves, www ↔ apex redirect."""
 
-    # ── Check 10: www subdomain ──
+    # ── www subdomain ──
     www_resolves = False
     try:
         dns_query(f"www.{r.domain}", "A")
@@ -686,7 +826,7 @@ def _check_dns(r: ScanResult):
     else:
         r.passed.append("www subdomain resolves")
 
-        # ── Check 11: www ↔ apex redirect ──
+        # ── www ↔ apex redirect ──
         _check_www_redirect(r)
 
 
@@ -752,6 +892,13 @@ def _check_www_redirect(r: ScanResult):
                 "Set up a 301 redirect from www to your apex domain "
                 "(or vice versa) in your hosting dashboard. Or add a "
                 '<link rel="canonical"> tag pointing to your preferred version.'))
+    elif www_status >= 400 and apex_status < 400:
+        r.issues.append(Issue("dns", "medium",
+            f"www.{r.domain} shows an error page (HTTP {www_status})",
+            f"www.{r.domain} resolves but returns HTTP {www_status} instead of your "
+            "site. People who type www out of habit land on an error.",
+            f"Add www.{r.domain} as a domain in your hosting dashboard, or add a "
+            f"redirect rule sending www.{r.domain}/* to https://{r.domain}/$1 (301)."))
     else:
         r.passed.append("www and apex properly redirect")
 
@@ -759,11 +906,11 @@ def _check_www_redirect(r: ScanResult):
 # ── CATEGORY 5: Security Headers ────────────────────────────────────────────
 
 def _check_security_headers(r: ScanResult, headers: dict):
-    """Check 12: HSTS header."""
+    """HSTS header."""
     if not headers:
         return
 
-    # ── Check 12: HSTS ──
+    # ── HSTS ──
     if "strict-transport-security" in headers:
         r.passed.append("HSTS header set")
     else:
@@ -779,8 +926,10 @@ def _check_security_headers(r: ScanResult, headers: dict):
 # ── CATEGORY 6: SEO & Shareability ──────────────────────────────────────────
 
 def _check_seo(r: ScanResult, html: str, fetch_ok: bool):
-    """Checks 13-20: title, meta desc, OG, Twitter Card, viewport,
+    """title, meta desc, OG, Twitter Card, viewport,
     canonical, sitemap, favicon."""
+    if not fetch_ok and r.raw["performance"].get("blocked"):
+        return  # explained in r.notes; not the site's fault
     if not fetch_ok:
         r.issues.append(Issue("seo", "high",
             "Could not load your site to check SEO",
@@ -791,7 +940,7 @@ def _check_seo(r: ScanResult, html: str, fetch_ok: bool):
 
     r.raw["seo"]["html_length"] = len(html)
 
-    # ── Check 13: Title tag ──
+    # ── Title tag ──
     title_match = re.search(r"<title[^>]*>(.+?)</title>", html, re.IGNORECASE | re.DOTALL)
     if title_match:
         r.raw["seo"]["title"] = title_match.group(1).strip()
@@ -805,7 +954,7 @@ def _check_seo(r: ScanResult, html: str, fetch_ok: bool):
             "<title>Your App Name — what it does in 5 words</title>\n"
             "Add this inside your <head> tag."))
 
-    # ── Check 14: Meta description ──
+    # ── Meta description ──
     if re.search(r'<meta\s+name=["\']description["\']', html, re.IGNORECASE):
         desc_match = re.search(
             r'<meta\s+name=["\']description["\']\s+content=["\'](.+?)["\']',
@@ -823,7 +972,7 @@ def _check_seo(r: ScanResult, html: str, fetch_ok: bool):
             '<meta name="description" content="What your app does in one sentence">\n'
             "Add this inside your <head> tag."))
 
-    # ── Check 15: Open Graph tags ──
+    # ── Open Graph tags ──
     has_og_title = bool(re.search(r'og:title', html, re.IGNORECASE))
     has_og_desc = bool(re.search(r'og:description', html, re.IGNORECASE))
     has_og_image = bool(re.search(r'og:image', html, re.IGNORECASE))
@@ -849,7 +998,7 @@ def _check_seo(r: ScanResult, html: str, fetch_ok: bool):
             '<meta property="og:description" content="What it does">\n'
             '<meta property="og:image" content="https://yourdomain.com/og.png">'))
 
-    # ── Check 16: Twitter Card tags ──
+    # ── Twitter Card tags ──
     if re.search(r'twitter:card', html, re.IGNORECASE):
         r.passed.append("Twitter Card tags set")
     else:
@@ -862,7 +1011,7 @@ def _check_seo(r: ScanResult, html: str, fetch_ok: bool):
             '<meta name="twitter:title" content="Your App Name">\n'
             '<meta name="twitter:image" content="https://yourdomain.com/og.png">'))
 
-    # ── Check 17: Viewport meta tag ──
+    # ── Viewport meta tag ──
     if re.search(r'viewport', html, re.IGNORECASE):
         r.passed.append("Viewport meta tag set (mobile-friendly)")
     else:
@@ -874,7 +1023,7 @@ def _check_seo(r: ScanResult, html: str, fetch_ok: bool):
             '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
             "Add this inside your <head> tag."))
 
-    # ── Check 18: Canonical URL ──
+    # ── Canonical URL ──
     if re.search(r'rel=["\']canonical["\']', html, re.IGNORECASE):
         r.passed.append("Canonical URL set")
     else:
@@ -886,7 +1035,7 @@ def _check_seo(r: ScanResult, html: str, fetch_ok: bool):
             f'<link rel="canonical" href="https://{r.domain}/">\n'
             "Add this inside your <head> tag on every page."))
 
-    # ── Check 19: Sitemap ──
+    # ── Sitemap ──
     # Check /sitemap.xml first, then fall back to robots.txt Sitemap directive.
     has_sitemap = False
     try:
@@ -928,7 +1077,7 @@ def _check_seo(r: ScanResult, html: str, fetch_ok: bool):
             "Astro: @astrojs/sitemap\n"
             "Django: django.contrib.sitemaps"))
 
-    # ── Check 20: Favicon ──
+    # ── Favicon ──
     has_favicon = bool(re.search(
         r'(?:rel=["\'](?:icon|shortcut icon)["\']|favicon)',
         html, re.IGNORECASE,
@@ -948,12 +1097,12 @@ def _check_seo(r: ScanResult, html: str, fetch_ok: bool):
 # ── CATEGORY 7: Performance ─────────────────────────────────────────────────
 
 def _check_performance(r: ScanResult, html: str, headers: dict):
-    """Checks 21-22: Response time, compression."""
+    """Response time, compression."""
 
     warmup = r.raw["performance"].get("warmup_time", 0)
     response = r.raw["performance"].get("response_time", 0)
 
-    # ── Check 21: Response time ──
+    # ── Response time ──
     if warmup and response:
         if warmup > 10 and response < 3:
             # Cold start detected
@@ -980,7 +1129,7 @@ def _check_performance(r: ScanResult, html: str, headers: dict):
     elif r.raw["performance"].get("error"):
         pass  # Already flagged as SEO issue (can't fetch)
 
-    # ── Check 22: Compression ──
+    # ── Compression ──
     encoding = r.raw["performance"].get("encoding", "")
     if encoding:
         r.passed.append(f"Compression enabled ({encoding})")
@@ -998,7 +1147,7 @@ def _check_performance(r: ScanResult, html: str, headers: dict):
 # ── CATEGORY 8: Broken Resources ────────────────────────────────────────────
 
 def _check_mixed_content(r: ScanResult, html: str):
-    """Check 23: Mixed content (HTTP resources on HTTPS page)."""
+    """Mixed content (HTTP resources on HTTPS page)."""
     if not html:
         return
 
@@ -1035,7 +1184,7 @@ def _check_mixed_content(r: ScanResult, html: str):
 # ── CATEGORY 9: Polish ──────────────────────────────────────────────────────
 
 def _check_404(r: ScanResult):
-    """Check 24: Custom 404 page."""
+    """Custom 404 page."""
     import random
     import string
     random_path = "/" + "".join(random.choices(string.ascii_lowercase, k=12))
@@ -1045,7 +1194,7 @@ def _check_404(r: ScanResult):
             r.url + random_path,
             headers={"User-Agent": "Mozilla/5.0 (compatible; didyouship/1.0)"},
         )
-        resp = _urlopen(req, timeout=5)
+        _urlopen(req, timeout=5)
         # 200 for a random path = SPA with client-side routing.
         # These apps handle 404s in JS — skip the check, it's not applicable.
         r.passed.append("Custom 404 page exists")

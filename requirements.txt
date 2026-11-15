@@ -1,6 +1,8 @@
+# Web app (Railway installs this). The scanner alone only needs dnspython:
+#   pip install .        -> CLI
+#   pip install .[web]   -> CLI + web app
+dnspython>=2.6
 fastapi>=0.110
 uvicorn>=0.27
-dnspython>=2.6
-openai>=1.0
 slowapi>=0.1.9
 jinja2>=3.1

@@ -188,6 +188,12 @@ body {
 }
 .fix-first-item::before { content: '\2192  '; color: var(--red); }
 
+/* scan notes (informational, not scored) */
+.scan-note {
+  font-size: 13px; color: var(--text2); padding: 10px 12px; margin: 12px 0 0;
+  border: 1px solid var(--border); border-radius: 6px;
+}
+
 /* vendors */
 .vendors {
   display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
@@ -387,7 +393,7 @@ body {
     <input type="text" id="domain" placeholder="yourdomain.com" autocomplete="off" spellcheck="false" autofocus>
     <button class="scan-btn" id="scan-btn" onclick="startScan()">Scan</button>
   </div>
-  <p class="hint" id="hint">~8 seconds. Nothing stored.</p>
+  <p class="hint" id="hint">~10 seconds. Nothing stored.</p>
 </div>
 
 <div class="scanning" id="scanning">
@@ -544,6 +550,9 @@ function render(d) {
   if (lo) h += '<span class="pill low">' + lo + ' low</span>';
   if (pa) h += '<span class="pill passed">' + pa + ' passed</span>';
   h += '</div></div></div>';
+
+  // Notes: things we couldn't check (e.g. site blocks bots). Not scored.
+  (d.notes || []).forEach(n => { h += '<div class="scan-note">' + esc(n) + '</div>'; });
 
   // "Fix first" callout for criticals
   const criticals = sorted.filter(i => i.severity === 'critical');

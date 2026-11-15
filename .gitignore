@@ -12,3 +12,8 @@ venv/
 # Editor
 *.swp
 *.swo
+
+# Build / test
+*.egg-info/
+build/
+.pytest_cache/
