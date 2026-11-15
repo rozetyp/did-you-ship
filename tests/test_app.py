@@ -84,3 +84,14 @@ def test_client_ip_precedence():
     assert web.client_ip(_Req({"CF-Connecting-IP": "1.1.1.1", "X-Forwarded-For": "9.9.9.9"})) == "1.1.1.1"
     assert web.client_ip(_Req({"X-Forwarded-For": "9.9.9.9, 100.64.0.7"})) == "9.9.9.9"
     assert web.client_ip(_Req({})) == "100.64.0.7"
+
+
+def test_www_redirects_to_apex_keeping_path_and_query(client):
+    r = client.get("/guides/spf-record?ref=x", headers={"Host": "www.didyouship.com"}, follow_redirects=False)
+    assert r.status_code == 301
+    assert r.headers["location"] == "https://didyouship.com/guides/spf-record?ref=x"
+    assert "strict-transport-security" in r.headers
+
+
+def test_apex_is_not_redirected(client):
+    assert client.get("/health", headers={"Host": "didyouship.com"}).status_code == 200

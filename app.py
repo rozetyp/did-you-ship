@@ -16,7 +16,7 @@ import os
 from concurrent.futures import ThreadPoolExecutor
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import FileResponse, HTMLResponse, Response
+from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
@@ -61,6 +61,21 @@ class HSTSMiddleware(BaseHTTPMiddleware):
         return response
 
 
+class WWWRedirectMiddleware(BaseHTTPMiddleware):
+    """www.<host> → https://<host>, same path and query (one canonical site)."""
+
+    async def dispatch(self, request, call_next):
+        host = request.headers.get("host", "")
+        if host.startswith("www."):
+            url = f"https://{host[4:]}{request.url.path}"
+            if request.url.query:
+                url += f"?{request.url.query}"
+            return RedirectResponse(url, status_code=301)
+        return await call_next(request)
+
+
+# Last added runs outermost: HSTS wraps the www redirect too.
+app.add_middleware(WWWRedirectMiddleware)
 app.add_middleware(HSTSMiddleware)
 
 _executor = ThreadPoolExecutor(max_workers=20)
