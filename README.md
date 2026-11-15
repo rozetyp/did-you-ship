@@ -1,12 +1,22 @@
 # didyouship
 
+[![CI](https://github.com/rozetyp/did-you-ship/actions/workflows/ci.yml/badge.svg)](https://github.com/rozetyp/did-you-ship/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 **You shipped your app. But did you check?**
 
-A production readiness scanner for the stuff nobody teaches: email that lands in spam, keys shipped to the browser, a `.env` file anyone can download, broken link previews, a `www.` that shows an error page. It runs 28 checks against a domain in about 5-15 seconds, using only public data (DNS, TLS, HTTP), and tells you what breaks and how to fix it.
+You built something with Cursor, Lovable, Bolt, Replit or v0. It works on your machine, it works on Vercel, you posted the link. Then over the next week:
 
-- **Web:** [didyouship.com](https://didyouship.com), free, no signup, nothing stored
-- **CLI:** `didyouship example.com`, with JSON output and a CI exit code
-- **Self-host:** a small FastAPI app, MIT licensed
+- Signup and password reset emails land in spam, because the domain has no SPF, DKIM or DMARC.
+- Your Supabase `service_role` key is sitting in the JavaScript bundle, and it bypasses every Row Level Security rule you wrote.
+- `yourapp.com/.env` downloads your database password.
+- The link you shared on Slack or X shows up as a bare URL with no preview.
+- `www.yourapp.com` shows your host's error page instead of your app.
+- The first visit takes 9 seconds because the free tier went to sleep.
+
+None of that is a bug in your code, and none of it shows up when you test the app yourself. It's the setup around the app: DNS records, headers, what your build ships to the browser. Nobody teaches it, and the coding assistant usually doesn't mention it.
+
+didyouship checks all of it in one scan. Give it a domain and it runs 28 checks in 5-15 seconds, from the outside, the way a visitor (or a bot looking for keys) would see your site. Every finding says what actually breaks and gives you the fix to paste: the DNS record, the header, the config line.
 
 ```
 $ didyouship example.com
@@ -21,6 +31,25 @@ HIGH     [email] Emails have no cryptographic signature (DKIM missing)
          ...
 19 passed · 5 issues · 28 checks
 ```
+
+Try it on [didyouship.com](https://didyouship.com) (free, no signup, nothing stored), or install the CLI below and run it before every launch.
+
+## Who it's for
+
+People who ship without an ops person: solo founders, indie hackers, vibe coders, agencies handing a site over to a client, anyone who just pointed a domain at Vercel, Netlify or Railway and moved on. If you know what DMARC is, it saves you ten minutes of checking. If you don't, it tells you why you should care, then exactly what to add.
+
+It's not a pentest. If you have a security team, they have better tools. This covers the boring stuff that's easy to fix and embarrassing to miss.
+
+## Why this one
+
+Most free checkers do one thing: an SEO audit, a DMARC lookup, a header grader. You'd need five tabs to cover what this does in one run. The vibe-coding security scanners go deeper on code, but they skip email and SEO entirely, and the paid ones want a card before your first scan.
+
+- Findings are written as what breaks ("your emails go to spam"), not as spec names.
+- It's strict about false alarms. Keys that are meant to be public, placeholder values copied from docs and sites that simply block bots don't count against you. A wrong "critical" is worse than a missed one.
+- It only reads what's already public, and it never uses a key it finds.
+- It's open source, so you can read exactly what each check does, run it in CI or host your own.
+
+Cleaning up this repo turned up two problems on didyouship.com itself. The scanner flagged `www.didyouship.com` returning a 404. And the hosted scanner had been quietly failing every page fetch for weeks, because its proxy login had expired. Both are fixed now.
 
 ## Install
 
